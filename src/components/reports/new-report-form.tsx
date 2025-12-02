@@ -42,7 +42,7 @@ const formSchema = z.object({
   income: z.coerce.number().optional(),
   expenses: z.coerce.number().optional(),
   workers: z
-    .array(z.object({ value: z.string() }))
+    .array(z.object({ name: z.string().min(1, "اسم العامل مطلوب."), phone: z.string().optional() }))
     .min(1, "يجب إضافة عامل واحد على الأقل."),
   tasks: z
     .array(z.object({ value: z.string() }))
@@ -70,7 +70,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
       clientName: "",
       date: dateString ? parseISO(dateString) : new Date(),
       tasks: [{ value: "" }],
-      workers: [{ value: "" }],
+      workers: [{ name: "", phone: "" }],
       materials: [],
       notes: "",
       vehicleNumber: "",
@@ -145,7 +145,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
       العميل: ${values.clientName}
       التاريخ: ${values.date ? format(values.date, "PPP", { locale: ar }) : ""}
       المهام: ${values.tasks.map((t) => t.value).join(", ")}
-      العمال: ${values.workers.map((w) => w.value).join(", ")}
+      العمال: ${values.workers.map((w) => w.name).join(", ")}
       المواد: ${values.materials.map((m) => m.value).join(", ")}
       الملاحظات: ${values.notes || "لا يوجد"}
     `;
@@ -253,37 +253,55 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                   <FormLabel>العمال</FormLabel>
                   <div className="space-y-2 mt-2">
                     {form.watch("workers").map((worker, index) => (
-                      <FormField
-                        key={index}
-                        control={form.control}
-                        name={`workers.${index}.value`}
-                        render={({ field }) => (
-                          <FormItem className="flex items-center gap-2">
-                            <FormControl>
-                              <Input
-                                placeholder={`اسم العامل #${index + 1}`}
-                                {...field}
-                              />
-                            </FormControl>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => {
-                                const currentWorkers = form.getValues("workers");
-                                if (currentWorkers.length > 1) {
-                                  form.setValue(
-                                    "workers",
-                                    currentWorkers.filter((_, i) => i !== index)
-                                  );
-                                }
-                              }}
-                            >
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          </FormItem>
-                        )}
-                      />
+                      <div key={index} className="flex items-start gap-2">
+                        <FormField
+                          control={form.control}
+                          name={`workers.${index}.name`}
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Input
+                                  placeholder={`اسم العامل #${index + 1}`}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                         <FormField
+                          control={form.control}
+                          name={`workers.${index}.phone`}
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Input
+                                  placeholder="رقم الهاتف"
+                                  {...field}
+                                />
+                              </FormControl>
+                               <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                           className="mt-1"
+                          onClick={() => {
+                            const currentWorkers = form.getValues("workers");
+                            if (currentWorkers.length > 1) {
+                              form.setValue(
+                                "workers",
+                                currentWorkers.filter((_, i) => i !== index)
+                              );
+                            }
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
                     ))}
                   </div>
                   <Button
@@ -294,7 +312,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                     onClick={() =>
                       form.setValue("workers", [
                         ...form.getValues("workers"),
-                        { value: "" },
+                        { name: "", phone: "" },
                       ])
                     }
                   >
@@ -535,3 +553,5 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     </Card>
   );
 }
+
+    
