@@ -24,10 +24,22 @@ const statusColors: { [key: string]: string } = {
 export function AppointmentsCalendar() {
   const { appointments, addAppointment, deleteAppointment } = useAppointments();
   const today = new Date();
-  const weekStart = startOfWeek(today, { weekStartsOn: 0 }); // Sunday
+  
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 }); // Sunday
   const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i));
 
   const weekRange = `${format(weekStart, 'd', { locale: ar })} - ${format(addDays(weekStart, 6), 'd MMMM yyyy', { locale: ar })}`;
+
+  const handleNextWeek = () => {
+    setCurrentDate(addDays(currentDate, 7));
+  };
+
+  const handlePrevWeek = () => {
+    setCurrentDate(addDays(currentDate, -7));
+  };
+
 
   return (
     <>
@@ -39,10 +51,10 @@ export function AppointmentsCalendar() {
             </div>
             <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground font-medium">{weekRange}</span>
-                <Button variant="outline" size="icon" className="h-8 w-8">
+                <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleNextWeek}>
                     <ChevronRight className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="icon" className="h-8 w-8">
+                <Button variant="outline" size="icon" className="h-8 w-8" onClick={handlePrevWeek}>
                     <ChevronLeft className="h-4 w-4" />
                 </Button>
             </div>
