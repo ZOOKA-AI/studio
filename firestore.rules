@@ -194,6 +194,15 @@ service cloud.firestore {
       allow delete: if isSupervisorOrAdmin() && resource != null;
     }
     
+    /**
+     * @description
+     *   Stores appointment data. Any authenticated user can create, read, update, or delete appointments.
+     *   This is a temporary rule for development and should be refined with specific role-based logic.
+     * @path /appointments/{appointmentId}
+     * @allow An authenticated user creates a new appointment. (create)
+     * @allow An authenticated user deletes their own appointment. (delete)
+     * @principle Allows basic appointment management for any signed-in user during early development.
+     */
     match /appointments/{appointmentId} {
       allow read, write: if isSignedIn();
     }
