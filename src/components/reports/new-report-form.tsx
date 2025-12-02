@@ -43,6 +43,8 @@ const formSchema = z.object({
   paymentMethod: z.string().optional(),
   workDescription: z.string().optional(),
   date: z.date({ required_error: "تاريخ اليومية مطلوب." }),
+  startTime: z.string().optional(),
+  endTime: z.string().optional(),
   vehicleNumber: z.string().optional(),
   workers: z
     .array(z.object({ name: z.string().min(1, "اسم العامل مطلوب."), phone: z.string().optional() }))
@@ -77,6 +79,8 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
       paymentMethod: "",
       workDescription: "",
       date: dateString ? parseISO(dateString) : new Date(),
+      startTime: "09:00",
+      endTime: "17:00",
       tasks: [{ value: "" }],
       workers: [{ name: "", phone: "" }],
       materials: [],
@@ -329,6 +333,34 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                         </FormItem>
                     )}
                 />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="startTime"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>وقت بدء العمل</FormLabel>
+                        <FormControl>
+                          <Input type="time" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="endTime"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>وقت انتهاء العمل</FormLabel>
+                        <FormControl>
+                          <Input type="time" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <div>
                   <FormLabel>العمال</FormLabel>
                   <div className="space-y-2 mt-2">

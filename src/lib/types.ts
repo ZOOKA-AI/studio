@@ -34,6 +34,8 @@ export type DailyReport = {
   paymentMethod?: string;
   workDescription?: string;
   vehicleNumber?: string;
+  startTime?: string;
+  endTime?: string;
   workers: { name: string; phone?: string }[];
   tasks: { value: string }[];
   materials: { name: string; quantity?: string }[];
