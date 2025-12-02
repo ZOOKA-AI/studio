@@ -3,16 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusCircle, UserPlus, FolderPlus, CalendarPlus, Send } from "lucide-react";
 import Link from "next/link";
-
-const actions = [
-  { label: 'بدء يومية جديدة', icon: PlusCircle, variant: 'default' as const, href: '/reports/new' },
-  { label: 'إضافة عامل', icon: UserPlus, variant: 'outline' as const, href: '/workers' },
-  { label: 'طلب مواد', icon: FolderPlus, variant: 'outline' as const, href: '/inventory' },
-  { label: 'جدولة موعد', icon: CalendarPlus, variant: 'outline' as const, href: '/calendar' },
-  { label: 'إرسال إشعار', icon: Send, variant: 'outline' as const, href: '#' },
-];
+import { useToast } from "@/hooks/use-toast";
 
 export function QuickActions() {
+    const { toast } = useToast();
+  const actions = [
+    { label: 'بدء يومية جديدة', icon: PlusCircle, variant: 'default' as const, href: '/reports/new' },
+    { label: 'إضافة عامل', icon: UserPlus, variant: 'outline' as const, href: '/workers' },
+    { label: 'طلب مواد', icon: FolderPlus, variant: 'outline' as const, href: '/inventory' },
+    { label: 'جدولة موعد', icon: CalendarPlus, variant: 'outline' as const, href: '/calendar' },
+  ];
+
   return (
     <Card>
       <CardHeader>
@@ -30,6 +31,10 @@ export function QuickActions() {
             </Button>
           );
         })}
+        <Button variant={'outline'} className="w-full justify-start text-base py-6" onClick={() => toast({ title: 'تم الإرسال', description: "تم إرسال الإشعار بنجاح."})}>
+            <Send className="me-3 h-5 w-5" />
+            إرسال إشعار
+        </Button>
       </CardContent>
     </Card>
   );

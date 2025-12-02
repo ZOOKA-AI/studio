@@ -1,7 +1,9 @@
+'use client';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const workers = [
     { id: 'W001', name: 'أحمد محمود', role: 'عامل نظافة', status: 'نشط' },
@@ -11,6 +13,7 @@ const workers = [
 ];
 
 export default function WorkersPage() {
+    const { toast } = useToast();
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -18,7 +21,7 @@ export default function WorkersPage() {
                     <CardTitle className="font-headline text-xl">👥 إدارة العمال</CardTitle>
                     <CardDescription>عرض وإدارة قائمة العمال في الشركة.</CardDescription>
                 </div>
-                <Button>
+                <Button onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>
                     <PlusCircle className="me-2 h-4 w-4" />
                     إضافة عامل جديد
                 </Button>
@@ -42,8 +45,8 @@ export default function WorkersPage() {
                                 <TableCell>{worker.role}</TableCell>
                                 <TableCell>{worker.status}</TableCell>
                                 <TableCell>
-                                    <Button variant="ghost" size="sm">تعديل</Button>
-                                    <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">حذف</Button>
+                                    <Button variant="ghost" size="sm" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>تعديل</Button>
+                                    <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>حذف</Button>
                                 </TableCell>
                             </TableRow>
                         ))}

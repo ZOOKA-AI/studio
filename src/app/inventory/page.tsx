@@ -1,8 +1,10 @@
+'use client';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 const inventoryItems = [
     { id: 'M001', name: 'سائل تنظيف الأرضيات', quantity: 50, unit: 'لتر', status: 'متوفر' },
@@ -13,6 +15,7 @@ const inventoryItems = [
 ];
 
 export default function InventoryPage() {
+    const { toast } = useToast();
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -20,7 +23,7 @@ export default function InventoryPage() {
                     <CardTitle className="font-headline text-xl">📦 إدارة المخزون والمواد</CardTitle>
                     <CardDescription>تتبع كميات المواد المستخدمة في عمليات التنظيف.</CardDescription>
                 </div>
-                <Button>
+                <Button onClick={() => toast({ title: "تم الإرسال!", description: "تم إرسال طلب المواد الجديدة للموافقة." })}>
                     <PlusCircle className="me-2 h-4 w-4" />
                     طلب مواد جديدة
                 </Button>
@@ -48,7 +51,7 @@ export default function InventoryPage() {
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
-                                    <Button variant="ghost" size="sm">تعديل</Button>
+                                    <Button variant="ghost" size="sm" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>تعديل</Button>
                                 </TableCell>
                             </TableRow>
                         ))}

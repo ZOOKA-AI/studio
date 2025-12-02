@@ -1,7 +1,9 @@
+'use client';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const sites = [
     { id: 'S001', name: 'فيلا السيد أحمد', address: 'الشارقة, الإمارات', type: 'سكني' },
@@ -12,6 +14,7 @@ const sites = [
 ];
 
 export default function SitesPage() {
+    const { toast } = useToast();
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -19,7 +22,7 @@ export default function SitesPage() {
                     <CardTitle className="font-headline text-xl">🏢 إدارة المواقع</CardTitle>
                     <CardDescription>قائمة بجميع مواقع العملاء.</CardDescription>
                 </div>
-                <Button>
+                <Button onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>
                     <PlusCircle className="me-2 h-4 w-4" />
                     إضافة موقع جديد
                 </Button>
@@ -43,7 +46,7 @@ export default function SitesPage() {
                                 <TableCell>{site.address}</TableCell>
                                 <TableCell>{site.type}</TableCell>
                                 <TableCell>
-                                    <Button variant="ghost" size="sm">عرض التفاصيل</Button>
+                                    <Button variant="ghost" size="sm" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>عرض التفاصيل</Button>
                                 </TableCell>
                             </TableRow>
                         ))}
