@@ -1,17 +1,21 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { mockStats } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { CalendarCheck, Users, FileText, BarChart3, TrendingUp, TrendingDown } from "lucide-react";
+import { CalendarCheck, Users, FileText, CheckSquare, TrendingUp, TrendingDown, BarChart3 } from "lucide-react";
+import type { Stat } from "@/lib/types";
 
 const iconMap = {
-  المواعيد: CalendarCheck,
-  العمال: Users,
-  اليوميات: FileText,
-  الإيرادات: BarChart3,
+  'المواعيد': CalendarCheck,
+  'العمال': Users,
+  'اليوميات': FileText,
+  'المهام': CheckSquare,
+  'الإيرادات': BarChart3,
 };
 
-export function StatsCards() {
-  const stats = Object.values(mockStats);
+type StatsCardsProps = {
+  stats: Stat[];
+};
+
+export function StatsCards({ stats }: StatsCardsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {stats.map((stat) => {

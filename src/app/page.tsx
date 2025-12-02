@@ -5,13 +5,41 @@ import { QuickActions } from '@/components/dashboard/quick-actions';
 import { RecentReports } from '@/components/dashboard/recent-reports';
 import { StatsCards } from '@/components/dashboard/stats-cards';
 import { useReports } from '@/context/reports-context';
-import { mockAppointments } from '@/lib/data';
+import { useTasks } from '@/context/tasks-context';
+import { useWorkers } from '@/context/workers-context';
+import { mockAppointments, mockStats } from '@/lib/data';
 
 export default function SupervisorDashboardPage() {
   const { reports } = useReports();
+  const { workers } = useWorkers();
+  const { tasks } = useTasks();
+
+  const dynamicStats = [
+    {
+      label: 'المواعيد',
+      value: mockAppointments.length.toString(), // This will be dynamic in a future step
+      change: '+10%',
+    },
+    {
+      label: 'العمال',
+      value: workers.length.toString(),
+      change: '+2.5%',
+    },
+    {
+      label: 'اليوميات',
+      value: reports.length.toString(),
+      change: '-1.4%',
+    },
+     {
+      label: 'المهام',
+      value: tasks.length.toString(),
+      change: '+5.2%',
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-8">
-      <StatsCards />
+      <StatsCards stats={dynamicStats} />
       <AppointmentsCalendar initialAppointments={mockAppointments} />
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3">
