@@ -96,7 +96,6 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   }, [dateString, form]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // @ts-ignore
     addReport(values);
     toast({
       title: "تم حفظ اليومية بنجاح!",

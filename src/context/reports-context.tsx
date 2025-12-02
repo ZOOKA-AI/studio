@@ -1,8 +1,10 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 import type { DailyReport } from '@/lib/types';
-import { mockRecentReports } from '@/lib/data';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { useFirebase, useMemoFirebase } from '@/firebase';
 
 type ReportsContextType = {
   reports: DailyReport[];
@@ -12,17 +14,31 @@ type ReportsContextType = {
 const ReportsContext = createContext<ReportsContextType | undefined>(undefined);
 
 export function ReportsProvider({ children }: { children: ReactNode }) {
-  const [reports, setReports] = useState<DailyReport[]>(mockRecentReports);
+  const { firestore } = useFirebase();
+  const reportsRef = useMemoFirebase(
+    () => (firestore ? collection(firestore, 'dailyReports') : null),
+    [firestore]
+  );
+  
+  const { data: rawReports = [] } = useCollection(reportsRef);
 
-  const addReport = (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
-    const newReport: DailyReport = {
+  const reports = (rawReports || []).map(report => ({
+    ...report,
+    date: report.date.toDate(),
+  }));
+
+
+  const addReport = async (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
+    if (!firestore) return;
+    
+    const newReport = {
       ...report,
-      id: new Date().toISOString(),
+      date: Timestamp.fromDate(report.date),
       supervisor: 'محمد', // Placeholder for logged-in user
       hours: 8, // Placeholder
       status: 'قيد المراجعة',
     };
-    setReports(prevReports => [newReport, ...prevReports]);
+    await addDoc(collection(firestore, 'dailyReports'), newReport);
   };
 
   return (

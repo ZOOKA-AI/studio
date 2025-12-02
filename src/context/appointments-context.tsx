@@ -3,7 +3,7 @@
 import { createContext, useContext, ReactNode } from 'react';
 import type { Appointment } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
 
 type AppointmentsContextType = {
@@ -20,14 +20,23 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     () => (firestore ? collection(firestore, 'appointments') : null),
     [firestore]
   );
-  const { data: appointments = [], isLoading } = useCollection<Appointment>(appointmentsRef);
+  
+  const { data: rawAppointments = [] } = useCollection<Omit<Appointment, 'startTime'|'endTime'> & {startTime: Timestamp, endTime: Timestamp}>(appointmentsRef);
+
+  const appointments: Appointment[] = (rawAppointments || []).map(appointment => ({
+    ...appointment,
+    startTime: appointment.startTime.toDate().toISOString(),
+    endTime: appointment.endTime.toDate().toISOString(),
+  }));
 
   const addAppointment = async (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => {
     if (!firestore) return;
+    const startTime = new Date(appointment.startTime);
     const newAppointment = {
         ...appointment,
+        startTime: Timestamp.fromDate(startTime),
         siteAddress: 'غير محدد',
-        endTime: new Date(new Date(appointment.startTime).getTime() + 2 * 60 * 60 * 1000).toISOString(),
+        endTime: Timestamp.fromDate(new Date(startTime.getTime() + 2 * 60 * 60 * 1000)),
     };
     await addDoc(collection(firestore, 'appointments'), newAppointment);
   };
