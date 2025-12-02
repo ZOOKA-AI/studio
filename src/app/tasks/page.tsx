@@ -30,7 +30,7 @@ export default function TasksPage() {
                     <CardTitle className="font-headline text-xl">📋 إدارة المهام</CardTitle>
                     <CardDescription>عرض وتتبع المهام الموكلة إليك.</CardDescription>
                 </div>
-                <Button onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا." })}>
+                <Button onClick={() => toast({ title: "لم يتم تفعيل هذه الميزة بعد", description: "سيتم تفعيل إضافة مهمة جديدة قريبًا." })}>
                     <PlusCircle className="me-2 h-4 w-4" />
                     إضافة مهمة جديدة
                 </Button>
@@ -58,7 +58,7 @@ export default function TasksPage() {
                                 </TableCell>
                                 <TableCell>{task.dueDate}</TableCell>
                                 <TableCell>
-                                    <Button variant="ghost" size="sm" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>
+                                    <Button variant="ghost" size="sm" onClick={() => toast({ title: "لم يتم تفعيل هذه الميزة بعد", description: "سيتم تفعيل هذا الإجراء قريبًا."})}>
                                         <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                 </TableCell>

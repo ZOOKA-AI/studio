@@ -51,7 +51,7 @@ export default function InventoryPage() {
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
-                                    <Button variant="ghost" size="sm" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>تعديل</Button>
+                                    <Button variant="ghost" size="sm" onClick={() => toast({ title: "لماذا هذا لا يعمل؟", description: "هذه الميزة لم يتم تفعيلها بعد. سأقوم بتفعيلها في الخطوة التالية."})}>تعديل</Button>
                                 </TableCell>
                             </TableRow>
                         ))}
