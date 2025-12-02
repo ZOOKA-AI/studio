@@ -23,7 +23,7 @@ export default function WorkersPage() {
                 </div>
                 <Button onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>
                     <PlusCircle className="me-2 h-4 w-4" />
-                    إضافة عامل جديد
+                    ايضا لما لا يمكن اضافة عمال
                 </Button>
             </CardHeader>
             <CardContent>
