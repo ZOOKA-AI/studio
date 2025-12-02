@@ -2,8 +2,8 @@
 
 import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import { FirebaseApp } from 'firebase/app';
-import { Firestore } from 'firebase/firestore';
-import { Auth, User, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
+import { Firestore, doc, setDoc } from 'firebase/firestore';
+import { Auth, User, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener'
 
 interface FirebaseProviderProps {
@@ -52,6 +52,9 @@ export interface UserHookResult { // Renamed from UserAuthHookResult for consist
 // React Context
 export const FirebaseContext = createContext<FirebaseContextState | undefined>(undefined);
 
+const SUPERVISOR_EMAIL = 'supervisor@royal.com';
+const SUPERVISOR_PASSWORD = 'password';
+
 /**
  * FirebaseProvider manages and provides Firebase services and user authentication state.
  */
@@ -69,33 +72,67 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
   // Effect to subscribe to Firebase auth state changes
   useEffect(() => {
-    if (!auth) { // If no Auth service instance, cannot determine user state
-      setUserAuthState({ user: null, isUserLoading: false, userError: new Error("Auth service not provided.") });
+    if (!auth || !firestore) { // If no Auth service instance, cannot determine user state
+      setUserAuthState({ user: null, isUserLoading: false, userError: new Error("Auth or Firestore service not provided.") });
       return;
     }
 
     setUserAuthState({ user: null, isUserLoading: true, userError: null }); // Reset on auth instance change
 
+    const ensureSupervisorAccount = async (user: User | null) => {
+        if (user) {
+            setUserAuthState({ user, isUserLoading: false, userError: null });
+            return;
+        }
+
+        try {
+            // Try to sign in as the supervisor
+            const userCredential = await signInWithEmailAndPassword(auth, SUPERVISOR_EMAIL, SUPERVISOR_PASSWORD);
+            setUserAuthState({ user: userCredential.user, isUserLoading: false, userError: null });
+        } catch (error: any) {
+            // If user does not exist, create it
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, SUPERVISOR_EMAIL, SUPERVISOR_PASSWORD);
+                    const supervisorUser = userCredential.user;
+                    
+                    // Create the user profile document in Firestore
+                    const userDocRef = doc(firestore, 'users', supervisorUser.uid);
+                    await setDoc(userDocRef, {
+                        id: supervisorUser.uid,
+                        name: 'محمد المشرف',
+                        email: SUPERVISOR_EMAIL,
+                        role: 'supervisor',
+                    });
+
+                    // Create admin role document
+                    const adminRoleRef = doc(firestore, 'roles_admin', supervisorUser.uid);
+                    await setDoc(adminRoleRef, { role: 'admin' });
+
+
+                    setUserAuthState({ user: supervisorUser, isUserLoading: false, userError: null });
+                } catch (creationError) {
+                    console.error("Supervisor account creation failed:", creationError);
+                    setUserAuthState({ user: null, isUserLoading: false, userError: creationError as Error });
+                }
+            } else {
+                console.error("Supervisor sign-in failed:", error);
+                setUserAuthState({ user: null, isUserLoading: false, userError: error });
+            }
+        }
+    };
+
+
     const unsubscribe = onAuthStateChanged(
       auth,
-      (firebaseUser) => { // Auth state determined
-        if (firebaseUser) {
-            setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
-        } else {
-            // If no user, sign in anonymously.
-            signInAnonymously(auth).catch((error) => {
-                console.error("Anonymous sign-in failed:", error);
-                setUserAuthState({ user: null, isUserLoading: false, userError: error });
-            });
-        }
-      },
+      ensureSupervisorAccount,
       (error) => { // Auth listener error
         console.error("FirebaseProvider: onAuthStateChanged error:", error);
         setUserAuthState({ user: null, isUserLoading: false, userError: error });
       }
     );
     return () => unsubscribe(); // Cleanup
-  }, [auth]); // Depends on the auth instance
+  }, [auth, firestore]); // Depends on the auth instance
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {

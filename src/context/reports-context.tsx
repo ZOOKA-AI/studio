@@ -38,7 +38,7 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
       ...report,
       date: Timestamp.fromDate(report.date),
       supervisorId: user.uid, // Use the actual user ID
-      supervisor: user.displayName || 'مشرف', // Use display name or a default
+      supervisor: 'محمد المشرف', // Hardcode supervisor name
       hours: 8, // Placeholder
       status: 'قيد المراجعة',
     };

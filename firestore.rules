@@ -103,11 +103,7 @@ service cloud.firestore {
      * @principle Enforces self-service profile management and provides admin oversight.
      */
     match /users/{userId} {
-      allow get: if isOwner(userId) || isAdmin();
-      allow list: if isAdmin();
-      allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update: if (isOwner(userId) || isAdmin()) && resource != null && request.resource.data.id == resource.data.id;
-      allow delete: if isAdmin() && resource != null;
+      allow read, write: if isSignedIn();
     }
 
     /**
@@ -156,7 +152,7 @@ service cloud.firestore {
     match /dailyReports/{dailyReportId} {
       allow get: if isAdmin() || isAssignedSupervisor(resource) || isAssignedWorker(resource);
       allow list: if isSignedIn();
-      allow create: if isSignedIn() && request.resource.data.supervisorId == request.auth.uid;
+      allow create: if isSupervisor() && request.resource.data.supervisorId == request.auth.uid;
       allow update: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null && request.resource.data.supervisorId == resource.data.supervisorId;
       allow delete: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null;
     }
