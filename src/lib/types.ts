@@ -36,7 +36,7 @@ export type DailyReport = {
   vehicleNumber?: string;
   workers: { name: string; phone?: string }[];
   tasks: { value: string }[];
-  materials: { value: string }[];
+  materials: { name: string; quantity?: string }[];
   notes?: string;
 };
 

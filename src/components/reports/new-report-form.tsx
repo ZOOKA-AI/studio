@@ -50,7 +50,7 @@ const formSchema = z.object({
   tasks: z
     .array(z.object({ value: z.string() }))
     .min(1, "يجب إضافة مهمة واحدة على الأقل."),
-  materials: z.array(z.object({ value: z.string() })),
+  materials: z.array(z.object({ name: z.string().min(1,"اسم المادة مطلوب"), quantity: z.string().optional() })),
   notes: z.string().optional(),
   beforeImage: z.any().optional(),
   afterImage: z.any().optional(),
@@ -92,6 +92,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   }, [dateString, form]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    // @ts-ignore
     addReport(values);
     toast({
       title: "تم حفظ اليومية بنجاح!",
@@ -121,10 +122,10 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     setIsSuggesting(true);
     try {
       const suggestions = await getMaterialSuggestions({ task: taskDescriptions });
-      const newMaterials = suggestions.map((s) => ({ value: s.materialName }));
-      const currentMaterials = form.getValues("materials").map((m) => m.value);
+      const newMaterials = suggestions.map((s) => ({ name: s.materialName, quantity: "" }));
+      const currentMaterialNames = form.getValues("materials").map((m) => m.name);
       const uniqueNewMaterials = newMaterials.filter(
-        (nm) => !currentMaterials.includes(nm.value)
+        (nm) => !currentMaterialNames.includes(nm.name)
       );
 
       if (uniqueNewMaterials.length > 0) {
@@ -152,7 +153,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
       التاريخ: ${values.date ? format(values.date, "PPP", { locale: ar }) : ""}
       المهام: ${values.tasks.map((t) => t.value).join(", ")}
       العمال: ${values.workers.map((w) => w.name).join(", ")}
-      المواد: ${values.materials.map((m) => m.value).join(", ")}
+      المواد: ${values.materials.map((m) => `${m.name} (${m.quantity})`).join(", ")}
       الملاحظات: ${values.notes || "لا يوجد"}
     `;
 
@@ -513,36 +514,53 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                 </div>
                 <div className="space-y-2">
                   {form.watch("materials").map((material, index) => (
-                    <FormField
-                      key={index}
-                      control={form.control}
-                      name={`materials.${index}.value`}
-                      render={({ field }) => (
-                        <FormItem className="flex items-center gap-2">
-                          <FormControl>
-                            <Input
-                              placeholder={`مادة #${index + 1}`}
-                              {...field}
-                            />
-                          </FormControl>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              const currentMaterials =
-                                form.getValues("materials");
-                              form.setValue(
+                    <div key={index} className="flex items-start gap-2">
+                        <FormField
+                          control={form.control}
+                          name={`materials.${index}.name`}
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Input
+                                  placeholder={`اسم المادة #${index + 1}`}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                         <FormField
+                          control={form.control}
+                          name={`materials.${index}.quantity`}
+                          render={({ field }) => (
+                            <FormItem className="w-1/3">
+                              <FormControl>
+                                <Input
+                                  placeholder="الكمية"
+                                  {...field}
+                                />
+                              </FormControl>
+                               <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                           className="mt-1"
+                          onClick={() => {
+                            const currentMaterials = form.getValues("materials");
+                            form.setValue(
                                 "materials",
                                 currentMaterials.filter((_, i) => i !== index)
                               );
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </FormItem>
-                      )}
-                    />
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
                   ))}
                 </div>
                 <Button
@@ -553,7 +571,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                   onClick={() =>
                     form.setValue("materials", [
                       ...form.getValues("materials"),
-                      { value: "" },
+                      { name: "", quantity: "" },
                     ])
                   }
                 >
