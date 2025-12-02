@@ -45,3 +45,16 @@ export type Stat = {
   value: string;
   change: string;
 };
+
+
+export type WorkerStatus = 'نشط' | 'في إجازة';
+
+export type Worker = {
+    id: string;
+    name: string;
+    phone: string;
+    nationalId: string;
+    role: string;
+    status: WorkerStatus;
+    type: 'company' | 'external';
+};
