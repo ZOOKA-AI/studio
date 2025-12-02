@@ -15,6 +15,8 @@ export default function SupervisorDashboardPage() {
   const { tasks } = useTasks();
   const { appointments } = useAppointments();
 
+  const totalRevenue = reports.reduce((sum, report) => sum + (report.agreedAmount || 0), 0);
+
   const dynamicStats = [
     {
       label: 'المواعيد',
@@ -38,9 +40,25 @@ export default function SupervisorDashboardPage() {
     },
   ];
 
+  const financialStats = [
+    {
+      label: 'الإيرادات',
+      value: `د.إ ${totalRevenue.toFixed(2)}`,
+      change: '+8.1%',
+    },
+    {
+      label: 'المصروفات',
+      value: 'د.إ 0.00',
+      change: '+0%',
+    }
+  ];
+
   return (
     <div className="flex flex-col gap-8">
       <StatsCards stats={dynamicStats} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <StatsCards stats={financialStats} />
+      </div>
       <AppointmentsCalendar />
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3">

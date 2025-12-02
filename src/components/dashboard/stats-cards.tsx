@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { CalendarCheck, Users, FileText, CheckSquare, TrendingUp, TrendingDown, BarChart3 } from "lucide-react";
+import { CalendarCheck, Users, FileText, CheckSquare, TrendingUp, TrendingDown, BarChart3, DollarSign, Package } from "lucide-react";
 import type { Stat } from "@/lib/types";
 
 const iconMap = {
@@ -8,7 +8,8 @@ const iconMap = {
   'العمال': Users,
   'اليوميات': FileText,
   'المهام': CheckSquare,
-  'الإيرادات': BarChart3,
+  'الإيرادات': DollarSign,
+  'المصروفات': Package,
 };
 
 type StatsCardsProps = {
@@ -17,7 +18,7 @@ type StatsCardsProps = {
 
 export function StatsCards({ stats }: StatsCardsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4", stats.length > 2 ? "lg:grid-cols-4" : "lg:grid-cols-2")}>
       {stats.map((stat) => {
         const Icon = iconMap[stat.label as keyof typeof iconMap] || FileText;
         const isPositive = stat.change.startsWith('+');
