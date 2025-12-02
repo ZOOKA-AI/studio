@@ -214,10 +214,7 @@ service cloud.firestore {
      * @principle Acts as a lookup table, allowing wide read access but restricted write access.
      */
     match /materials/{materialId} {
-      allow get, list: if isSignedIn();
-      allow create: if isSupervisorOrAdmin();
-      allow update: if isSupervisorOrAdmin() && resource != null;
-      allow delete: if isSupervisorOrAdmin() && resource != null;
+      allow read, write: if isSignedIn();
     }
 
     /**
@@ -277,5 +274,3 @@ service cloud.firestore {
     }
   }
 }
-
-    

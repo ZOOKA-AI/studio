@@ -71,3 +71,12 @@ export type Task = {
   priority: TaskPriority;
   dueDate: string; // ISO string for date
 };
+
+
+export type Material = {
+  id: string;
+  name: string;
+  description?: string;
+  quantity: number;
+  unit: string;
+}

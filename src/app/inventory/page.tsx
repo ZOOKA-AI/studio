@@ -5,17 +5,18 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-
-const inventoryItems = [
-    { id: 'M001', name: 'سائل تنظيف الأرضيات', quantity: 50, unit: 'لتر', status: 'متوفر' },
-    { id: 'M002', name: 'معقم أسطح', quantity: 25, unit: 'لتر', status: 'متوفر' },
-    { id: 'M003', name: 'مناشف ورقية', quantity: 10, unit: 'صندوق', status: 'كمية منخفضة' },
-    { id: 'M004', name: 'أكياس قمامة', quantity: 200, unit: 'كيس', status: 'متوفر' },
-    { id: 'M005', name: 'قفازات لاتكس', quantity: 0, unit: 'صندوق', status: 'نفذت الكمية' },
-];
+import { useMaterials } from "@/context/materials-context";
 
 export default function InventoryPage() {
     const { toast } = useToast();
+    const { materials } = useMaterials();
+
+    const getStatus = (quantity: number) => {
+        if (quantity === 0) return { text: 'نفذت الكمية', variant: 'destructive' as const };
+        if (quantity < 20) return { text: 'كمية منخفضة', variant: 'secondary' as const };
+        return { text: 'متوفر', variant: 'default' as const };
+    };
+
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -40,21 +41,24 @@ export default function InventoryPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {inventoryItems.map((item) => (
-                            <TableRow key={item.id}>
-                                <TableCell className="font-mono">{item.id}</TableCell>
-                                <TableCell className="font-medium">{item.name}</TableCell>
-                                <TableCell>{item.quantity} {item.unit}</TableCell>
-                                <TableCell>
-                                    <Badge variant={item.status === 'نفذت الكمية' ? 'destructive' : item.status === 'كمية منخفضة' ? 'secondary' : 'default'}>
-                                        {item.status}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <Button variant="ghost" size="sm" onClick={() => toast({ title: "لماذا هذا لا يعمل؟", description: "هذه الميزة لم يتم تفعيلها بعد. سأقوم بتفعيلها في الخطوة التالية."})}>تعديل</Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {materials.map((item) => {
+                            const statusInfo = getStatus(item.quantity);
+                            return (
+                                <TableRow key={item.id}>
+                                    <TableCell className="font-mono">{item.id.substring(0, 6)}</TableCell>
+                                    <TableCell className="font-medium">{item.name}</TableCell>
+                                    <TableCell>{item.quantity} {item.unit}</TableCell>
+                                    <TableCell>
+                                        <Badge variant={statusInfo.variant}>
+                                            {statusInfo.text}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button variant="ghost" size="sm" onClick={() => toast({ title: "لماذا هذا لا يعمل؟", description: "هذه الميزة لم يتم تفعيلها بعد. سأقوم بتفعيلها في الخطوة التالية."})}>تعديل</Button>
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </CardContent>
