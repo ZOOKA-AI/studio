@@ -16,7 +16,7 @@ type ReportsContextType = {
 const ReportsContext = createContext<ReportsContextType | undefined>(undefined);
 
 export function ReportsProvider({ children }: { children: ReactNode }) {
-  const { firestore } = useFirebase();
+  const { firestore, user } = useFirebase(); // Get the user from useFirebase
   const reportsRef = useMemoFirebase(
     () => (firestore ? collection(firestore, 'dailyReports') : null),
     [firestore]
@@ -31,13 +31,14 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
 
 
   const addReport = async (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
-    if (!firestore) return;
+    if (!firestore || !user) return; // Ensure user is available
     const reportsCollection = collection(firestore, 'dailyReports');
     
     const newReport = {
       ...report,
       date: Timestamp.fromDate(report.date),
-      supervisor: 'محمد', // Placeholder for logged-in user
+      supervisorId: user.uid, // Use the actual user ID
+      supervisor: user.displayName || 'مشرف', // Use display name or a default
       hours: 8, // Placeholder
       status: 'قيد المراجعة',
     };
