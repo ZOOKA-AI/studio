@@ -26,6 +26,8 @@ import {
 import { useTasks } from "@/context/tasks-context";
 import { useToast } from "@/hooks/use-toast";
 import { AddEditTaskDialog } from "@/components/tasks/add-edit-task-dialog";
+import { format, parseISO } from "date-fns";
+import { ar } from "date-fns/locale";
 
 const priorityVariant: Record<TaskPriority, 'default' | 'secondary' | 'destructive'> = {
     'عالية': 'destructive',
@@ -108,7 +110,7 @@ export default function TasksPage() {
                                      <TableCell>
                                         <Badge variant={statusVariant[task.status]}>{task.status}</Badge>
                                     </TableCell>
-                                    <TableCell>{task.dueDate}</TableCell>
+                                    <TableCell>{format(parseISO(task.dueDate), 'PPP', { locale: ar })}</TableCell>
                                     <TableCell className="text-left">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>

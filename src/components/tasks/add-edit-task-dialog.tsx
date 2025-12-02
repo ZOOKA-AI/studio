@@ -49,7 +49,7 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
             setTitle(task.title);
             setPriority(task.priority);
             setStatus(task.status);
-            setDueDate(parseISO(task.dueDate));
+            setDueDate(task.dueDate ? parseISO(task.dueDate) : undefined);
         } else if (open && !task) {
             setTitle('');
             setPriority('متوسطة');
@@ -69,7 +69,7 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
             return;
         }
         
-        onSave({ title, priority, status, dueDate: format(dueDate, 'yyyy-MM-dd') });
+        onSave({ title, priority, status, dueDate: dueDate.toISOString() });
         onOpenChange(false);
     };
 

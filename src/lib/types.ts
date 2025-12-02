@@ -69,5 +69,5 @@ export type Task = {
   title: string;
   status: TaskStatus;
   priority: TaskPriority;
-  dueDate: string;
+  dueDate: string; // ISO string for date
 };
