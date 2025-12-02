@@ -15,8 +15,8 @@ const companyWorkers = [
 ];
 
 const externalWorkers = [
-    { id: 'E001', name: 'محمد خان', phone: '0521234567', nationalId: '202-2000-1234567-5', role: 'عامل يومي' },
-    { id: 'E002', name: 'سانجاي كومار', phone: '0587654321', nationalId: '202-1998-7654321-6', role: 'عامل يومي' },
+    { id: 'E001', name: 'محمد خان', phone: '0521234567', nationalId: '202-2000-1234567-5', role: 'عامل يومي', status: 'نشط' },
+    { id: 'E002', name: 'سانجاي كومار', phone: '0587654321', nationalId: '202-1998-7654321-6', role: 'عامل يومي', status: 'نشط' },
 ];
 
 export default function WorkersPage() {
@@ -30,11 +30,11 @@ export default function WorkersPage() {
                 </div>
                 <Button onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>
                     <PlusCircle className="me-2 h-4 w-4" />
-                    ايضا لما لا يمكن اضافة عمال
+                    إضافة عامل جديد
                 </Button>
             </CardHeader>
             <CardContent>
-                <Tabs defaultValue="company">
+                <Tabs defaultValue="company" dir="rtl">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="company">عمال الشركة</TabsTrigger>
                         <TabsTrigger value="external">عمالة خارجية</TabsTrigger>
@@ -44,24 +44,20 @@ export default function WorkersPage() {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>الاسم</TableHead>
-                                    <TableHead>رقم الهاتف</TableHead>
-                                    <TableHead>رقم الهوية</TableHead>
                                     <TableHead>الدور</TableHead>
                                     <TableHead>الحالة</TableHead>
-                                    <TableHead>الإجراء</TableHead>
+                                    <TableHead className="text-left">الإجراء</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {companyWorkers.map((worker) => (
                                     <TableRow key={worker.id}>
                                         <TableCell className="font-medium">{worker.name}</TableCell>
-                                        <TableCell>{worker.phone}</TableCell>
-                                        <TableCell className="font-mono">{worker.nationalId}</TableCell>
                                         <TableCell>{worker.role}</TableCell>
                                         <TableCell>
                                             <Badge variant={worker.status === 'نشط' ? 'default' : 'secondary'}>{worker.status}</Badge>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell className="text-left">
                                             <Button variant="ghost" size="sm" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>تعديل</Button>
                                             <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>حذف</Button>
                                         </TableCell>
@@ -75,20 +71,20 @@ export default function WorkersPage() {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>الاسم</TableHead>
-                                    <TableHead>رقم الهاتف</TableHead>
-                                    <TableHead>رقم الهوية</TableHead>
                                     <TableHead>الدور</TableHead>
-                                    <TableHead>الإجراء</TableHead>
+                                     <TableHead>الحالة</TableHead>
+                                    <TableHead className="text-left">الإجراء</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {externalWorkers.map((worker) => (
                                     <TableRow key={worker.id}>
                                         <TableCell className="font-medium">{worker.name}</TableCell>
-                                        <TableCell>{worker.phone}</TableCell>
-                                        <TableCell className="font-mono">{worker.nationalId}</TableCell>
                                         <TableCell>{worker.role}</TableCell>
                                         <TableCell>
+                                            <Badge variant={worker.status === 'نشط' ? 'default' : 'secondary'}>{worker.status}</Badge>
+                                        </TableCell>
+                                        <TableCell className="text-left">
                                             <Button variant="ghost" size="sm" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>تعديل</Button>
                                             <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => toast({ title: "قيد التنفيذ", description: "سيتم تفعيل هذه الميزة قريبًا."})}>حذف</Button>
                                         </TableCell>
