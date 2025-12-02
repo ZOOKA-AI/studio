@@ -6,7 +6,7 @@ import { mockRecentReports } from '@/lib/data';
 
 type ReportsContextType = {
   reports: DailyReport[];
-  addReport: (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor'>) => void;
+  addReport: (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => void;
 };
 
 const ReportsContext = createContext<ReportsContextType | undefined>(undefined);
@@ -14,7 +14,7 @@ const ReportsContext = createContext<ReportsContextType | undefined>(undefined);
 export function ReportsProvider({ children }: { children: ReactNode }) {
   const [reports, setReports] = useState<DailyReport[]>(mockRecentReports);
 
-  const addReport = (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor'>) => {
+  const addReport = (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
     const newReport: DailyReport = {
       ...report,
       id: new Date().toISOString(),

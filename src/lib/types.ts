@@ -22,11 +22,22 @@ export type DailyReportStatus = 'مكتمل' | 'مسودة' | 'قيد المرا
 
 export type DailyReport = {
   id: string;
-  siteName: string;
+  // siteName is now clientName to better reflect what it is
+  clientName: string;
   date: Date;
   supervisor: string;
   status: DailyReportStatus;
   hours: number;
+  clientPhone?: string;
+  clientLocation?: string;
+  agreedAmount?: number;
+  paymentMethod?: string;
+  workDescription?: string;
+  vehicleNumber?: string;
+  workers: { name: string; phone?: string }[];
+  tasks: { value: string }[];
+  materials: { value: string }[];
+  notes?: string;
 };
 
 export type Stat = {

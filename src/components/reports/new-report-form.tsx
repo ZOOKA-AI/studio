@@ -39,10 +39,11 @@ const formSchema = z.object({
   clientName: z.string().min(2, { message: "اسم العميل مطلوب." }),
   clientPhone: z.string().optional(),
   clientLocation: z.string().optional(),
+  agreedAmount: z.coerce.number().optional(),
+  paymentMethod: z.string().optional(),
+  workDescription: z.string().optional(),
   date: z.date({ required_error: "تاريخ اليومية مطلوب." }),
   vehicleNumber: z.string().optional(),
-  income: z.coerce.number().optional(),
-  expenses: z.coerce.number().optional(),
   workers: z
     .array(z.object({ name: z.string().min(1, "اسم العامل مطلوب."), phone: z.string().optional() }))
     .min(1, "يجب إضافة عامل واحد على الأقل."),
@@ -72,14 +73,15 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
       clientName: "",
       clientPhone: "",
       clientLocation: "",
+      agreedAmount: 0,
+      paymentMethod: "",
+      workDescription: "",
       date: dateString ? parseISO(dateString) : new Date(),
       tasks: [{ value: "" }],
       workers: [{ name: "", phone: "" }],
       materials: [],
       notes: "",
       vehicleNumber: "",
-      income: 0,
-      expenses: 0,
     },
   });
 
@@ -281,6 +283,51 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                     )}
                     />
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                        control={form.control}
+                        name="agreedAmount"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>المبلغ المتفق عليه (بالدرهم)</FormLabel>
+                            <FormControl>
+                                <Input type="number" placeholder="0.00" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="paymentMethod"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>طريقة الدفع</FormLabel>
+                            <FormControl>
+                                <Input placeholder="كاش، تحويل بنكي،..." {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                 <FormField
+                    control={form.control}
+                    name="workDescription"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>وصف الأعمال</FormLabel>
+                        <FormControl>
+                            <Textarea
+                            placeholder="وصف عام للأعمال المتفق عليها..."
+                            className="resize-none"
+                            {...field}
+                            />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <div>
                   <FormLabel>العمال</FormLabel>
                   <div className="space-y-2 mt-2">
@@ -446,35 +493,6 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
             </div>
 
             <div className="border-t pt-6">
-              <h3 className="text-lg font-medium mb-4">المواد والمصروفات</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="income"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>الوارد (بالدرهم)</FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="0.00" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="expenses"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>المصروف (بالدرهم)</FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="0.00" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
               <div className="mt-6">
                 <div className="flex items-center justify-between mb-2">
                   <FormLabel>المواد المستخدمة</FormLabel>
