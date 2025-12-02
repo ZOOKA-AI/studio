@@ -7,7 +7,7 @@ export type User = {
   avatarUrl: string;
 };
 
-export type AppointmentStatus = 'مكتمل' | 'قيد التنفيذ' | 'متأخر' | 'مجدول' | 'مؤجل';
+export type AppointmentStatus = 'حجز جديد' | 'مكتمل' | 'قيد التنفيذ' | 'متأخر' | 'مجدول' | 'مؤجل';
 
 export type Appointment = {
   id: string;

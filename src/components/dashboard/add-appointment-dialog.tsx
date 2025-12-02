@@ -34,18 +34,18 @@ type AddAppointmentDialogProps = {
   onOpenChange?: (open: boolean) => void;
 };
 
-const appointmentStatuses: AppointmentStatus[] = ['مجدول', 'قيد التنفيذ', 'مكتمل', 'متأخر', 'مؤجل'];
+const appointmentStatuses: AppointmentStatus[] = ['حجز جديد', 'مجدول', 'قيد التنفيذ', 'مكتمل', 'متأخر', 'مؤجل'];
 
 export function AddAppointmentDialog({ onAppointmentAdd, open, onOpenChange }: AddAppointmentDialogProps) {
     const { toast } = useToast();
-    const [siteName, setSiteName] = useState('');
-    const [status, setStatus] = useState<AppointmentStatus>('مجدول');
+    const [clientName, setClientName] = useState('');
+    const [status, setStatus] = useState<AppointmentStatus>('حجز جديد');
     const [date, setDate] = useState<Date | undefined>(new Date());
     const [time, setTime] = useState('09:00');
     const [isOpen, setIsOpen] = useState(false);
 
     const handleSave = () => {
-        if (!siteName || !date || !time) {
+        if (!clientName || !date || !time) {
              toast({
                 variant: "destructive",
                 title: "الحقول مطلوبة",
@@ -58,16 +58,16 @@ export function AddAppointmentDialog({ onAppointmentAdd, open, onOpenChange }: A
         const startTime = new Date(date);
         startTime.setHours(hours, minutes);
         
-        onAppointmentAdd({ siteName, status, startTime });
+        onAppointmentAdd({ siteName: clientName, status, startTime });
         
         toast({
             title: "تمت إضافة الموعد",
-            description: `تم جدولة موعد لـ ${siteName} بنجاح.`,
+            description: `تم جدولة موعد لـ ${clientName} بنجاح.`,
         });
         
         // Reset form
-        setSiteName('');
-        setStatus('مجدول');
+        setClientName('');
+        setStatus('حجز جديد');
         setDate(new Date());
         setTime('09:00');
         
@@ -93,10 +93,10 @@ export function AddAppointmentDialog({ onAppointmentAdd, open, onOpenChange }: A
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="siteName" className="text-right">
-              اسم الموقع
+            <Label htmlFor="clientName" className="text-right">
+              اسم العميل
             </Label>
-            <Input id="siteName" value={siteName} onChange={(e) => setSiteName(e.target.value)} className="col-span-3" />
+            <Input id="clientName" value={clientName} onChange={(e) => setClientName(e.target.value)} className="col-span-3" />
           </div>
            <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="status" className="text-right">
