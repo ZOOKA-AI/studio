@@ -6,6 +6,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
 import { ReportsProvider } from '@/context/reports-context';
+import { WorkersProvider } from '@/context/workers-context';
 
 export const metadata: Metadata = {
   title: 'Royal Clean Dashboard',
@@ -26,6 +27,7 @@ export default function RootLayout({
       </head>
       <body className={cn("font-body antialiased", 'bg-background')}>
         <ReportsProvider>
+          <WorkersProvider>
             <SidebarProvider>
                 <div className="relative flex min-h-screen">
                     <AppSidebar />
@@ -38,6 +40,7 @@ export default function RootLayout({
                 </div>
                 <Toaster />
             </SidebarProvider>
+          </WorkersProvider>
         </ReportsProvider>
       </body>
     </html>

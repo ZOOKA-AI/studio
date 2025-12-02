@@ -25,33 +25,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
-
-export type Worker = {
-    id: string;
-    name: string;
-    phone: string;
-    nationalId: string;
-    role: string;
-    status: 'نشط' | 'في إجازة';
-    type: 'company' | 'external';
-};
-
-const initialCompanyWorkers: Worker[] = [
-    { id: 'W001', name: 'أحمد محمود', phone: '0501234567', nationalId: '784-1990-1234567-1', role: 'عامل نظافة', status: 'نشط', type: 'company' },
-    { id: 'W002', name: 'علي حسن', phone: '0557654321', nationalId: '784-1985-7654321-2', role: 'عامل نظافة', status: 'نشط', type: 'company' },
-    { id: 'W004', name: 'يوسف خالد', phone: '0561122334', nationalId: '784-1992-1122334-3', role: 'مشرف فريق', status: 'نشط', type: 'company' },
-    { id: 'W003', name: 'فاطمة الزهراء', phone: '0509876543', nationalId: '784-1995-9876543-4', role: 'عاملة نظافة', status: 'في إجازة', type: 'company' },
-];
-
-const initialExternalWorkers: Worker[] = [
-    { id: 'E001', name: 'محمد خان', phone: '0521234567', nationalId: '202-2000-1234567-5', role: 'عامل يومي', status: 'نشط', type: 'external' },
-    { id: 'E002', name: 'سانجاي كومار', phone: '0587654321', nationalId: '202-1998-7654321-6', role: 'عامل يومي', status: 'نشط', type: 'external' },
-];
+import type { Worker } from '@/lib/types';
+import { useWorkers } from "@/context/workers-context";
 
 export default function WorkersPage() {
     const { toast } = useToast();
-    const [workers, setWorkers] = useState<Worker[]>([...initialCompanyWorkers, ...initialExternalWorkers]);
+    const { workers, addWorker, updateWorker, deleteWorker } = useWorkers();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingWorker, setEditingWorker] = useState<Worker | null>(null);
 
@@ -66,7 +45,7 @@ export default function WorkersPage() {
     };
     
     const handleDeleteWorker = (workerId: string) => {
-        setWorkers(workers.filter(w => w.id !== workerId));
+        deleteWorker(workerId);
         toast({
             title: "تم الحذف بنجاح",
             description: "تم حذف العامل من القائمة.",
@@ -76,16 +55,11 @@ export default function WorkersPage() {
     const handleSaveWorker = (workerData: Omit<Worker, 'id' | 'type'>, type: 'company' | 'external') => {
         if (editingWorker) {
             // Edit existing worker
-            setWorkers(workers.map(w => w.id === editingWorker.id ? { ...editingWorker, ...workerData } : w));
+            updateWorker(editingWorker.id, { ...editingWorker, ...workerData });
             toast({ title: "تم التعديل بنجاح", description: "تم تحديث بيانات العامل." });
         } else {
             // Add new worker
-            const newWorker: Worker = {
-                id: `W${Math.floor(Math.random() * 1000)}`,
-                ...workerData,
-                type,
-            };
-            setWorkers([...workers, newWorker]);
+            addWorker(workerData, type);
             toast({ title: "تمت الإضافة بنجاح", description: "تمت إضافة العامل الجديد." });
         }
         setEditingWorker(null);

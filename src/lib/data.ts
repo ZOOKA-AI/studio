@@ -1,4 +1,4 @@
-import type { Appointment, DailyReport } from './types';
+import type { Appointment, DailyReport, Worker } from './types';
 import { subDays, addHours, set, startOfWeek, addDays as dateFnsAddDays } from 'date-fns';
 
 const now = new Date();
@@ -124,3 +124,16 @@ export const mockStats = {
     change: '+5.2%',
   },
 };
+
+
+export const initialCompanyWorkers: Worker[] = [
+    { id: 'W001', name: 'أحمد محمود', phone: '0501234567', nationalId: '784-1990-1234567-1', role: 'عامل نظافة', status: 'نشط', type: 'company' },
+    { id: 'W002', name: 'علي حسن', phone: '0557654321', nationalId: '784-1985-7654321-2', role: 'عامل نظافة', status: 'نشط', type: 'company' },
+    { id: 'W004', name: 'يوسف خالد', phone: '0561122334', nationalId: '784-1992-1122334-3', role: 'مشرف فريق', status: 'نشط', type: 'company' },
+    { id: 'W003', name: 'فاطمة الزهراء', phone: '0509876543', nationalId: '784-1995-9876543-4', role: 'عاملة نظافة', status: 'في إجازة', type: 'company' },
+];
+
+export const initialExternalWorkers: Worker[] = [
+    { id: 'E001', name: 'محمد خان', phone: '0521234567', nationalId: '202-2000-1234567-5', role: 'عامل يومي', status: 'نشط', type: 'external' },
+    { id: 'E002', name: 'سانجاي كومار', phone: '0587654321', nationalId: '202-1998-7654321-6', role: 'عامل يومي', status: 'نشط', type: 'external' },
+];
