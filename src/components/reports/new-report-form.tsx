@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -96,7 +97,10 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   }, [dateString, form]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    addReport(values);
+    // Exclude image fields before saving to Firestore
+    const { beforeImage, afterImage, ...reportData } = values;
+
+    addReport(reportData);
     toast({
       title: "تم حفظ اليومية بنجاح!",
       description: `تم تحديث تقرير يوم ${format(values.date, "PPP", {
