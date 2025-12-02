@@ -4,7 +4,7 @@ import { mockAppointments } from '@/lib/data';
 export default function CalendarPage() {
   return (
     <div>
-      <AppointmentsCalendar appointments={mockAppointments} />
+      <AppointmentsCalendar initialAppointments={mockAppointments} />
     </div>
   );
 }
