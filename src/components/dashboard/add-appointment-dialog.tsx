@@ -58,7 +58,7 @@ export function AddAppointmentDialog({ onAppointmentAdd, open, onOpenChange }: A
         const startTime = new Date(date);
         startTime.setHours(hours, minutes);
         
-        onAppointmentAdd({ siteName: clientName, status, startTime });
+        onAppointmentAdd({ siteName: clientName, status, startTime: startTime.toISOString() });
         
         toast({
             title: "تمت إضافة الموعد",

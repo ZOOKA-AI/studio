@@ -13,8 +13,8 @@ export type Appointment = {
   id: string;
   siteName: string;
   siteAddress: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
   status: AppointmentStatus;
 };
 

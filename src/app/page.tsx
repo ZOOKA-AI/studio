@@ -4,20 +4,21 @@ import { AppointmentsCalendar } from '@/components/dashboard/appointments-calend
 import { QuickActions } from '@/components/dashboard/quick-actions';
 import { RecentReports } from '@/components/dashboard/recent-reports';
 import { StatsCards } from '@/components/dashboard/stats-cards';
+import { useAppointments } from '@/context/appointments-context';
 import { useReports } from '@/context/reports-context';
 import { useTasks } from '@/context/tasks-context';
 import { useWorkers } from '@/context/workers-context';
-import { mockAppointments, mockStats } from '@/lib/data';
 
 export default function SupervisorDashboardPage() {
   const { reports } = useReports();
   const { workers } = useWorkers();
   const { tasks } = useTasks();
+  const { appointments } = useAppointments();
 
   const dynamicStats = [
     {
       label: 'المواعيد',
-      value: mockAppointments.length.toString(), // This will be dynamic in a future step
+      value: appointments.length.toString(),
       change: '+10%',
     },
     {
@@ -40,7 +41,7 @@ export default function SupervisorDashboardPage() {
   return (
     <div className="flex flex-col gap-8">
       <StatsCards stats={dynamicStats} />
-      <AppointmentsCalendar initialAppointments={mockAppointments} />
+      <AppointmentsCalendar />
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3">
             <RecentReports reports={reports} />

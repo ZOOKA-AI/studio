@@ -7,13 +7,10 @@ import { cn } from "@/lib/utils";
 import { format, addDays, startOfWeek, isSameDay } from "date-fns";
 import { ar } from "date-fns/locale";
 import { Button } from "../ui/button";
-import { ChevronLeft, ChevronRight, PlusCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { AddAppointmentDialog } from "./add-appointment-dialog";
-
-type AppointmentsCalendarProps = {
-  initialAppointments: Appointment[];
-};
+import { useAppointments } from "@/context/appointments-context";
 
 const statusColors: { [key: string]: string } = {
   'مكتمل': 'bg-green-100 text-green-800 border-green-200',
@@ -24,25 +21,13 @@ const statusColors: { [key: string]: string } = {
   'حجز جديد': 'bg-purple-100 text-purple-800 border-purple-200',
 };
 
-export function AppointmentsCalendar({ initialAppointments }: AppointmentsCalendarProps) {
-  const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+export function AppointmentsCalendar() {
+  const { appointments, addAppointment, deleteAppointment } = useAppointments();
   const today = new Date();
   const weekStart = startOfWeek(today, { weekStartsOn: 0 }); // Sunday
   const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i));
 
   const weekRange = `${format(weekStart, 'd', { locale: ar })} - ${format(addDays(weekStart, 6), 'd MMMM yyyy', { locale: ar })}`;
-  
-  const handleAddAppointment = (newAppointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => {
-    const newAppointmentFull: Appointment = {
-      ...newAppointment,
-      id: new Date().toISOString(),
-      siteAddress: 'غير محدد',
-      endTime: new Date(newAppointment.startTime.getTime() + 2 * 60 * 60 * 1000), // Placeholder: 2 hours later
-    };
-    setAppointments(prev => [...prev, newAppointmentFull].sort((a, b) => a.startTime.getTime() - b.startTime.getTime()));
-  };
-
 
   return (
     <>
@@ -50,7 +35,7 @@ export function AppointmentsCalendar({ initialAppointments }: AppointmentsCalend
         <CardHeader className="flex flex-row items-center justify-between">
             <div className="flex items-center gap-4">
                  <CardTitle className="font-headline text-lg">📅 مواعيد الأسبوع</CardTitle>
-                 <AddAppointmentDialog onAppointmentAdd={handleAddAppointment} />
+                 <AddAppointmentDialog onAppointmentAdd={addAppointment} />
             </div>
             <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground font-medium">{weekRange}</span>
@@ -66,7 +51,7 @@ export function AppointmentsCalendar({ initialAppointments }: AppointmentsCalend
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-px bg-border border border-border rounded-lg overflow-hidden">
             {weekDays.map((day) => {
               const dayAppointments = appointments.filter((appointment) =>
-                isSameDay(appointment.startTime, day)
+                isSameDay(new Date(appointment.startTime), day)
               );
               return (
                 <div key={day.toString()} className={cn("bg-card p-2", isSameDay(day, today) && "bg-primary/5")}>
@@ -80,15 +65,23 @@ export function AppointmentsCalendar({ initialAppointments }: AppointmentsCalend
                     {dayAppointments.map((appointment) => (
                       <div
                         key={appointment.id}
-                        className="p-2 rounded-lg border bg-background shadow-sm text-xs"
+                        className="relative group p-2 rounded-lg border bg-background shadow-sm text-xs"
                       >
                         <p className="font-bold truncate">{appointment.siteName}</p>
                         <p className="text-muted-foreground">
-                          {format(appointment.startTime, 'p', { locale: ar })}
+                          {format(new Date(appointment.startTime), 'p', { locale: ar })}
                         </p>
                         <Badge variant="outline" className={cn("mt-1 text-xs", statusColors[appointment.status])}>
                           {appointment.status}
                         </Badge>
+                         <Button
+                          variant="ghost"
+                          size="icon"
+                          className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => deleteAppointment(appointment.id)}
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -98,11 +91,6 @@ export function AppointmentsCalendar({ initialAppointments }: AppointmentsCalend
           </div>
         </CardContent>
       </Card>
-      <AddAppointmentDialog 
-        open={isAddDialogOpen} 
-        onOpenChange={setIsAddDialogOpen} 
-        onAppointmentAdd={handleAddAppointment}
-       />
     </>
   );
 }

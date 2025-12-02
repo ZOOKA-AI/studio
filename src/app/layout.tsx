@@ -8,6 +8,8 @@ import { Header } from '@/components/layout/header';
 import { ReportsProvider } from '@/context/reports-context';
 import { WorkersProvider } from '@/context/workers-context';
 import { TasksProvider } from '@/context/tasks-context';
+import { AppointmentsProvider } from '@/context/appointments-context';
+import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
   title: 'Royal Clean Dashboard',
@@ -27,24 +29,28 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("font-body antialiased", 'bg-background')}>
-        <TasksProvider>
-          <ReportsProvider>
-            <WorkersProvider>
-              <SidebarProvider>
-                  <div className="relative flex min-h-screen">
-                      <AppSidebar />
-                      <div className="flex-1">
-                          <Header />
-                          <main className="p-4 sm:p-6 lg:p-8">
-                              {children}
-                          </main>
+        <FirebaseClientProvider>
+          <AppointmentsProvider>
+            <TasksProvider>
+              <ReportsProvider>
+                <WorkersProvider>
+                  <SidebarProvider>
+                      <div className="relative flex min-h-screen">
+                          <AppSidebar />
+                          <div className="flex-1">
+                              <Header />
+                              <main className="p-4 sm:p-6 lg:p-8">
+                                  {children}
+                              </main>
+                          </div>
                       </div>
-                  </div>
-                  <Toaster />
-              </SidebarProvider>
-            </WorkersProvider>
-          </ReportsProvider>
-        </TasksProvider>
+                      <Toaster />
+                  </SidebarProvider>
+                </WorkersProvider>
+              </ReportsProvider>
+            </TasksProvider>
+          </AppointmentsProvider>
+        </FirebaseClientProvider>
       </body>
     </html>
   );
