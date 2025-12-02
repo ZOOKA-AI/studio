@@ -6,6 +6,12 @@ import { PlusCircle, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { mockTasks } from "@/lib/data";
 import { Task, TaskPriority, TaskStatus } from "@/lib/types";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const priorityVariant: Record<TaskPriority, 'default' | 'secondary' | 'destructive'> = {
     'عالية': 'destructive',
@@ -41,7 +47,7 @@ export default function TasksPage() {
                             <TableHead>الأولوية</TableHead>
                             <TableHead>الحالة</TableHead>
                             <TableHead>تاريخ الاستحقاق</TableHead>
-                            <TableHead>الإجراء</TableHead>
+                            <TableHead className="text-left">الإجراء</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -55,10 +61,22 @@ export default function TasksPage() {
                                     <Badge variant={statusVariant[task.status]}>{task.status}</Badge>
                                 </TableCell>
                                 <TableCell>{task.dueDate}</TableCell>
-                                <TableCell>
-                                    <Button variant="ghost" size="sm">
-                                        <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
+                                <TableCell className="text-left">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="icon">
+                                                <MoreHorizontal className="h-4 w-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuItem>
+                                                تعديل
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                                حذف
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                 </TableCell>
                             </TableRow>
                         ))}
