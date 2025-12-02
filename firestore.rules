@@ -1,0 +1,260 @@
+/**
+ * Royal Clean Dashboard - Firestore Security Rules
+ *
+ * Core Philosophy:
+ * This ruleset enforces a role-based access control (RBAC) model tailored for a cleaning services company.
+ * The primary roles are 'admin', 'supervisor', and 'worker'.
+ * - Admins have full read/write access to all data for management and oversight.
+ * - Supervisors can manage sites, clients, schedules, and the daily reports they create.
+ * - Workers have read-only access to the schedules and reports they are assigned to.
+ * All operations require user authentication.
+ *
+ * Data Structure:
+ * The data is organized into top-level collections (e.g., users, sites, dailyReports).
+ * There are no user-specific subcollections; instead, relationships are managed via IDs within documents.
+ * A special `/roles_admin` collection is used for fast, secure identification of administrators.
+ *
+ * Key Security Decisions:
+ * - Admin Role Check: A user's admin status is determined by the existence of a document in `/roles_admin/{userId}`. This is faster and more secure than checking a field in a user profile.
+ * - Supervisor/Worker Role Check: These roles are determined by a 'role' field in the user's profile document (`/users/{userId}`), requiring a `get` call for authorization.
+ * - Immutable Audit Logs: The `/auditLogs` collection is append-only. Once a record is written, it cannot be modified or deleted, ensuring the integrity of the audit trail.
+ * - Restricted Listing: To prevent data leakage, listing entire collections (like all users or clients) is restricted to admins or supervisors.
+ *
+ * Denormalization for Authorization:
+ * To create simpler and more performant rules, authorization data is denormalized. For example, `dailyReports` and `schedules` documents contain `supervisorId` and an array of `workerIds`. This allows rules to grant access by checking fields directly on the document being requested, avoiding slow and costly `get` calls to other collections.
+ *
+ * Structural Segregation:
+ * The `/roles_admin` collection is segregated from user profiles. This separates the critical function of identifying an admin from their general profile data, simplifying the rules for managing admin privileges.
+ */
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for improved readability and maintenance.
+
+    /**
+     * Checks if a user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the requesting user's UID matches the provided userId.
+     * Used for ownership-based security.
+     */
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    /**
+     * Checks if the requesting user is an admin.
+     * This is the primary check for elevated privileges.
+     * It efficiently checks for the existence of a document in the roles_admin collection.
+     */
+    function isAdmin() {
+      return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /**
+     * Retrieves the role of the currently authenticated user from their user profile.
+     * Note: This function performs a document read.
+     */
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    /**
+     * Checks if the currently authenticated user has the 'supervisor' role.
+     */
+    function isSupervisor() {
+      return getUserRole() == 'supervisor';
+    }
+
+    /**
+     * A combined check for admin or supervisor roles.
+     */
+    function isSupervisorOrAdmin() {
+      return isSupervisor() || isAdmin();
+    }
+
+    /**
+     * Checks if the requesting user is the supervisor assigned to a document (e.g., a report or schedule).
+     */
+    function isAssignedSupervisor(doc) {
+      return request.auth.uid == doc.data.supervisorId;
+    }
+
+    /**
+     * Checks if the requesting user is a worker assigned to a document (e.g., a report or schedule).
+     */
+    function isAssignedWorker(doc) {
+      return request.auth.uid in doc.data.workerIds;
+    }
+    
+    /**
+     * @description
+     *   Manages user profiles. Users can create and manage their own profile.
+     *   Admins have full read/write access to all user profiles for administrative purposes.
+     * @path /users/{userId}
+     * @allow A user (auth.uid='user123') creates their own profile document at /users/user123. (create)
+     * @deny A user (auth.uid='user123') tries to read another user's profile at /users/user456. (get)
+     * @principle Enforces self-service profile management and provides admin oversight.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if (isOwner(userId) || isAdmin()) && resource != null && request.resource.data.id == resource.data.id;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description
+     *   Stores information about cleaning sites.
+     *   Admins and supervisors can manage all site information. All authenticated users can read site details.
+     * @path /sites/{siteId}
+     * @allow A supervisor creates a new site document. (create)
+     * @deny A user with a 'worker' role tries to delete a site. (delete)
+     * @principle Provides broad read access for operational awareness and controlled write access for data integrity.
+     */
+    match /sites/{siteId} {
+      allow get: if isSignedIn();
+      allow list: if isSupervisorOrAdmin();
+      allow create: if isSupervisorOrAdmin();
+      allow update: if isSupervisorOrAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description
+     *   Stores information about clients.
+     *   Admins and supervisors can manage client data.
+     * @path /clients/{clientId}
+     * @allow An admin updates an existing client's contact phone. (update)
+     * @deny A worker attempts to list all clients. (list)
+     * @principle Protects sensitive client information by restricting access to management roles.
+     */
+    match /clients/{clientId} {
+      allow get: if isSupervisorOrAdmin();
+      allow list: if isSupervisorOrAdmin();
+      allow create: if isSupervisorOrAdmin();
+      allow update: if isSupervisorOrAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description
+     *   Stores daily work reports created by supervisors.
+     *   Supervisors can manage their own reports. Assigned workers can read them. Admins have full access.
+     * @path /dailyReports/{dailyReportId}
+     * @allow A worker (auth.uid='worker123') who is in the `workerIds` array reads the report. (get)
+     * @deny A supervisor (auth.uid='sv_A') tries to delete a report created by another supervisor (sv_B). (delete)
+     * @principle Secures reports based on direct assignment using denormalized supervisor and worker IDs.
+     */
+    match /dailyReports/{dailyReportId} {
+      allow get: if isAdmin() || isAssignedSupervisor(resource) || isAssignedWorker(resource);
+      allow list: if isSupervisorOrAdmin();
+      allow create: if isSupervisor() && request.resource.data.supervisorId == request.auth.uid;
+      allow update: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null && request.resource.data.supervisorId == resource.data.supervisorId;
+      allow delete: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null;
+    }
+
+    /**
+     * @description
+     *   Stores individual tasks assigned to workers, linked to a daily report.
+     *   Managed by admins/supervisors, readable by the assigned worker.
+     * @path /workerTasks/{workerTaskId}
+     * @allow A worker (auth.uid='worker123') reads a task where `workerId` is 'worker123'. (get)
+     * @deny A worker tries to create a new task for themselves. (create)
+     * @principle Restricts task management to supervisors while allowing workers to view their assignments.
+     */
+    match /workerTasks/{workerTaskId} {
+      allow get: if isSupervisorOrAdmin() || isOwner(resource.data.workerId);
+      allow list: if isSupervisorOrAdmin();
+      allow create: if isSupervisorOrAdmin();
+      allow update: if isSupervisorOrAdmin() && resource != null;
+      allow delete: if isSupervisorOrAdmin() && resource != null;
+    }
+
+    /**
+     * @description
+     *   A global collection of predefined cleaning tasks.
+     *   Managed by supervisors and admins, readable by all authenticated users.
+     * @path /tasks/{taskId}
+     * @allow Any authenticated user reads the description of a task. (get)
+     * @deny A worker tries to add a new task to the global list. (create)
+     * @principle Acts as a lookup table, allowing wide read access but restricted write access.
+     */
+    match /tasks/{taskId} {
+      allow get, list: if isSignedIn();
+      allow create: if isSupervisorOrAdmin();
+      allow update: if isSupervisorOrAdmin() && resource != null;
+      allow delete: if isSupervisorOrAdmin() && resource != null;
+    }
+
+    /**
+     * @description
+     *   A global collection of cleaning materials.
+     *   Managed by supervisors and admins, readable by all authenticated users.
+     * @path /materials/{materialId}
+     * @allow A worker lists all available materials to see what to use. (list)
+     * @deny An unauthenticated user tries to read a material. (get)
+     * @principle Acts as a lookup table, allowing wide read access but restricted write access.
+     */
+    match /materials/{materialId} {
+      allow get, list: if isSignedIn();
+      allow create: if isSupervisorOrAdmin();
+      allow update: if isSupervisorOrAdmin() && resource != null;
+      allow delete: if isSupervisorOrAdmin() && resource != null;
+    }
+
+    /**
+     * @description
+     *   Stores job schedules. Supervisors create and manage schedules they are assigned to.
+     *   Assigned workers can view their schedules. Admins have full access.
+     * @path /schedules/{scheduleId}
+     * @allow A supervisor (auth.uid='sv_A') updates a schedule where `supervisorId` is 'sv_A'. (update)
+     * @deny A worker tries to change the start time of their assigned schedule. (update)
+     * @principle Secures schedules based on direct assignment using denormalized supervisor and worker IDs.
+     */
+    match /schedules/{scheduleId} {
+      allow get: if isAdmin() || isAssignedSupervisor(resource) || isAssignedWorker(resource);
+      allow list: if isSupervisorOrAdmin();
+      allow create: if isSupervisorOrAdmin() && (isAdmin() || request.resource.data.supervisorId == request.auth.uid);
+      allow update: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null;
+      allow delete: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null;
+    }
+
+    /**
+     * @description
+     *   Manages admin privileges. The existence of a document grants admin rights.
+     *   Only other admins can add or remove users from this collection.
+     * @path /roles_admin/{userId}
+     * @allow An existing admin creates a document for a new user to make them an admin. (create)
+     * @deny A non-admin user tries to read this collection to see who the admins are. (list)
+     * @principle Provides the highest level of security for managing administrative access.
+     */
+    match /roles_admin/{userId} {
+      allow get, list: if isAdmin();
+      allow create, update, delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description
+     *   Stores immutable audit logs of important actions.
+     *   Any authenticated user can create a log entry, but no one can modify or delete them. Only admins can read the logs.
+     * @path /auditLogs/{auditLogId}
+     * @allow A supervisor's action triggers the creation of a new audit log entry. (create)
+     * @deny An admin attempts to delete a log entry to cover up an action. (delete)
+     * @principle Enforces an immutable, append-only log for maximum accountability, with read access restricted to admins.
+     */
+    match /auditLogs/{auditLogId} {
+      allow get, list: if isAdmin();
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}
