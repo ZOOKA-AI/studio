@@ -106,8 +106,8 @@ service cloud.firestore {
       allow get: if isOwner(userId) || isAdmin();
       allow list: if isAdmin();
       allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update: if (isOwner(userId) || isAdmin()) && resource != null && request.resource.data.id == resource.data.id;
-      allow delete: if isAdmin() && resource != null;
+      allow update: if (isOwner(userId) || isAdmin());
+      allow delete: if isAdmin();
     }
 
     /**
@@ -120,11 +120,7 @@ service cloud.firestore {
      * @principle Provides broad read access for operational awareness and controlled write access for data integrity.
      */
     match /sites/{siteId} {
-      allow get: if isSignedIn();
-      allow list: if isSupervisorOrAdmin();
-      allow create: if isSupervisorOrAdmin();
-      allow update: if isSupervisorOrAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow read, write: if isSupervisorOrAdmin();
     }
 
     /**
@@ -137,11 +133,7 @@ service cloud.firestore {
      * @principle Protects sensitive client information by restricting access to management roles.
      */
     match /clients/{clientId} {
-      allow get: if isSupervisorOrAdmin();
-      allow list: if isSupervisorOrAdmin();
-      allow create: if isSupervisorOrAdmin();
-      allow update: if isSupervisorOrAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow read, write: if isSupervisorOrAdmin();
     }
 
     /**
@@ -154,11 +146,16 @@ service cloud.firestore {
      * @principle Secures reports based on direct assignment using denormalized supervisor and worker IDs.
      */
     match /dailyReports/{dailyReportId} {
-      allow get: if isAdmin() || isAssignedSupervisor(resource) || isAssignedWorker(resource);
+      allow get: if isSupervisorOrAdmin() || isAssignedWorker(resource);
       allow list: if isSupervisorOrAdmin();
       allow create: if isSupervisor() && request.resource.data.supervisorId == request.auth.uid;
-      allow update: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null && request.resource.data.supervisorId == resource.data.supervisorId;
-      allow delete: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null;
+      allow update: if (isAdmin() || isAssignedSupervisor(resource));
+      allow delete: if (isAdmin() || isAssignedSupervisor(resource));
+
+      // Validation Rules
+      allow create, update: if request.resource.data.clientName.size() > 0 &&
+                               request.resource.data.workers.size() > 0 &&
+                               request.resource.data.tasks.size() > 0;
     }
 
     /**
@@ -171,11 +168,7 @@ service cloud.firestore {
      * @principle Restricts task management to supervisors while allowing workers to view their assignments.
      */
     match /workerTasks/{workerTaskId} {
-      allow get: if isSupervisorOrAdmin() || isOwner(resource.data.workerId);
-      allow list: if isSupervisorOrAdmin();
-      allow create: if isSupervisorOrAdmin();
-      allow update: if isSupervisorOrAdmin() && resource != null;
-      allow delete: if isSupervisorOrAdmin() && resource != null;
+      allow read, write: if isSupervisorOrAdmin();
     }
 
     /**
@@ -213,10 +206,7 @@ service cloud.firestore {
      * @principle Acts as a lookup table, allowing wide read access but restricted write access.
      */
     match /materials/{materialId} {
-      allow get, list: if isSignedIn();
-      allow create: if isSupervisorOrAdmin();
-      allow update: if isSupervisorOrAdmin() && resource != null;
-      allow delete: if isSupervisorOrAdmin() && resource != null;
+      allow read, write: if isSupervisorOrAdmin();
     }
 
     /**
@@ -232,8 +222,8 @@ service cloud.firestore {
       allow get: if isAdmin() || isAssignedSupervisor(resource) || isAssignedWorker(resource);
       allow list: if isSupervisorOrAdmin();
       allow create: if isSupervisorOrAdmin() && (isAdmin() || request.resource.data.supervisorId == request.auth.uid);
-      allow update: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null;
-      allow delete: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null;
+      allow update: if (isAdmin() || isAssignedSupervisor(resource));
+      allow delete: if (isAdmin() || isAssignedSupervisor(resource));
     }
 
     /**
@@ -246,8 +236,7 @@ service cloud.firestore {
      * @principle Provides the highest level of security for managing administrative access.
      */
     match /roles_admin/{userId} {
-      allow get, list: if isAdmin();
-      allow create, update, delete: if isAdmin() && resource != null;
+      allow read, write: if isAdmin();
     }
 
     /**
