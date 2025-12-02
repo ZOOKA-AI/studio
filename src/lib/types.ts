@@ -80,3 +80,13 @@ export type Material = {
   quantity: number;
   unit: string;
 }
+
+export type EquipmentCondition = 'ممتازة' | 'جيدة' | 'تحتاج صيانة';
+
+export type Equipment = {
+  id: string;
+  name: string;
+  condition: EquipmentCondition;
+  quantity: number;
+  supervisor: string;
+};

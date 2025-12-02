@@ -274,6 +274,42 @@
         "name"
       ]
     },
+    "Equipment": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Equipment",
+      "type": "object",
+      "description": "Represents a piece of equipment used for cleaning.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the equipment."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the equipment."
+        },
+        "condition": {
+          "type": "string",
+          "description": "The current condition of the equipment.",
+          "enum": ["ممتازة", "جيدة", "تحتاج صيانة"]
+        },
+        "quantity": {
+          "type": "number",
+          "description": "The quantity of this equipment."
+        },
+        "supervisor": {
+          "type": "string",
+          "description": "The supervisor responsible for the equipment."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "condition",
+        "quantity",
+        "supervisor"
+      ]
+    },
     "Schedule": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Schedule",
@@ -481,6 +517,22 @@
             {
               "name": "materialId",
               "description": "The unique identifier for the material."
+            }
+          ]
+        }
+      },
+       {
+        "path": "/equipment/{equipmentId}",
+        "definition": {
+          "entityName": "Equipment",
+          "schema": {
+            "$ref": "#/backend/entities/Equipment"
+          },
+          "description": "Stores equipment inventory.",
+          "params": [
+            {
+              "name": "equipmentId",
+              "description": "The unique identifier for the equipment."
             }
           ]
         }

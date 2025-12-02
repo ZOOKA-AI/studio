@@ -272,5 +272,14 @@ service cloud.firestore {
     match /workers/{workerId} {
       allow read, write: if isSignedIn();
     }
+    
+    /**
+     * @description
+     *  Stores equipment information. Any authenticated user can manage equipment during development.
+     * @path /equipment/{equipmentId}
+     */
+    match /equipment/{equipmentId} {
+        allow read, write: if isSignedIn();
+    }
   }
 }
