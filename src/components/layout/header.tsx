@@ -15,10 +15,15 @@ import {
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
+import { useEffect, useState } from 'react';
 
 export function Header() {
     const userAvatar = PlaceHolderImages.find(p => p.id === 'user-avatar-1');
-    const today = format(new Date(), 'eeee, d MMMM yyyy', { locale: ar });
+    const [today, setToday] = useState('');
+
+    useEffect(() => {
+        setToday(format(new Date(), 'eeee, d MMMM yyyy', { locale: ar }));
+    }, []);
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-8">
@@ -31,7 +36,7 @@ export function Header() {
 
       <div className="ms-auto flex items-center gap-4">
         <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
-            <span>{today}</span>
+            {today && <span>{today}</span>}
         </div>
         <Button variant="ghost" size="icon" className="relative rounded-full">
           <Bell className="h-5 w-5" />
