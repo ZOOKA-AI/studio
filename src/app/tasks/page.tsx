@@ -4,7 +4,6 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { Button } from "@/components/ui/button";
 import { PlusCircle, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
 import { mockTasks } from "@/lib/data";
 import { Task, TaskPriority, TaskStatus } from "@/lib/types";
 
@@ -21,7 +20,6 @@ const statusVariant: Record<TaskStatus, 'default' | 'secondary' | 'destructive'>
 };
 
 export default function TasksPage() {
-    const { toast } = useToast();
 
     return (
         <Card>
@@ -30,7 +28,7 @@ export default function TasksPage() {
                     <CardTitle className="font-headline text-xl">📋 إدارة المهام</CardTitle>
                     <CardDescription>عرض وتتبع المهام الموكلة إليك.</CardDescription>
                 </div>
-                <Button onClick={() => toast({ title: "لم يتم تفعيل هذه الميزة بعد", description: "سيتم تفعيل إضافة مهمة جديدة قريبًا." })}>
+                <Button>
                     <PlusCircle className="me-2 h-4 w-4" />
                     إضافة مهمة جديدة
                 </Button>
@@ -58,7 +56,7 @@ export default function TasksPage() {
                                 </TableCell>
                                 <TableCell>{task.dueDate}</TableCell>
                                 <TableCell>
-                                    <Button variant="ghost" size="sm" onClick={() => toast({ title: "لم يتم تفعيل هذه الميزة بعد", description: "سيتم تفعيل هذا الإجراء قريبًا."})}>
+                                    <Button variant="ghost" size="sm">
                                         <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                 </TableCell>
