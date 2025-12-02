@@ -42,15 +42,15 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
     const [title, setTitle] = useState('');
     const [priority, setPriority] = useState<TaskPriority>('متوسطة');
     const [status, setStatus] = useState<TaskStatus>('جديدة');
-    const [dueDate, setDueDate] = useState<Date | undefined>(new Date());
+    const [dueDate, setDueDate] = useState<Date | undefined>();
 
     useEffect(() => {
-        if (task) {
+        if (open && task) {
             setTitle(task.title);
             setPriority(task.priority);
             setStatus(task.status);
             setDueDate(parseISO(task.dueDate));
-        } else {
+        } else if (open && !task) {
             setTitle('');
             setPriority('متوسطة');
             setStatus('جديدة');
