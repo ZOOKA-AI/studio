@@ -8,7 +8,7 @@ import { format, addDays, startOfWeek, isSameDay } from "date-fns";
 import { ar } from "date-fns/locale";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AddAppointmentDialog } from "./add-appointment-dialog";
 import { useAppointments } from "@/context/appointments-context";
 
@@ -23,9 +23,14 @@ const statusColors: { [key: string]: string } = {
 
 export function AppointmentsCalendar() {
   const { appointments, addAppointment, deleteAppointment } = useAppointments();
-  const today = new Date();
+  const [today, setToday] = useState(new Date());
   
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    // This ensures 'today' is set only on the client, avoiding hydration mismatch.
+    setToday(new Date());
+  }, []);
 
   const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 }); // Sunday
   const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i));
@@ -51,10 +56,10 @@ export function AppointmentsCalendar() {
             </div>
             <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground font-medium">{weekRange}</span>
-                <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleNextWeek}>
+                <Button variant="outline" size="icon" className="h-8 w-8" onClick={handlePrevWeek}>
                     <ChevronRight className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="icon" className="h-8 w-8" onClick={handlePrevWeek}>
+                <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleNextWeek}>
                     <ChevronLeft className="h-4 w-4" />
                 </Button>
             </div>
