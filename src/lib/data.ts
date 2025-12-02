@@ -1,5 +1,5 @@
-import type { Appointment, DailyReport, Worker } from './types';
-import { subDays, addHours, set, startOfWeek, addDays as dateFnsAddDays } from 'date-fns';
+import type { Appointment, DailyReport, Worker, Task } from './types';
+import { subDays, addHours, set, startOfWeek, addDays as dateFnsAddDays, format } from 'date-fns';
 
 const now = new Date();
 const startOfWeekDate = startOfWeek(now, { weekStartsOn: 0 }); // Sunday
@@ -136,4 +136,12 @@ export const initialCompanyWorkers: Worker[] = [
 export const initialExternalWorkers: Worker[] = [
     { id: 'E001', name: 'محمد خان', phone: '0521234567', nationalId: '202-2000-1234567-5', role: 'عامل يومي', status: 'نشط', type: 'external' },
     { id: 'E002', name: 'سانجاي كومار', phone: '0587654321', nationalId: '202-1998-7654321-6', role: 'عامل يومي', status: 'نشط', type: 'external' },
+];
+
+export const mockTasks: Task[] = [
+    { id: '1', title: 'مراجعة تقارير الأمس', status: 'مكتملة', priority: 'عالية', dueDate: format(subDays(now, 1), 'yyyy-MM-dd') },
+    { id: '2', title: 'جدولة فريق عمل فيلا الشارقة', status: 'قيد التنفيذ', priority: 'عالية', dueDate: format(now, 'yyyy-MM-dd') },
+    { id: '3', title: 'طلب مواد تنظيف ناقصة', status: 'جديدة', priority: 'متوسطة', dueDate: format(dateFnsAddDays(now, 1), 'yyyy-MM-dd') },
+    { id: '4', title: 'تدريب العامل الجديد "علي"', status: 'جديدة', priority: 'منخفضة', dueDate: format(dateFnsAddDays(now, 3), 'yyyy-MM-dd') },
+    { id: '5', title: 'التواصل مع العميل بخصوص الشكوى', status: 'قيد التنفيذ', priority: 'عالية', dueDate: format(now, 'yyyy-MM-dd') },
 ];

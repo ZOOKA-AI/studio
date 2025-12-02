@@ -58,3 +58,14 @@ export type Worker = {
     status: WorkerStatus;
     type: 'company' | 'external';
 };
+
+export type TaskStatus = 'جديدة' | 'قيد التنفيذ' | 'مكتملة';
+export type TaskPriority = 'عالية' | 'متوسطة' | 'منخفضة';
+
+export type Task = {
+  id: string;
+  title: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  dueDate: string;
+};
