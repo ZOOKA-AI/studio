@@ -37,6 +37,8 @@ import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   clientName: z.string().min(2, { message: "اسم العميل مطلوب." }),
+  clientPhone: z.string().optional(),
+  clientLocation: z.string().optional(),
   date: z.date({ required_error: "تاريخ اليومية مطلوب." }),
   vehicleNumber: z.string().optional(),
   income: z.coerce.number().optional(),
@@ -68,6 +70,8 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       clientName: "",
+      clientPhone: "",
+      clientLocation: "",
       date: dateString ? parseISO(dateString) : new Date(),
       tasks: [{ value: "" }],
       workers: [{ name: "", phone: "" }],
@@ -236,19 +240,47 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
             <div className="border-t pt-6">
               <h3 className="text-lg font-medium mb-4">تفاصيل العمل</h3>
               <div className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="clientName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>اسم العميل</FormLabel>
-                      <FormControl>
-                        <Input placeholder="ادخل اسم العميل" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <FormField
+                    control={form.control}
+                    name="clientName"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>اسم العميل</FormLabel>
+                        <FormControl>
+                            <Input placeholder="ادخل اسم العميل" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="clientPhone"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>رقم هاتف العميل</FormLabel>
+                        <FormControl>
+                            <Input placeholder="ادخل رقم الهاتف" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="clientLocation"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>موقع العميل</FormLabel>
+                        <FormControl>
+                            <Input placeholder="ادخل موقع العميل" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                </div>
                 <div>
                   <FormLabel>العمال</FormLabel>
                   <div className="space-y-2 mt-2">
@@ -553,5 +585,3 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     </Card>
   );
 }
-
-    
