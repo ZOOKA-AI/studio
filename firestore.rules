@@ -155,7 +155,7 @@ service cloud.firestore {
      */
     match /dailyReports/{dailyReportId} {
       allow get: if isAdmin() || isAssignedSupervisor(resource) || isAssignedWorker(resource);
-      allow list: if isSupervisorOrAdmin();
+      allow list: if isSignedIn();
       allow create: if isSupervisor() && request.resource.data.supervisorId == request.auth.uid;
       allow update: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null && request.resource.data.supervisorId == resource.data.supervisorId;
       allow delete: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null;
