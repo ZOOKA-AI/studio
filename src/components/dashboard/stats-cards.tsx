@@ -1,36 +1,49 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { mockStats } from "@/lib/data";
-import type { Stat } from "@/lib/types";
-import { CalendarCheck, Users, FileText, DollarSign } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { CalendarCheck, Users, FileText, BarChart3, TrendingUp, TrendingDown } from "lucide-react";
 
 const iconMap = {
   المواعيد: CalendarCheck,
   العمال: Users,
   اليوميات: FileText,
-  'الإيراد اليومي': DollarSign,
+  الإيرادات: BarChart3,
 };
 
-
 export function StatsCards() {
-  const stats = mockStats;
+  const stats = Object.values(mockStats);
   return (
-    <Card>
-        <CardHeader>
-            <CardTitle className="font-headline text-lg">📈 إحصائيات اليوم</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4">
-          {Object.values(stats).map((stat) => {
-            const Icon = iconMap[stat.label as keyof typeof iconMap] || FileText;
-            return (
-                <div key={stat.label} className="flex flex-col items-center justify-center p-4 bg-background/50 rounded-lg text-center">
-                    <Icon className="w-7 h-7 mb-2 text-primary" />
-                    <p className="text-xs text-muted-foreground">{stat.label}</p>
-                    <p className="text-lg font-bold font-headline">{stat.value}</p>
-                    <p className="text-xs text-muted-foreground">{stat.change}</p>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {stats.map((stat) => {
+        const Icon = iconMap[stat.label as keyof typeof iconMap] || FileText;
+        const isPositive = stat.change.startsWith('+');
+        const isNegative = stat.change.startsWith('-');
+        
+        return (
+          <Card key={stat.label}>
+            <CardContent className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-4">
+                    <div className="p-3 rounded-lg bg-primary/10">
+                        <Icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                        <p className="text-sm text-muted-foreground">{stat.label}</p>
+                        <p className="text-2xl font-bold font-headline">{stat.value}</p>
+                    </div>
                 </div>
-            )
-          })}
-        </CardContent>
-    </Card>
+                <div className={cn(
+                    "flex items-center gap-1 text-sm font-semibold",
+                    isPositive && "text-green-600",
+                    isNegative && "text-red-600"
+                )}>
+                    {isPositive && <TrendingUp className="w-4 h-4" />}
+                    {isNegative && <TrendingDown className="w-4 h-4" />}
+                    <span>{stat.change}</span>
+                </div>
+            </CardContent>
+          </Card>
+        )
+      })}
+    </div>
   );
 }

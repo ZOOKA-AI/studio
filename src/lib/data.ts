@@ -93,22 +93,22 @@ export const mockRecentReports: DailyReport[] = [
 export const mockStats = {
   appointments: {
     label: 'المواعيد',
-    value: '5/8',
-    change: 'مكتملة',
+    value: '8',
+    change: '+10%',
   },
   workers: {
     label: 'العمال',
-    value: '12/15',
-    change: 'حاضرون',
+    value: '12',
+    change: '+2.5%',
   },
   reports: {
     label: 'اليوميات',
     value: '3',
-    change: 'مسجلة',
+    change: '-1.4%',
   },
   revenue: {
-    label: 'الإيراد اليومي',
-    value: '٢,٥٠٠',
-    change: 'درهم',
+    label: 'الإيرادات',
+    value: 'د.إ 2,500',
+    change: '+5.2%',
   },
 };

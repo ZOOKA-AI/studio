@@ -6,14 +6,16 @@ import { mockAppointments, mockRecentReports } from '@/lib/data';
 
 export default function SupervisorDashboardPage() {
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
-      <div className="xl:col-span-2 space-y-8">
-        <AppointmentsCalendar appointments={mockAppointments} />
-        <RecentReports reports={mockRecentReports} />
-      </div>
-      <div className="xl:col-span-1 space-y-8">
-        <QuickActions />
-        <StatsCards />
+    <div className="flex flex-col gap-8">
+      <StatsCards />
+      <AppointmentsCalendar appointments={mockAppointments} />
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="lg:col-span-3">
+            <RecentReports reports={mockRecentReports} />
+        </div>
+        <div className="lg:col-span-2">
+            <QuickActions />
+        </div>
       </div>
     </div>
   );
