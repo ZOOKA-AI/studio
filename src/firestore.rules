@@ -155,7 +155,7 @@ service cloud.firestore {
      */
     match /dailyReports/{dailyReportId} {
       allow get: if isAdmin() || isAssignedSupervisor(resource) || isAssignedWorker(resource);
-      allow list: if isSignedIn();
+      allow list: if isSupervisorOrAdmin();
       allow create: if isSupervisor() && request.resource.data.supervisorId == request.auth.uid;
       allow update: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null && request.resource.data.supervisorId == resource.data.supervisorId;
       allow delete: if (isAdmin() || isAssignedSupervisor(resource)) && resource != null;
@@ -188,20 +188,19 @@ service cloud.firestore {
      * @principle Acts as a lookup table, allowing wide read access but restricted write access.
      */
     match /tasks/{taskId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if isSupervisorOrAdmin();
     }
     
     /**
      * @description
-     *   Stores appointment data. Any authenticated user can create, read, update, or delete appointments.
-     *   This is a temporary rule for development and should be refined with specific role-based logic.
+     *   Stores appointment data. Only supervisors and admins can manage appointments.
      * @path /appointments/{appointmentId}
-     * @allow An authenticated user creates a new appointment. (create)
-     * @allow An authenticated user deletes their own appointment. (delete)
-     * @principle Allows basic appointment management for any signed-in user during early development.
+     * @allow An admin or supervisor creates a new appointment. (create)
+     * @deny A worker tries to delete an appointment. (delete)
+     * @principle Restricts appointment management to authorized roles.
      */
     match /appointments/{appointmentId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if isSupervisorOrAdmin();
     }
 
     /**
@@ -269,11 +268,20 @@ service cloud.firestore {
     
     /**
      * @description
-     *   Stores worker information. Any authenticated user can manage workers during development.
+     *   Stores worker information. Only supervisors and admins can manage worker data.
      * @path /workers/{workerId}
      */
     match /workers/{workerId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if isSupervisorOrAdmin();
+    }
+    
+    /**
+     * @description
+     *  Stores equipment information. Only supervisors and admins can manage equipment data.
+     * @path /equipment/{equipmentId}
+     */
+    match /equipment/{equipmentId} {
+        allow read, write: if isSupervisorOrAdmin();
     }
   }
 }
