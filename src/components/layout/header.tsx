@@ -16,8 +16,11 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 export function Header() {
+    const { toast } = useToast();
     const userAvatar = PlaceHolderImages.find(p => p.id === 'user-avatar-1');
     const [today, setToday] = useState('');
 
@@ -62,10 +65,14 @@ export function Header() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>حسابي</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>الملف الشخصي</DropdownMenuItem>
-            <DropdownMenuItem>الإعدادات</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+                <Link href="/profile">الملف الشخصي</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+                <Link href="/settings">الإعدادات</Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>تسجيل الخروج</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => toast({ title: 'تم تسجيل الخروج', description: 'هذه الميزة لا تعمل بعد.'})}>تسجيل الخروج</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

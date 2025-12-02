@@ -103,7 +103,11 @@ service cloud.firestore {
      * @principle Enforces self-service profile management and provides admin oversight.
      */
     match /users/{userId} {
-      allow read, write: if isSignedIn();
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if (isOwner(userId) || isAdmin()) && resource != null && request.resource.data.id == resource.data.id;
+      allow delete: if isAdmin() && resource != null;
     }
 
     /**
@@ -210,7 +214,10 @@ service cloud.firestore {
      * @principle Acts as a lookup table, allowing wide read access but restricted write access.
      */
     match /materials/{materialId} {
-      allow read, write: if isSignedIn();
+      allow get, list: if isSignedIn();
+      allow create: if isSupervisorOrAdmin();
+      allow update: if isSupervisorOrAdmin() && resource != null;
+      allow delete: if isSupervisorOrAdmin() && resource != null;
     }
 
     /**

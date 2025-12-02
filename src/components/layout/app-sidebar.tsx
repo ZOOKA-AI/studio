@@ -12,7 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Home, Calendar, PlusCircle, Book, Users, HardHat, Box, Settings, LogOut, ShieldCheck, CheckSquare } from 'lucide-react';
+import { Home, Calendar, PlusCircle, Book, Users, HardHat, Box, Settings, LogOut, ShieldCheck, CheckSquare, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -64,10 +64,20 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton className="justify-start">
+              <Link href="/profile" passHref>
+                <SidebarMenuButton isActive={pathname === '/profile'} className="justify-start">
+                    <span className="me-3"><User className="h-5 w-5" /></span>
+                    <span>الملف الشخصي</span>
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/settings" passHref>
+                <SidebarMenuButton isActive={pathname === '/settings'} className="justify-start">
                     <span className="me-3"><Settings className="h-5 w-5" /></span>
                     <span>الإعدادات</span>
                 </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
         </SidebarMenu>
         <div className="w-full border-t my-2" />
