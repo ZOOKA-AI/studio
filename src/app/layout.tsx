@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
+import { ReportsProvider } from '@/context/reports-context';
 
 export const metadata: Metadata = {
   title: 'Royal Clean Dashboard',
@@ -24,18 +25,20 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("font-body antialiased", 'bg-background')}>
-        <SidebarProvider>
-            <div className="relative flex min-h-screen">
-                <AppSidebar />
-                <div className="flex-1">
-                    <Header />
-                    <main className="p-4 sm:p-6 lg:p-8">
-                        {children}
-                    </main>
+        <ReportsProvider>
+            <SidebarProvider>
+                <div className="relative flex min-h-screen">
+                    <AppSidebar />
+                    <div className="flex-1">
+                        <Header />
+                        <main className="p-4 sm:p-6 lg:p-8">
+                            {children}
+                        </main>
+                    </div>
                 </div>
-            </div>
-            <Toaster />
-        </SidebarProvider>
+                <Toaster />
+            </SidebarProvider>
+        </ReportsProvider>
       </body>
     </html>
   );

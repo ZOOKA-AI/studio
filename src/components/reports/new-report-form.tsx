@@ -32,6 +32,8 @@ import { useState } from 'react';
 import { getMaterialSuggestions } from '@/ai/flows/material-suggestions';
 import { generateReportSummary } from '@/ai/flows/generate-report-summary';
 import { useToast } from '@/hooks/use-toast';
+import { useReports } from '@/context/reports-context';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   clientName: z.string().min(2, { message: 'اسم العميل مطلوب.' }),
@@ -47,6 +49,8 @@ const formSchema = z.object({
 
 export function NewReportForm() {
     const { toast } = useToast();
+    const router = useRouter();
+    const { addReport } = useReports();
     const [isSuggesting, setIsSuggesting] = useState(false);
     const [isSummarizing, setIsSummarizing] = useState(false);
 
@@ -54,6 +58,7 @@ export function NewReportForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       clientName: '',
+      date: new Date(),
       tasks: [{ value: '' }],
       workers: [{value: ''}],
       materials: [],
@@ -65,11 +70,21 @@ export function NewReportForm() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const newReport = {
+        id: new Date().toISOString(),
+        siteName: values.clientName,
+        date: values.date,
+        supervisor: 'محمد', // Assuming a logged in user
+        status: 'قيد المراجعة' as const,
+        hours: 8, // Placeholder
+    };
+    addReport(newReport);
     console.log(values);
     toast({
         title: 'تم حفظ اليومية بنجاح!',
         description: `تم حفظ تقرير العميل ${values.clientName}`,
     });
+    router.push('/reports');
   };
 
   const handleSuggestMaterials = async () => {

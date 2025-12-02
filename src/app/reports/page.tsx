@@ -1,8 +1,10 @@
+'use client';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { RecentReports } from "@/components/dashboard/recent-reports";
-import { mockRecentReports } from "@/lib/data";
+import { useReports } from "@/context/reports-context";
 
 export default function ReportsLogPage() {
+    const { reports } = useReports();
     return (
         <div className="space-y-8">
             <Card>
@@ -13,7 +15,7 @@ export default function ReportsLogPage() {
                     </CardDescription>
                 </CardHeader>
             </Card>
-            <RecentReports reports={mockRecentReports} />
+            <RecentReports reports={reports} />
         </div>
     );
 }
