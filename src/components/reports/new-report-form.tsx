@@ -69,6 +69,11 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   const { addReport } = useReports();
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [isSummarizing, setIsSummarizing] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,7 +84,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
       agreedAmount: 0,
       paymentMethod: "",
       workDescription: "",
-      date: dateString ? parseISO(dateString) : new Date(),
+      date: dateString ? parseISO(dateString) : undefined, // Set to undefined initially
       startTime: "09:00",
       endTime: "17:00",
       tasks: [{ value: "" }],
@@ -91,10 +96,16 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   });
 
   useEffect(() => {
-    if (dateString) {
-      form.setValue("date", parseISO(dateString));
+    // Set the date only on the client side
+    if (isClient) {
+      if (dateString) {
+        form.setValue("date", parseISO(dateString));
+      } else if (!form.getValues("date")) {
+        // Set to new Date only if it's not already set
+        form.setValue("date", new Date());
+      }
     }
-  }, [dateString, form]);
+  }, [dateString, form, isClient]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     // Exclude image fields before saving to Firestore
@@ -208,7 +219,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                               !field.value && "text-muted-foreground"
                             )}
                           >
-                            {field.value ? (
+                            {field.value && isClient ? (
                               format(field.value, "PPP", { locale: ar })
                             ) : (
                               <span>اختر تاريخاً</span>
@@ -649,7 +660,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                 )}
               />
             </div>
-            <Button type="submit">حفظ اليومية</Button>
+            <Button type="submit" disabled={!isClient || !form.formState.isValid}>حفظ اليومية</Button>
           </form>
         </Form>
       </CardContent>
