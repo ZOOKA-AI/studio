@@ -26,9 +26,9 @@ import { CalendarIcon, Loader2, Sparkles, Trash2 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { ar } from 'date-fns/locale';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getMaterialSuggestions } from '@/ai/flows/material-suggestions';
 import { generateReportSummary } from '@/ai/flows/generate-report-summary';
 import { useToast } from '@/hooks/use-toast';
@@ -47,7 +47,11 @@ const formSchema = z.object({
   notes: z.string().optional(),
 });
 
-export function NewReportForm() {
+type NewReportFormProps = {
+  date?: string | null;
+};
+
+export function NewReportForm({ date: dateString }: NewReportFormProps) {
     const { toast } = useToast();
     const router = useRouter();
     const { addReport } = useReports();
@@ -58,7 +62,7 @@ export function NewReportForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       clientName: '',
-      date: new Date(),
+      date: dateString ? parseISO(dateString) : new Date(),
       tasks: [{ value: '' }],
       workers: [{value: ''}],
       materials: [],
@@ -69,20 +73,17 @@ export function NewReportForm() {
     },
   });
 
+  useEffect(() => {
+    if (dateString) {
+      form.setValue('date', parseISO(dateString));
+    }
+  }, [dateString, form]);
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const newReport = {
-        id: new Date().toISOString(),
-        siteName: values.clientName,
-        date: values.date,
-        supervisor: 'محمد', // Assuming a logged in user
-        status: 'قيد المراجعة' as const,
-        hours: 8, // Placeholder
-    };
-    addReport(newReport);
-    console.log(values);
+    addReport(values);
     toast({
         title: 'تم حفظ اليومية بنجاح!',
-        description: `تم حفظ تقرير العميل ${values.clientName}`,
+        description: `تم تحديث تقرير يوم ${format(values.date, 'PPP', { locale: ar })}`,
     });
     router.push('/reports');
   };
@@ -153,28 +154,15 @@ export function NewReportForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline text-xl">📝 يومية جديدة</CardTitle>
+        <CardTitle className="font-headline text-xl">📝 يومية عمل</CardTitle>
         <CardDescription>
-          املأ الحقول التالية لتوثيق تفاصيل يوم العمل.
+          املأ أو عدّل الحقول التالية لتوثيق تفاصيل يوم العمل.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="clientName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>اسم العميل</FormLabel>
-                      <FormControl>
-                        <Input placeholder="ادخل اسم العميل" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                  <FormField
                   control={form.control}
                   name="date"
@@ -230,153 +218,177 @@ export function NewReportForm() {
                   )}
                 />
             </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <FormField
-                  control={form.control}
-                  name="income"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>الوارد (بالدرهم)</FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="0.00" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                 <FormField
-                  control={form.control}
-                  name="expenses"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>المصروف (بالدرهم)</FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="0.00" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-            </div>
-
-            <div>
-              <FormLabel>العمال</FormLabel>
-              <div className="space-y-2 mt-2">
-                {form.watch('workers').map((worker, index) => (
-                  <FormField
-                    key={index}
-                    control={form.control}
-                    name={`workers.${index}.value`}
-                    render={({ field }) => (
-                      <FormItem className="flex items-center gap-2">
-                        <FormControl>
-                          <Input placeholder={`اسم العامل #${index + 1}`} {...field} />
-                        </FormControl>
-                        <Button type="button" variant="ghost" size="icon" onClick={() => {
-                            const currentWorkers = form.getValues('workers');
-                            if (currentWorkers.length > 1) {
-                                form.setValue('workers', currentWorkers.filter((_, i) => i !== index));
-                            }
-                        }}>
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </div>
-              <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => form.setValue('workers', [...form.getValues('workers'), {value: ''}])}>
-                إضافة عامل
-              </Button>
-            </div>
-
-             <div>
-              <FormLabel>المهام المنجزة</FormLabel>
-              <div className="space-y-2 mt-2">
-                {form.watch('tasks').map((task, index) => (
-                  <FormField
-                    key={index}
-                    control={form.control}
-                    name={`tasks.${index}.value`}
-                    render={({ field }) => (
-                      <FormItem className="flex items-center gap-2">
-                        <FormControl>
-                          <Input placeholder={`مهمة #${index + 1}`} {...field} />
-                        </FormControl>
-                        <Button type="button" variant="ghost" size="icon" onClick={() => {
-                            const currentTasks = form.getValues('tasks');
-                             if (currentTasks.length > 1) {
-                                form.setValue('tasks', currentTasks.filter((_, i) => i !== index));
-                            }
-                        }}>
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </div>
-              <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => form.setValue('tasks', [...form.getValues('tasks'), {value: ''}])}>
-                إضافة مهمة
-              </Button>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <FormLabel>المواد المستخدمة</FormLabel>
-                <Button type="button" variant="ghost" size="sm" onClick={handleSuggestMaterials} disabled={isSuggesting}>
-                    {isSuggesting ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : <Sparkles className="me-2 h-4 w-4 text-yellow-500" />}
-                    اقترح مواد
-                </Button>
-              </div>
-              <div className="space-y-2">
-                {form.watch('materials').map((material, index) => (
-                  <FormField
-                    key={index}
-                    control={form.control}
-                    name={`materials.${index}.value`}
-                    render={({ field }) => (
-                      <FormItem className="flex items-center gap-2">
-                        <FormControl>
-                          <Input placeholder={`مادة #${index + 1}`} {...field} />
-                        </FormControl>
-                        <Button type="button" variant="ghost" size="icon" onClick={() => {
-                            const currentMaterials = form.getValues('materials');
-                            form.setValue('materials', currentMaterials.filter((_, i) => i !== index));
-                        }}>
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </div>
-               <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => form.setValue('materials', [...form.getValues('materials'), {value: ''}])}>
-                إضافة مادة
-              </Button>
-            </div>
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                    <div className="flex items-center justify-between">
-                        <FormLabel>ملاحظات وملخص اليوم</FormLabel>
-                        <Button type="button" variant="ghost" size="sm" onClick={handleGenerateSummary} disabled={isSummarizing}>
-                            {isSummarizing ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : <Sparkles className="me-2 h-4 w-4 text-yellow-500" />}
-                            إنشاء ملخص تلقائي
-                        </Button>
-                    </div>
-                  <FormControl>
-                    <Textarea
-                      placeholder="أضف ملاحظات إضافية، مثل أي مشاكل واجهتها أو ملاحظات خاصة بالموقع..."
-                      className="resize-none"
-                      {...field}
+             <div className="border-t pt-6">
+                <h3 className="text-lg font-medium mb-4">تفاصيل العمل</h3>
+                <div className="space-y-6">
+                     <FormField
+                      control={form.control}
+                      name="clientName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>اسم العميل</FormLabel>
+                          <FormControl>
+                            <Input placeholder="ادخل اسم العميل" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <div>
+                      <FormLabel>العمال</FormLabel>
+                      <div className="space-y-2 mt-2">
+                        {form.watch('workers').map((worker, index) => (
+                          <FormField
+                            key={index}
+                            control={form.control}
+                            name={`workers.${index}.value`}
+                            render={({ field }) => (
+                              <FormItem className="flex items-center gap-2">
+                                <FormControl>
+                                  <Input placeholder={`اسم العامل #${index + 1}`} {...field} />
+                                </FormControl>
+                                <Button type="button" variant="ghost" size="icon" onClick={() => {
+                                    const currentWorkers = form.getValues('workers');
+                                    if (currentWorkers.length > 1) {
+                                        form.setValue('workers', currentWorkers.filter((_, i) => i !== index));
+                                    }
+                                }}>
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                      <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => form.setValue('workers', [...form.getValues('workers'), {value: ''}])}>
+                        إضافة عامل
+                      </Button>
+                    </div>
+
+                     <div>
+                      <FormLabel>المهام المنجزة</FormLabel>
+                      <div className="space-y-2 mt-2">
+                        {form.watch('tasks').map((task, index) => (
+                          <FormField
+                            key={index}
+                            control={form.control}
+                            name={`tasks.${index}.value`}
+                            render={({ field }) => (
+                              <FormItem className="flex items-center gap-2">
+                                <FormControl>
+                                  <Input placeholder={`مهمة #${index + 1}`} {...field} />
+                                </FormControl>
+                                <Button type="button" variant="ghost" size="icon" onClick={() => {
+                                    const currentTasks = form.getValues('tasks');
+                                     if (currentTasks.length > 1) {
+                                        form.setValue('tasks', currentTasks.filter((_, i) => i !== index));
+                                    }
+                                }}>
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                      <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => form.setValue('tasks', [...form.getValues('tasks'), {value: ''}])}>
+                        إضافة مهمة
+                      </Button>
+                    </div>
+                </div>
+             </div>
+
+
+            <div className="border-t pt-6">
+                <h3 className="text-lg font-medium mb-4">المواد والمصروفات</h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <FormField
+                      control={form.control}
+                      name="income"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>الوارد (بالدرهم)</FormLabel>
+                          <FormControl>
+                            <Input type="number" placeholder="0.00" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                     <FormField
+                      control={form.control}
+                      name="expenses"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>المصروف (بالدرهم)</FormLabel>
+                          <FormControl>
+                            <Input type="number" placeholder="0.00" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                </div>
+                <div className="mt-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <FormLabel>المواد المستخدمة</FormLabel>
+                    <Button type="button" variant="ghost" size="sm" onClick={handleSuggestMaterials} disabled={isSuggesting}>
+                        {isSuggesting ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : <Sparkles className="me-2 h-4 w-4 text-yellow-500" />}
+                        اقترح مواد
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {form.watch('materials').map((material, index) => (
+                      <FormField
+                        key={index}
+                        control={form.control}
+                        name={`materials.${index}.value`}
+                        render={({ field }) => (
+                          <FormItem className="flex items-center gap-2">
+                            <FormControl>
+                              <Input placeholder={`مادة #${index + 1}`} {...field} />
+                            </FormControl>
+                            <Button type="button" variant="ghost" size="icon" onClick={() => {
+                                const currentMaterials = form.getValues('materials');
+                                form.setValue('materials', currentMaterials.filter((_, i) => i !== index));
+                            }}>
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                   <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => form.setValue('materials', [...form.getValues('materials'), {value: ''}])}>
+                    إضافة مادة
+                  </Button>
+                </div>
+            </div>
+            <div className="border-t pt-6">
+                 <FormField
+                  control={form.control}
+                  name="notes"
+                  render={({ field }) => (
+                    <FormItem>
+                        <div className="flex items-center justify-between">
+                            <FormLabel>ملاحظات وملخص اليوم</FormLabel>
+                            <Button type="button" variant="ghost" size="sm" onClick={handleGenerateSummary} disabled={isSummarizing}>
+                                {isSummarizing ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : <Sparkles className="me-2 h-4 w-4 text-yellow-500" />}
+                                إنشاء ملخص تلقائي
+                            </Button>
+                        </div>
+                      <FormControl>
+                        <Textarea
+                          placeholder="أضف ملاحظات إضافية، مثل أي مشاكل واجهتها أو ملاحظات خاصة بالموقع..."
+                          className="resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+            </div>
             <Button type="submit">حفظ اليومية</Button>
           </form>
         </Form>

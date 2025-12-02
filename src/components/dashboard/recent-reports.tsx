@@ -14,52 +14,59 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { ar } from "date-fns/locale";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 type RecentReportsProps = {
   reports: DailyReport[];
 };
 
-const statusColors: { [key: string]: string } = {
-    'مكتمل': 'bg-green-100 text-green-800 border-green-200',
-    'مسودة': 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    'قيد المراجعة': 'bg-blue-100 text-blue-800 border-blue-200',
-};
-
 export function RecentReports({ reports }: RecentReportsProps) {
+  // Group reports by date to show one entry per day
+  const dailySummaries = reports.reduce((acc, report) => {
+    const reportDate = format(report.date, 'yyyy-MM-dd');
+    if (!acc[reportDate]) {
+      acc[reportDate] = {
+        date: report.date,
+        reportId: report.id // Use the first report ID for the link
+      };
+    }
+    return acc;
+  }, {} as Record<string, { date: Date, reportId: string }>);
+
+  const sortedDailyEntries = Object.values(dailySummaries).sort((a, b) => b.date.getTime() - a.date.getTime());
+
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline text-lg">📝 آخر اليوميات المسجلة</CardTitle>
-        <CardDescription>نظرة سريعة على أحدث التقارير التي تم تسجيلها.</CardDescription>
+        <CardTitle className="font-headline text-lg">📝 اليوميات المسجلة</CardTitle>
+        <CardDescription>
+            هنا يقوم المشرف بتسجيل جميع الأعمال التي قام بها خلال اليوم.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>الموقع</TableHead>
+              <TableHead>اليوم</TableHead>
               <TableHead>التاريخ</TableHead>
-              <TableHead>المشرف</TableHead>
-              <TableHead>الحالة</TableHead>
               <TableHead>الإجراء</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {reports.map((report) => (
-              <TableRow key={report.id}>
-                <TableCell className="font-medium">{report.siteName}</TableCell>
-                <TableCell>{format(report.date, 'yyyy/MM/dd')}</TableCell>
-                <TableCell>{report.supervisor}</TableCell>
+            {sortedDailyEntries.map((entry) => (
+              <TableRow key={entry.reportId}>
+                <TableCell className="font-medium">{format(entry.date, 'eeee', { locale: ar })}</TableCell>
+                <TableCell>{format(entry.date, 'yyyy/MM/dd', { locale: ar })}</TableCell>
                 <TableCell>
-                  <Badge variant="outline" className={cn("font-medium", statusColors[report.status])}>
-                    {report.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                    <Button variant="ghost" size="sm">عرض</Button>
+                    <Button variant="ghost" size="sm" asChild>
+                        <Link href={`/reports/new?date=${format(entry.date, 'yyyy-MM-dd')}`}>
+                            عرض أو إضافة مهام
+                        </Link>
+                    </Button>
                 </TableCell>
               </TableRow>
             ))}
