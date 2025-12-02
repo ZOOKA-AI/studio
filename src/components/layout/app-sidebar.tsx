@@ -50,9 +50,9 @@ export function AppSidebar() {
               <Link href={item.href} passHref>
                 <SidebarMenuButton
                   isActive={pathname === item.href}
-                  className="w-full"
+                  className="w-full justify-start"
                 >
-                  <item.icon className="h-5 w-5" />
+                  <item.icon className="me-3 h-5 w-5" />
                   <span>{item.label}</span>
                 </SidebarMenuButton>
               </Link>
@@ -63,8 +63,8 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton>
-                    <Settings className="h-5 w-5" />
+                <SidebarMenuButton className="justify-start">
+                    <Settings className="me-3 h-5 w-5" />
                     <span>الإعدادات</span>
                 </SidebarMenuButton>
             </SidebarMenuItem>
