@@ -5,6 +5,8 @@ import type { DailyReport } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 type ReportsContextType = {
   reports: DailyReport[];
@@ -20,9 +22,9 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
     [firestore]
   );
   
-  const { data: rawReports = [] } = useCollection(reportsRef);
+  const { data: rawReports = [] } = useCollection<Omit<DailyReport, 'date'> & { date: Timestamp }>(reportsRef);
 
-  const reports = (rawReports || []).map(report => ({
+  const reports: DailyReport[] = (rawReports || []).map(report => ({
     ...report,
     date: report.date.toDate(),
   }));
@@ -30,6 +32,7 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
 
   const addReport = async (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
     if (!firestore) return;
+    const reportsCollection = collection(firestore, 'dailyReports');
     
     const newReport = {
       ...report,
@@ -38,7 +41,16 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
       hours: 8, // Placeholder
       status: 'قيد المراجعة',
     };
-    await addDoc(collection(firestore, 'dailyReports'), newReport);
+    
+    addDoc(reportsCollection, newReport)
+      .catch((error) => {
+        const permissionError = new FirestorePermissionError({
+          path: reportsCollection.path,
+          operation: 'create',
+          requestResourceData: newReport,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
   };
 
   return (
