@@ -8,10 +8,10 @@ import { useToast } from "@/hooks/use-toast";
 export function QuickActions() {
     const { toast } = useToast();
   const actions = [
-    { label: 'بدء يومية جديدة', icon: PlusCircle, variant: 'default' as const, href: '/reports/new' },
+    { label: 'إضافة موعد جديد (تسجيل المشرف)', icon: CalendarPlus, variant: 'default' as const, href: '/calendar' },
+    { label: 'بدء يومية جديدة', icon: PlusCircle, variant: 'outline' as const, href: '/reports/new' },
     { label: 'إضافة عامل', icon: UserPlus, variant: 'outline' as const, href: '/workers' },
     { label: 'طلب مواد', icon: FolderPlus, variant: 'outline' as const, href: '/inventory' },
-    { label: 'جدولة موعد', icon: CalendarPlus, variant: 'outline' as const, href: '/calendar' },
   ];
 
   return (
