@@ -177,7 +177,7 @@ service cloud.firestore {
       allow update: if isSupervisorOrAdmin() && resource != null;
       allow delete: if isSupervisorOrAdmin() && resource != null;
     }
-    
+
     /**
      * @description
      *   A global collection of predefined cleaning tasks.
