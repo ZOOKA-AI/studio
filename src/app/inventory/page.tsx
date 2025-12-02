@@ -25,7 +25,7 @@ export default function InventoryPage() {
                 </div>
                 <Button onClick={() => toast({ title: "تم الإرسال!", description: "تم إرسال طلب المواد الجديدة للموافقة." })}>
                     <PlusCircle className="me-2 h-4 w-4" />
-                    لماذا هذا لا يعمل
+                    طلب مواد جديدة
                 </Button>
             </CardHeader>
             <CardContent>
