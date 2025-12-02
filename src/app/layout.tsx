@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
 import { ReportsProvider } from '@/context/reports-context';
 import { WorkersProvider } from '@/context/workers-context';
+import { TasksProvider } from '@/context/tasks-context';
 
 export const metadata: Metadata = {
   title: 'Royal Clean Dashboard',
@@ -26,22 +27,24 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("font-body antialiased", 'bg-background')}>
-        <ReportsProvider>
-          <WorkersProvider>
-            <SidebarProvider>
-                <div className="relative flex min-h-screen">
-                    <AppSidebar />
-                    <div className="flex-1">
-                        <Header />
-                        <main className="p-4 sm:p-6 lg:p-8">
-                            {children}
-                        </main>
-                    </div>
-                </div>
-                <Toaster />
-            </SidebarProvider>
-          </WorkersProvider>
-        </ReportsProvider>
+        <TasksProvider>
+          <ReportsProvider>
+            <WorkersProvider>
+              <SidebarProvider>
+                  <div className="relative flex min-h-screen">
+                      <AppSidebar />
+                      <div className="flex-1">
+                          <Header />
+                          <main className="p-4 sm:p-6 lg:p-8">
+                              {children}
+                          </main>
+                      </div>
+                  </div>
+                  <Toaster />
+              </SidebarProvider>
+            </WorkersProvider>
+          </ReportsProvider>
+        </TasksProvider>
       </body>
     </html>
   );
