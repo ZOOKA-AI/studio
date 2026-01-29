@@ -6,7 +6,7 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "06:00"
+      time: "06:00" # UTC timezone
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
@@ -14,10 +14,6 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
-    reviewers:
-      - "ZOOKA-AI/studio-maintainers"
-    assignees:
-      - "ZOOKA-AI/studio-maintainers"
 
   # Enable security updates for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -25,7 +21,7 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "06:00"
+      time: "06:00" # UTC timezone
     open-pull-requests-limit: 5
     labels:
       - "dependencies"

@@ -10,7 +10,6 @@ We are committed to providing security updates for the following versions of the
 | ----------------- | ------------------------- |
 | main branch       | :white_check_mark: نعم / Yes |
 | develop branch    | :white_check_mark: نعم / Yes |
-| أقدم من 1.0 / < 1.0 | :x: لا / No              |
 
 ## 🚨 الإبلاغ عن ثغرة أمنية / Reporting a Vulnerability
 
@@ -29,10 +28,6 @@ Please send your security vulnerability report via one of the following methods:
    - انقر على "Report a vulnerability" / Click "Report a vulnerability"
    - املأ النموذج بالتفاصيل / Fill out the form with details
 
-2. **البريد الإلكتروني / Email**:
-   - أرسل إلى / Send to: security@zooka.ai (if available)
-   - استخدم موضوع / Use subject: `[SECURITY] Firebase Studio Vulnerability Report`
-
 ### ما يجب تضمينه / What to Include
 
 يرجى تضمين المعلومات التالية في تقريرك:
@@ -47,7 +42,7 @@ Please include the following information in your report:
 
 ### ما يمكن توقعه / What to Expect
 
-- **الإقرار** / **Acknowledgment**: سنقر باستلام تقريرك خلال 48 ساعة / We will acknowledge receipt of your report within 48 hours
+- **تأكيد الاستلام** / **Acknowledgment**: سنقر باستلام تقريرك خلال 48 ساعة / We will acknowledge receipt of your report within 48 hours
 - **التقييم** / **Assessment**: سنقيم الثغرة ونحدد خطورتها / We will assess the vulnerability and determine its severity
 - **الإصلاح** / **Fix**: سنعمل على إصلاح الثغرة في أقرب وقت ممكن / We will work on fixing the vulnerability as soon as possible
 - **الإفصاح** / **Disclosure**: سنعلمك عند إصدار الإصلاح / We will notify you when the fix is released
