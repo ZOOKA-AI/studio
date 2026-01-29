@@ -48,9 +48,9 @@ To inquire about commercial support and get a custom quote:
 
 ### الترخيص مفتوح المصدر | Open Source License
 
-هذا المشروع مرخص تحت رخصة مفتوحة المصدر، مما يعني أنه يمكنك استخدامه وتعديله وتوزيعه بحرية وفقاً لشروط الترخيص.
+هذا المشروع مرخص تحت رخصة مفتوحة المصدر. *(يرجى إضافة ملف LICENSE لتحديد الترخيص المحدد)*
 
-This project is licensed under an open-source license, meaning you can use, modify, and distribute it freely according to the license terms.
+This project is licensed under an open-source license. *(Please add a LICENSE file to specify the exact license)*
 
 ### الترخيص التجاري | Commercial License
 
@@ -64,9 +64,9 @@ This project is licensed under an open-source license, meaning you can use, modi
 - ✅ **ضمانات إضافية** وتعويضات | **Additional warranties** and indemnification
 - ✅ **مرونة أكبر** في الاستخدام التجاري | **Greater flexibility** for commercial use
 
-**للاستفسار عن الترخيص التجاري**، يرجى التواصل معنا عبر: support@zooka.ai
+**للاستفسار عن الترخيص التجاري**، يرجى التواصل معنا عبر: support@zooka.ai *(استبدل بالبريد الإلكتروني الفعلي / Replace with actual email)*
 
-**To inquire about commercial licensing**, please contact us at: support@zooka.ai
+**To inquire about commercial licensing**, please contact us at: support@zooka.ai *(استبدل بالبريد الإلكتروني الفعلي / Replace with actual email)*
 
 ---
 
