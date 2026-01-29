@@ -5,5 +5,5 @@ runConfig:
   # Automatically spin up more instances in response to increased traffic.
   # Increased from 1 to 10 for better scalability and availability.
   maxInstances: 10
-  # Minimum number of instances to keep warm
-  minInstances: 1
+  # minInstances: 0 is the default - instances scale down to zero when idle to save costs
+  # Set to 1 or higher only if you need guaranteed availability and can accept the cost

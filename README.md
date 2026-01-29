@@ -85,7 +85,11 @@ After setting up the project, you'll need to create your first admin user:
 3. Create an account with your email and password
 4. Manually promote your user to admin in the Firebase Console:
    - Go to Firestore Database
-   - Add a document to the `roles_admin` collection with your user ID
+   - Navigate to the `roles_admin` collection
+   - Click "Add document"
+   - Set the Document ID to your user's UID (found in Authentication > Users)
+   - Add any field (e.g., `role: "admin"`) - the document just needs to exist
+   - The security rules check for document existence, not content
 
 ### Learn More
 
