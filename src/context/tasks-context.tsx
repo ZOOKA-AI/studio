@@ -9,15 +9,29 @@ import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 import { parseISO } from 'date-fns';
 
+/**
+ * Context type for managing tasks throughout the application
+ */
 type TasksContextType = {
+  /** Array of all tasks from Firestore */
   tasks: Task[];
+  /** Add a new task to the database */
   addTask: (taskData: Omit<Task, 'id'>) => void;
+  /** Update an existing task by ID */
   updateTask: (taskId: string, updatedData: Partial<Omit<Task, 'id'>>) => void;
+  /** Delete a task by ID */
   deleteTask: (taskId: string) => void;
 };
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
 
+/**
+ * Provider component for tasks management
+ * Handles CRUD operations for tasks in Firestore
+ * Automatically converts Firestore Timestamps to ISO strings for easier handling
+ * 
+ * @param children - React children components
+ */
 export function TasksProvider({ children }: { children: ReactNode }) {
   const { firestore } = useFirebase();
   const tasksRef = useMemoFirebase(
@@ -27,11 +41,16 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   
   const { data: rawTasks = [] } = useCollection<Omit<Task, 'dueDate'> & {dueDate: Timestamp}>(tasksRef);
   
+  // Convert Firestore Timestamps to ISO date strings and sort by due date
   const tasks: Task[] = (rawTasks || []).map(task => ({
       ...task,
       dueDate: task.dueDate.toDate().toISOString(),
   })).sort((a,b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
 
+  /**
+   * Add a new task to Firestore
+   * Converts ISO date string to Firestore Timestamp before saving
+   */
   const addTask = (taskData: Omit<Task, 'id'>) => {
     if (!firestore) return;
     const tasksCollection = collection(firestore, 'tasks');
@@ -51,6 +70,10 @@ export function TasksProvider({ children }: { children: ReactNode }) {
       });
   };
 
+  /**
+   * Update an existing task in Firestore
+   * Converts ISO date string to Firestore Timestamp if dueDate is updated
+   */
   const updateTask = (taskId: string, updatedData: Partial<Omit<Task, 'id'>>) => {
     if (!firestore) return;
     const taskDocRef = doc(firestore, 'tasks', taskId);
@@ -72,6 +95,9 @@ export function TasksProvider({ children }: { children: ReactNode }) {
       });
   };
   
+  /**
+   * Delete a task from Firestore by ID
+   */
   const deleteTask = (taskId: string) => {
     if (!firestore) return;
     const taskDocRef = doc(firestore, 'tasks', taskId);
@@ -93,6 +119,13 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Hook to access the tasks context
+ * Must be used within a TasksProvider
+ * 
+ * @throws Error if used outside of TasksProvider
+ * @returns TasksContextType with tasks data and CRUD operations
+ */
 export function useTasks() {
   const context = useContext(TasksContext);
   if (context === undefined) {
