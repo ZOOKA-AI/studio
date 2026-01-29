@@ -1,0 +1,90 @@
+name: 🐛 تقرير خطأ / Bug Report
+description: أبلغ عن خطأ لمساعدتنا في تحسين المشروع / Report a bug to help us improve
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        شكراً لك على تخصيص الوقت لملء هذا التقرير! / Thank you for taking the time to fill out this bug report!
+        
+  - type: textarea
+    id: description
+    attributes:
+      label: وصف المشكلة / Description
+      description: قدم وصفاً واضحاً ومختصراً للخطأ / Provide a clear and concise description of the bug
+      placeholder: أخبرنا ما حدث / Tell us what you see!
+    validations:
+      required: true
+      
+  - type: textarea
+    id: steps
+    attributes:
+      label: خطوات إعادة الإنتاج / Steps to Reproduce
+      description: كيف يمكننا إعادة إنتاج هذا الخطأ؟ / How can we reproduce this bug?
+      placeholder: |
+        1. اذهب إلى... / Go to...
+        2. انقر على... / Click on...
+        3. شاهد الخطأ / See error
+    validations:
+      required: true
+      
+  - type: textarea
+    id: expected
+    attributes:
+      label: السلوك المتوقع / Expected Behavior
+      description: ما الذي كنت تتوقع حدوثه؟ / What did you expect to happen?
+    validations:
+      required: true
+      
+  - type: textarea
+    id: actual
+    attributes:
+      label: السلوك الفعلي / Actual Behavior
+      description: ما الذي حدث بالفعل؟ / What actually happened?
+    validations:
+      required: true
+      
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: لقطات الشاشة / Screenshots
+      description: إذا كان ذلك ممكناً، أضف لقطات شاشة للمساعدة في شرح المشكلة / If applicable, add screenshots to help explain the problem
+      
+  - type: dropdown
+    id: browser
+    attributes:
+      label: المتصفح / Browser
+      description: ما المتصفح الذي تستخدمه؟ / What browser are you using?
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+    validations:
+      required: false
+      
+  - type: input
+    id: version
+    attributes:
+      label: الإصدار / Version
+      description: ما إصدار التطبيق؟ / What version of the app?
+      placeholder: "مثال / e.g., v1.0.0"
+      
+  - type: textarea
+    id: additional
+    attributes:
+      label: معلومات إضافية / Additional Context
+      description: أضف أي معلومات أخرى حول المشكلة هنا / Add any other context about the problem here
+      
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: التحقق / Verification
+      description: الرجاء التأكد من النقاط التالية / Please verify the following
+      options:
+        - label: لقد بحثت في المشكلات الموجودة ولم أجد مشكلة مشابهة / I have searched existing issues and found no similar issue
+          required: true
+        - label: هذه مشكلة جديدة وليست سؤالاً أو طلب ميزة / This is a bug report and not a question or feature request
+          required: true

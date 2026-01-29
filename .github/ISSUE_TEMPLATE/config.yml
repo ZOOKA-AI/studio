@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 المناقشات / Discussions
+    url: https://github.com/ZOOKA-AI/studio/discussions
+    about: للأسئلة والمناقشات العامة / For questions and general discussions
+  - name: 🌟 الدعم / Support
+    url: https://github.com/sponsors/ZOOKA-AI
+    about: دعم المشروع عبر GitHub Sponsors / Support the project via GitHub Sponsors

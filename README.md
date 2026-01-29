@@ -13,3 +13,13 @@
 This is a NextJS starter in Firebase Studio.
 
 To get started, take a look at src/app/page.tsx.
+
+## 📚 التوثيق / Documentation
+
+- [دليل المراقبة والتحليلات / Monitoring and Analytics Guide](docs/MONITORING.md) - إعداد التحليلات ومراقبة وقت التشغيل / Setup analytics and uptime monitoring
+
+## 🤝 المساهمة / Contributing
+
+نرحب بمساهماتك! يرجى استخدام [قوالب المشكلات](/.github/ISSUE_TEMPLATE) المناسبة للإبلاغ عن الأخطاء أو اقتراح ميزات جديدة.
+
+We welcome contributions! Please use the appropriate [issue templates](/.github/ISSUE_TEMPLATE) to report bugs or suggest new features.

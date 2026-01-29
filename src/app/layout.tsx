@@ -12,6 +12,7 @@ import { AppointmentsProvider } from '@/context/appointments-context';
 import { FirebaseClientProvider } from '@/firebase';
 import { MaterialsProvider } from '@/context/materials-context';
 import { EquipmentProvider } from '@/context/equipment-context';
+import { Analytics } from '@/components/analytics';
 
 export const metadata: Metadata = {
   title: 'Royal Clean Dashboard',
@@ -31,6 +32,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("font-body antialiased", 'bg-background')}>
+        <Analytics />
         <FirebaseClientProvider>
           <EquipmentProvider>
             <MaterialsProvider>

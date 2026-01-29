@@ -1,0 +1,81 @@
+name: 📚 تحسين التوثيق / Documentation Improvement
+description: اقترح تحسينات للتوثيق / Suggest improvements to documentation
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ساعدنا في تحسين التوثيق لجعله أكثر وضوحاً وفائدة!
+        Help us improve the documentation to make it clearer and more helpful!
+        
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: نوع التوثيق / Documentation Type
+      description: ما نوع التوثيق الذي تريد تحسينه؟ / What type of documentation do you want to improve?
+      options:
+        - README
+        - دليل المستخدم / User Guide
+        - دليل المساهم / Contributor Guide
+        - مرجع API / API Reference
+        - أمثلة الشيفرة / Code Examples
+        - تعليقات الشيفرة / Code Comments
+        - آخر / Other
+    validations:
+      required: true
+      
+  - type: textarea
+    id: issue
+    attributes:
+      label: المشكلة / Issue
+      description: ما المشكلة في التوثيق الحالي؟ / What is the issue with the current documentation?
+      placeholder: التوثيق غير واضح حول... / The documentation is unclear about...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: الاقتراح / Suggestion
+      description: كيف يمكن تحسين التوثيق؟ / How can the documentation be improved?
+      placeholder: يجب أن يشرح التوثيق... / The documentation should explain...
+    validations:
+      required: true
+      
+  - type: input
+    id: location
+    attributes:
+      label: الموقع / Location
+      description: أين في التوثيق توجد المشكلة؟ / Where in the documentation is the issue?
+      placeholder: "مثال / e.g., README.md line 42, docs/api.md section 3"
+      
+  - type: dropdown
+    id: language
+    attributes:
+      label: اللغة / Language
+      description: هل التحسين متعلق بلغة معينة؟ / Is the improvement related to a specific language?
+      options:
+        - العربية / Arabic
+        - الإنجليزية / English
+        - كلاهما / Both
+        - آخر / Other
+    validations:
+      required: false
+      
+  - type: textarea
+    id: additional
+    attributes:
+      label: معلومات إضافية / Additional Context
+      description: أضف أي معلومات أخرى حول تحسين التوثيق / Add any other context about the documentation improvement
+      
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: التحقق / Verification
+      description: الرجاء التأكد من النقاط التالية / Please verify the following
+      options:
+        - label: لقد بحثت في المشكلات الموجودة ولم أجد اقتراحاً مشابهاً / I have searched existing issues and found no similar suggestion
+          required: true
+        - label: أنا على استعداد للمساعدة في تحسين التوثيق إذا أمكن / I am willing to help improve the documentation if possible
+          required: false

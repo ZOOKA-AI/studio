@@ -1,0 +1,77 @@
+name: ✨ طلب ميزة / Feature Request
+description: اقترح ميزة جديدة لهذا المشروع / Suggest a new feature for this project
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        شكراً لاقتراحك! نحن نقدر مساهمتك في تحسين المشروع.
+        Thank you for your suggestion! We appreciate your contribution to improving the project.
+        
+  - type: textarea
+    id: problem
+    attributes:
+      label: المشكلة / Problem Statement
+      description: هل طلبك متعلق بمشكلة؟ صف المشكلة / Is your feature request related to a problem? Describe it
+      placeholder: أشعر بالإحباط عندما... / I'm frustrated when...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: solution
+    attributes:
+      label: الحل المقترح / Proposed Solution
+      description: صف الحل الذي تريده / Describe the solution you'd like
+      placeholder: أريد أن يكون هناك... / I would like to have...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: البدائل / Alternatives
+      description: صف أي حلول أو ميزات بديلة فكرت فيها / Describe any alternative solutions or features you've considered
+      
+  - type: dropdown
+    id: priority
+    attributes:
+      label: الأولوية / Priority
+      description: ما مدى أهمية هذه الميزة بالنسبة لك؟ / How important is this feature to you?
+      options:
+        - منخفضة - من الجميل أن يكون لديها / Low - Nice to have
+        - متوسطة - مفيدة / Medium - Useful
+        - عالية - مهمة جداً / High - Very important
+        - حرجة - ضرورية للعمل / Critical - Essential for work
+    validations:
+      required: false
+      
+  - type: dropdown
+    id: willing-to-contribute
+    attributes:
+      label: المساهمة / Contribution
+      description: هل أنت على استعداد للمساهمة في تنفيذ هذه الميزة؟ / Are you willing to contribute to implementing this feature?
+      options:
+        - نعم، يمكنني العمل على هذا / Yes, I can work on this
+        - ربما، بحاجة إلى توجيه / Maybe, need guidance
+        - لا، لكن يمكنني المساعدة في الاختبار / No, but I can help test
+        - لا / No
+    validations:
+      required: false
+      
+  - type: textarea
+    id: additional
+    attributes:
+      label: معلومات إضافية / Additional Context
+      description: أضف أي معلومات أخرى أو لقطات شاشة حول طلب الميزة هنا / Add any other context or screenshots about the feature request here
+      
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: التحقق / Verification
+      description: الرجاء التأكد من النقاط التالية / Please verify the following
+      options:
+        - label: لقد بحثت في المشكلات الموجودة ولم أجد طلب ميزة مشابه / I have searched existing issues and found no similar feature request
+          required: true
+        - label: هذا طلب ميزة وليس تقرير خطأ / This is a feature request and not a bug report
+          required: true

@@ -1,0 +1,86 @@
+name: Uptime Monitoring
+
+on:
+  schedule:
+    # Run every hour
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  uptime-check:
+    name: Check Website Uptime
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check website status
+        id: check
+        run: |
+          # Define the URL to check (update with your actual deployment URL)
+          # For GitHub Pages, it would be: https://ZOOKA-AI.github.io/studio
+          # For Firebase Hosting or other deployments, update accordingly
+          URL="${{ vars.MONITORING_URL || 'https://zooka-ai.github.io/studio' }}"
+          
+          echo "Checking URL: $URL"
+          
+          # Perform HTTP request and check status code
+          HTTP_CODE=$(curl -o /dev/null -s -w "%{http_code}" -L "$URL" --max-time 30)
+          
+          echo "HTTP Status Code: $HTTP_CODE"
+          
+          # Check if status code is in the 2xx or 3xx range (success)
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 400 ]; then
+            echo "✅ Website is UP (Status: $HTTP_CODE)"
+            echo "status=up" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Website is DOWN (Status: $HTTP_CODE)"
+            echo "status=down" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+      
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🚨 Uptime Alert: Website is Down';
+            const body = `## Website Downtime Detected
+            
+            **Time:** ${new Date().toISOString()}
+            **Workflow Run:** ${context.payload.repository.html_url}/actions/runs/${context.runId}
+            
+            The uptime monitoring check has detected that the website is not responding properly.
+            
+            ### Actions to Take:
+            1. Check deployment status
+            2. Verify hosting service status
+            3. Review recent changes
+            4. Check server logs
+            
+            This issue was created automatically by the uptime monitoring workflow.
+            `;
+            
+            // Check if there's already an open issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'uptime-alert'
+            });
+            
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['uptime-alert', 'automated']
+              });
+            } else {
+              // Add comment to existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                body: `⚠️ Another downtime detected at ${new Date().toISOString()}\n\nWorkflow: ${context.payload.repository.html_url}/actions/runs/${context.runId}`
+              });
+            }
