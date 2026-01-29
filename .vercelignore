@@ -30,8 +30,8 @@ ui-debug.log
 .cache
 .temp
 
-# Documentation (if you don't want to deploy docs)
-# docs
+# Documentation (not needed for deployment)
+docs
 
 # Git
 .git
