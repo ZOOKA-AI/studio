@@ -3,6 +3,10 @@ import { cn } from "@/lib/utils";
 import { CalendarCheck, Users, FileText, CheckSquare, TrendingUp, TrendingDown, BarChart3, DollarSign, Package } from "lucide-react";
 import type { Stat } from "@/lib/types";
 
+/**
+ * Icon mapping for Arabic labels to Lucide icons
+ * Maps Arabic statistics labels to their corresponding visual icons
+ */
 const iconMap = {
   'المواعيد': CalendarCheck,
   'العمال': Users,
@@ -13,9 +17,22 @@ const iconMap = {
 };
 
 type StatsCardsProps = {
+  /** Array of statistics to display */
   stats: Stat[];
 };
 
+/**
+ * StatsCards Component
+ * Displays a responsive grid of statistics cards with icons and trend indicators
+ * 
+ * Features:
+ * - Responsive grid layout (1 column mobile, 2 columns tablet, up to 4 columns desktop)
+ * - Dynamic icon mapping based on Arabic labels
+ * - Visual trend indicators (up/down arrows with color coding)
+ * - Positive trends shown in green, negative in red
+ * 
+ * @param stats - Array of Stat objects containing label, value, and change
+ */
 export function StatsCards({ stats }: StatsCardsProps) {
   return (
     <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4", stats.length > 2 ? "lg:grid-cols-4" : "lg:grid-cols-2")}>
