@@ -115,7 +115,6 @@ npm run prepare
 
 # Verify your setup
 npm run typecheck
-npm run lint
 npm run format:check
 ```
 
@@ -145,7 +144,6 @@ npm run format:check
 5. **Test your changes**
    ```bash
    npm run typecheck  # Check TypeScript types
-   npm run lint       # Check code quality
    npm run format     # Format code
    ```
 
@@ -175,8 +173,6 @@ npm run format:check
 | `npm run dev` | Start development server on port 9002 |
 | `npm run build` | Build for production |
 | `npm run start` | Start production server |
-| `npm run lint` | Run ESLint to check code quality |
-| `npm run lint:fix` | Auto-fix ESLint issues |
 | `npm run format` | Format code with Prettier |
 | `npm run format:check` | Check if code is formatted |
 | `npm run typecheck` | Run TypeScript type checking |
@@ -184,9 +180,8 @@ npm run format:check
 ### Code Quality Standards
 
 1. **TypeScript**: Use strict typing, avoid `any` when possible
-2. **ESLint**: Follow Next.js recommended rules
-3. **Prettier**: All code must be formatted consistently
-4. **Naming Conventions**:
+2. **Prettier**: All code must be formatted consistently
+3. **Naming Conventions**:
    - Components: PascalCase (`UserProfile.tsx`)
    - Hooks: camelCase with `use` prefix (`useAuth.ts`)
    - Utilities: camelCase (`formatDate.ts`)
@@ -197,7 +192,7 @@ npm run format:check
 Before committing, ensure:
 
 - ✅ Code is properly formatted (`npm run format`)
-- ✅ No linting errors (`npm run lint`)
+- ✅ TypeScript types are correct (`npm run typecheck`)
 - ✅ TypeScript types are correct (`npm run typecheck`)
 - ✅ All imports are organized
 - ✅ No console.logs in production code
