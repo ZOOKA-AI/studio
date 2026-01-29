@@ -28,9 +28,12 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body className={cn("font-body antialiased", 'bg-background')}>
+      <body className={cn('font-body antialiased', 'bg-background')}>
         <FirebaseClientProvider>
           <EquipmentProvider>
             <MaterialsProvider>
@@ -39,16 +42,14 @@ export default function RootLayout({
                   <ReportsProvider>
                     <WorkersProvider>
                       <SidebarProvider>
-                          <div className="relative flex min-h-screen">
-                              <AppSidebar />
-                              <div className="flex-1">
-                                  <Header />
-                                  <main className="p-4 sm:p-6 lg:p-8">
-                                      {children}
-                                  </main>
-                              </div>
+                        <div className="relative flex min-h-screen">
+                          <AppSidebar />
+                          <div className="flex-1">
+                            <Header />
+                            <main className="p-4 sm:p-6 lg:p-8">{children}</main>
                           </div>
-                          <Toaster />
+                        </div>
+                        <Toaster />
                       </SidebarProvider>
                     </WorkersProvider>
                   </ReportsProvider>

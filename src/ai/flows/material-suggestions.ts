@@ -8,13 +8,11 @@
  * - MaterialSuggestionsOutput - The return type for the getMaterialSuggestions function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 
 const MaterialSuggestionsInputSchema = z.object({
-  task: z
-    .string()
-    .describe('The task for which material suggestions are requested.'),
+  task: z.string().describe('The task for which material suggestions are requested.'),
 });
 export type MaterialSuggestionsInput = z.infer<typeof MaterialSuggestionsInputSchema>;
 
@@ -23,17 +21,21 @@ const MaterialSuggestionSchema = z.object({
   reason: z.string().describe('Why this material is suggested for this task.'),
 });
 
-const MaterialSuggestionsOutputSchema = z.array(MaterialSuggestionSchema).describe('An array of material suggestions for the task.');
+const MaterialSuggestionsOutputSchema = z
+  .array(MaterialSuggestionSchema)
+  .describe('An array of material suggestions for the task.');
 export type MaterialSuggestionsOutput = z.infer<typeof MaterialSuggestionsOutputSchema>;
 
-export async function getMaterialSuggestions(input: MaterialSuggestionsInput): Promise<MaterialSuggestionsOutput> {
+export async function getMaterialSuggestions(
+  input: MaterialSuggestionsInput
+): Promise<MaterialSuggestionsOutput> {
   return materialSuggestionsFlow(input);
 }
 
 const materialSuggestionsPrompt = ai.definePrompt({
   name: 'materialSuggestionsPrompt',
-  input: {schema: MaterialSuggestionsInputSchema},
-  output: {schema: MaterialSuggestionsOutputSchema},
+  input: { schema: MaterialSuggestionsInputSchema },
+  output: { schema: MaterialSuggestionsOutputSchema },
   prompt: `You are an expert in cleaning supplies and materials.
 
   Given a task, suggest the most appropriate materials to use.
@@ -52,7 +54,7 @@ const materialSuggestionsFlow = ai.defineFlow(
     outputSchema: MaterialSuggestionsOutputSchema,
   },
   async input => {
-    const {output} = await materialSuggestionsPrompt(input);
+    const { output } = await materialSuggestionsPrompt(input);
     return output!;
   }
 );

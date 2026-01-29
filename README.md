@@ -36,21 +36,24 @@ Firebase Studio is a modern Next.js application integrated with Firebase and Goo
 ## 🛠️ Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/ZOOKA-AI/studio.git
    cd studio
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables:**
+
    ```bash
    cp .env.local.example .env.local
    ```
-   
+
    Edit `.env.local` and add your credentials:
    - Firebase configuration (from Firebase Console)
    - Google Generative AI API key (from [Google AI Studio](https://makersuite.google.com/app/apikey))
@@ -93,6 +96,7 @@ npm run firebase:emulators
 ```
 
 This will start:
+
 - Authentication emulator on port 9099
 - Firestore emulator on port 8080
 - Hosting emulator on port 5000
@@ -119,6 +123,7 @@ studio/
 ## 🤖 AI Features
 
 The project includes Genkit AI flows for:
+
 - Material suggestions for cleaning tasks
 - Report summary generation
 

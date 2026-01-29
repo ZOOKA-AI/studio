@@ -11,12 +11,14 @@
  *   - GenerateReportSummaryOutput: The TypeScript type definition for the output of the flow.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 
 // Define the input schema for the generateReportSummary flow
 const GenerateReportSummaryInputSchema = z.object({
-  reportDetails: z.string().describe('Details of the daily report including tasks, materials, and any issues.'),
+  reportDetails: z
+    .string()
+    .describe('Details of the daily report including tasks, materials, and any issues.'),
 });
 export type GenerateReportSummaryInput = z.infer<typeof GenerateReportSummaryInputSchema>;
 
@@ -27,15 +29,17 @@ const GenerateReportSummaryOutputSchema = z.object({
 export type GenerateReportSummaryOutput = z.infer<typeof GenerateReportSummaryOutputSchema>;
 
 // Exported function to generate the report summary
-export async function generateReportSummary(input: GenerateReportSummaryInput): Promise<GenerateReportSummaryOutput> {
+export async function generateReportSummary(
+  input: GenerateReportSummaryInput
+): Promise<GenerateReportSummaryOutput> {
   return generateReportSummaryFlow(input);
 }
 
 // Define the prompt for summarizing the daily report
 const generateReportSummaryPrompt = ai.definePrompt({
   name: 'generateReportSummaryPrompt',
-  input: {schema: GenerateReportSummaryInputSchema},
-  output: {schema: GenerateReportSummaryOutputSchema},
+  input: { schema: GenerateReportSummaryInputSchema },
+  output: { schema: GenerateReportSummaryOutputSchema },
   prompt: `You are an AI assistant tasked with summarizing daily reports for a cleaning company.
   Given the details of the report, create a concise summary highlighting the key tasks completed, any issues encountered, and the overall status of the cleaning job.
   Report Details: {{{reportDetails}}}`,
@@ -49,7 +53,7 @@ const generateReportSummaryFlow = ai.defineFlow(
     outputSchema: GenerateReportSummaryOutputSchema,
   },
   async input => {
-    const {output} = await generateReportSummaryPrompt(input);
+    const { output } = await generateReportSummaryPrompt(input);
     return output!;
   }
 );

@@ -29,7 +29,7 @@ export function MaterialsProvider({ children }: { children: ReactNode }) {
     () => (firestore ? collection(firestore, 'materials') : null),
     [firestore]
   );
-  
+
   // Use the useCollection hook to fetch data.
   const { data: materials = [] } = useCollection<Material>(materialsRef);
 

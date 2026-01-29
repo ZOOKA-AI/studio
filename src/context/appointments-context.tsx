@@ -20,8 +20,10 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     () => (firestore ? collection(firestore, 'appointments') : null),
     [firestore]
   );
-  
-  const { data: rawAppointments = [] } = useCollection<Omit<Appointment, 'startTime'|'endTime'> & {startTime: Timestamp, endTime: Timestamp}>(appointmentsRef);
+
+  const { data: rawAppointments = [] } = useCollection<
+    Omit<Appointment, 'startTime' | 'endTime'> & { startTime: Timestamp; endTime: Timestamp }
+  >(appointmentsRef);
 
   const appointments: Appointment[] = (rawAppointments || []).map(appointment => ({
     ...appointment,
@@ -29,14 +31,16 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     endTime: appointment.endTime.toDate().toISOString(),
   }));
 
-  const addAppointment = async (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => {
+  const addAppointment = async (
+    appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>
+  ) => {
     if (!firestore) return;
     const startTime = new Date(appointment.startTime);
     const newAppointment = {
-        ...appointment,
-        startTime: Timestamp.fromDate(startTime),
-        siteAddress: 'غير محدد',
-        endTime: Timestamp.fromDate(new Date(startTime.getTime() + 2 * 60 * 60 * 1000)),
+      ...appointment,
+      startTime: Timestamp.fromDate(startTime),
+      siteAddress: 'غير محدد',
+      endTime: Timestamp.fromDate(new Date(startTime.getTime() + 2 * 60 * 60 * 1000)),
     };
     await addDoc(collection(firestore, 'appointments'), newAppointment);
   };
@@ -47,7 +51,9 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AppointmentsContext.Provider value={{ appointments: appointments || [], addAppointment, deleteAppointment }}>
+    <AppointmentsContext.Provider
+      value={{ appointments: appointments || [], addAppointment, deleteAppointment }}
+    >
       {children}
     </AppointmentsContext.Provider>
   );

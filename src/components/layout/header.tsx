@@ -20,26 +20,24 @@ import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
 export function Header() {
-    const { toast } = useToast();
-    const userAvatar = PlaceHolderImages.find(p => p.id === 'user-avatar-1');
-    const [today, setToday] = useState('');
+  const { toast } = useToast();
+  const userAvatar = PlaceHolderImages.find(p => p.id === 'user-avatar-1');
+  const [today, setToday] = useState('');
 
-    useEffect(() => {
-        setToday(format(new Date(), 'eeee, d MMMM yyyy', { locale: ar }));
-    }, []);
+  useEffect(() => {
+    setToday(format(new Date(), 'eeee, d MMMM yyyy', { locale: ar }));
+  }, []);
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-8">
       <div className="flex items-center gap-2">
         <SidebarTrigger className="lg:hidden" />
-        <h1 className="font-headline text-lg font-bold text-foreground">
-          مرحباً، محمد المشرف
-        </h1>
+        <h1 className="font-headline text-lg font-bold text-foreground">مرحباً، محمد المشرف</h1>
       </div>
 
       <div className="ms-auto flex items-center gap-4">
         <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
-            {today && <span>{today}</span>}
+          {today && <span>{today}</span>}
         </div>
         <Button variant="ghost" size="icon" className="relative rounded-full">
           <Bell className="h-5 w-5" />
@@ -56,8 +54,8 @@ export function Header() {
                 <AvatarFallback>م</AvatarFallback>
               </Avatar>
               <div className="hidden lg:flex flex-col items-start">
-                  <p className="text-sm font-medium">محمد</p>
-                  <p className="text-xs text-muted-foreground">مشرف</p>
+                <p className="text-sm font-medium">محمد</p>
+                <p className="text-xs text-muted-foreground">مشرف</p>
               </div>
               <ChevronDown className="h-4 w-4 text-muted-foreground hidden lg:block" />
             </Button>
@@ -66,13 +64,19 @@ export function Header() {
             <DropdownMenuLabel>حسابي</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-                <Link href="/profile">الملف الشخصي</Link>
+              <Link href="/profile">الملف الشخصي</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-                <Link href="/settings">الإعدادات</Link>
+              <Link href="/settings">الإعدادات</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => toast({ title: 'تم تسجيل الخروج', description: 'هذه الميزة لا تعمل بعد.'})}>تسجيل الخروج</DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() =>
+                toast({ title: 'تم تسجيل الخروج', description: 'هذه الميزة لا تعمل بعد.' })
+              }
+            >
+              تسجيل الخروج
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

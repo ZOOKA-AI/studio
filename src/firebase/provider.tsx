@@ -1,10 +1,24 @@
 'use client';
 
-import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
+import React, {
+  DependencyList,
+  createContext,
+  useContext,
+  ReactNode,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react';
 import { FirebaseApp } from 'firebase/app';
 import { Firestore, doc, setDoc } from 'firebase/firestore';
-import { Auth, User, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { FirebaseErrorListener } from '@/components/FirebaseErrorListener'
+import {
+  Auth,
+  User,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 interface FirebaseProviderProps {
   children: ReactNode;
@@ -43,7 +57,8 @@ export interface FirebaseServicesAndUser {
 }
 
 // Return type for useUser() - specific to user auth state
-export interface UserHookResult { // Renamed from UserAuthHookResult for consistency if desired, or keep as UserAuthHookResult
+export interface UserHookResult {
+  // Renamed from UserAuthHookResult for consistency if desired, or keep as UserAuthHookResult
   user: User | null;
   isUserLoading: boolean;
   userError: Error | null;
@@ -72,65 +87,77 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
   // Effect to subscribe to Firebase auth state changes
   useEffect(() => {
-    if (!auth || !firestore) { // If no Auth service instance, cannot determine user state
-      setUserAuthState({ user: null, isUserLoading: false, userError: new Error("Auth or Firestore service not provided.") });
+    if (!auth || !firestore) {
+      // If no Auth service instance, cannot determine user state
+      setUserAuthState({
+        user: null,
+        isUserLoading: false,
+        userError: new Error('Auth or Firestore service not provided.'),
+      });
       return;
     }
 
     setUserAuthState({ user: null, isUserLoading: true, userError: null }); // Reset on auth instance change
 
     const ensureSupervisorAccount = async (user: User | null) => {
-        if (user) {
-            setUserAuthState({ user, isUserLoading: false, userError: null });
-            return;
+      if (user) {
+        setUserAuthState({ user, isUserLoading: false, userError: null });
+        return;
+      }
+
+      try {
+        // Try to sign in as the supervisor
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          SUPERVISOR_EMAIL,
+          SUPERVISOR_PASSWORD
+        );
+        setUserAuthState({ user: userCredential.user, isUserLoading: false, userError: null });
+      } catch (error: any) {
+        // If user does not exist, create it
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+          try {
+            const userCredential = await createUserWithEmailAndPassword(
+              auth,
+              SUPERVISOR_EMAIL,
+              SUPERVISOR_PASSWORD
+            );
+            const supervisorUser = userCredential.user;
+
+            // Create the user profile document in Firestore
+            const userDocRef = doc(firestore, 'users', supervisorUser.uid);
+            await setDoc(userDocRef, {
+              id: supervisorUser.uid,
+              name: 'محمد المشرف',
+              email: SUPERVISOR_EMAIL,
+              role: 'supervisor',
+            });
+
+            // Create admin role document
+            const adminRoleRef = doc(firestore, 'roles_admin', supervisorUser.uid);
+            await setDoc(adminRoleRef, { role: 'admin' });
+
+            setUserAuthState({ user: supervisorUser, isUserLoading: false, userError: null });
+          } catch (creationError) {
+            console.error('Supervisor account creation failed:', creationError);
+            setUserAuthState({
+              user: null,
+              isUserLoading: false,
+              userError: creationError as Error,
+            });
+          }
+        } else {
+          console.error('Supervisor sign-in failed:', error);
+          setUserAuthState({ user: null, isUserLoading: false, userError: error });
         }
-
-        try {
-            // Try to sign in as the supervisor
-            const userCredential = await signInWithEmailAndPassword(auth, SUPERVISOR_EMAIL, SUPERVISOR_PASSWORD);
-            setUserAuthState({ user: userCredential.user, isUserLoading: false, userError: null });
-        } catch (error: any) {
-            // If user does not exist, create it
-            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-                try {
-                    const userCredential = await createUserWithEmailAndPassword(auth, SUPERVISOR_EMAIL, SUPERVISOR_PASSWORD);
-                    const supervisorUser = userCredential.user;
-                    
-                    // Create the user profile document in Firestore
-                    const userDocRef = doc(firestore, 'users', supervisorUser.uid);
-                    await setDoc(userDocRef, {
-                        id: supervisorUser.uid,
-                        name: 'محمد المشرف',
-                        email: SUPERVISOR_EMAIL,
-                        role: 'supervisor',
-                    });
-
-                    // Create admin role document
-                    const adminRoleRef = doc(firestore, 'roles_admin', supervisorUser.uid);
-                    await setDoc(adminRoleRef, { role: 'admin' });
-
-
-                    setUserAuthState({ user: supervisorUser, isUserLoading: false, userError: null });
-                } catch (creationError) {
-                    console.error("Supervisor account creation failed:", creationError);
-                    setUserAuthState({ user: null, isUserLoading: false, userError: creationError as Error });
-                }
-            } else {
-                console.error("Supervisor sign-in failed:", error);
-                setUserAuthState({ user: null, isUserLoading: false, userError: error });
-            }
-        }
+      }
     };
 
-
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      ensureSupervisorAccount,
-      (error) => { // Auth listener error
-        console.error("FirebaseProvider: onAuthStateChanged error:", error);
-        setUserAuthState({ user: null, isUserLoading: false, userError: error });
-      }
-    );
+    const unsubscribe = onAuthStateChanged(auth, ensureSupervisorAccount, error => {
+      // Auth listener error
+      console.error('FirebaseProvider: onAuthStateChanged error:', error);
+      setUserAuthState({ user: null, isUserLoading: false, userError: error });
+    });
     return () => unsubscribe(); // Cleanup
   }, [auth, firestore]); // Depends on the auth instance
 
@@ -167,7 +194,12 @@ export const useFirebase = (): FirebaseServicesAndUser => {
     throw new Error('useFirebase must be used within a FirebaseProvider.');
   }
 
-  if (!context.areServicesAvailable || !context.firebaseApp || !context.firestore || !context.auth) {
+  if (
+    !context.areServicesAvailable ||
+    !context.firebaseApp ||
+    !context.firestore ||
+    !context.auth
+  ) {
     throw new Error('Firebase core services not available. Check FirebaseProvider props.');
   }
 
@@ -199,14 +231,14 @@ export const useFirebaseApp = (): FirebaseApp => {
   return firebaseApp;
 };
 
-type MemoFirebase <T> = T & {__memo?: boolean};
+type MemoFirebase<T> = T & { __memo?: boolean };
 
-export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T | (MemoFirebase<T>) {
+export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T | MemoFirebase<T> {
   const memoized = useMemo(factory, deps);
-  
-  if(typeof memoized !== 'object' || memoized === null) return memoized;
+
+  if (typeof memoized !== 'object' || memoized === null) return memoized;
   (memoized as MemoFirebase<T>).__memo = true;
-  
+
   return memoized;
 }
 
@@ -215,7 +247,8 @@ export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T | 
  * This provides the User object, loading status, and any auth errors.
  * @returns {UserHookResult} Object with user, isUserLoading, userError.
  */
-export const useUser = (): UserHookResult => { // Renamed from useAuthUser
+export const useUser = (): UserHookResult => {
+  // Renamed from useAuthUser
   const { user, isUserLoading, userError } = useFirebase(); // Leverages the main hook
   return { user, isUserLoading, userError };
 };

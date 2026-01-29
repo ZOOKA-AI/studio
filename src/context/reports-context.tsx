@@ -21,19 +21,20 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
     () => (firestore ? collection(firestore, 'dailyReports') : null),
     [firestore]
   );
-  
-  const { data: rawReports = [] } = useCollection<Omit<DailyReport, 'date'> & { date: Timestamp }>(reportsRef);
+
+  const { data: rawReports = [] } = useCollection<Omit<DailyReport, 'date'> & { date: Timestamp }>(
+    reportsRef
+  );
 
   const reports: DailyReport[] = (rawReports || []).map(report => ({
     ...report,
     date: report.date.toDate(),
   }));
 
-
   const addReport = async (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
     if (!firestore || !user) return; // Ensure user is available
     const reportsCollection = collection(firestore, 'dailyReports');
-    
+
     const newReport = {
       ...report,
       date: Timestamp.fromDate(report.date),
@@ -42,22 +43,19 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
       hours: 8, // Placeholder
       status: 'قيد المراجعة',
     };
-    
-    addDoc(reportsCollection, newReport)
-      .catch((error) => {
-        const permissionError = new FirestorePermissionError({
-          path: reportsCollection.path,
-          operation: 'create',
-          requestResourceData: newReport,
-        });
-        errorEmitter.emit('permission-error', permissionError);
+
+    addDoc(reportsCollection, newReport).catch(error => {
+      const permissionError = new FirestorePermissionError({
+        path: reportsCollection.path,
+        operation: 'create',
+        requestResourceData: newReport,
       });
+      errorEmitter.emit('permission-error', permissionError);
+    });
   };
 
   return (
-    <ReportsContext.Provider value={{ reports, addReport }}>
-      {children}
-    </ReportsContext.Provider>
+    <ReportsContext.Provider value={{ reports, addReport }}>{children}</ReportsContext.Provider>
   );
 }
 

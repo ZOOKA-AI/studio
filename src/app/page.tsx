@@ -33,7 +33,7 @@ export default function SupervisorDashboardPage() {
       value: reports.length.toString(),
       change: '-1.4%',
     },
-     {
+    {
       label: 'المهام',
       value: tasks.length.toString(),
       change: '+5.2%',
@@ -50,7 +50,7 @@ export default function SupervisorDashboardPage() {
       label: 'المصروفات',
       value: 'د.إ 0.00',
       change: '+0%',
-    }
+    },
   ];
 
   return (
@@ -59,13 +59,13 @@ export default function SupervisorDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <StatsCards stats={financialStats} />
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3">
-            <RecentReports reports={reports || []} />
+          <RecentReports reports={reports || []} />
         </div>
         <div className="lg:col-span-2">
-            <QuickActions />
+          <QuickActions />
         </div>
       </div>
     </div>

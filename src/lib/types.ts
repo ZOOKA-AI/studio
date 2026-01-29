@@ -14,7 +14,7 @@ export type Appointment = {
   siteName: string;
   siteAddress: string;
   startTime: string; // ISO string
-  endTime: string;   // ISO string
+  endTime: string; // ISO string
   status: AppointmentStatus;
 };
 
@@ -48,17 +48,16 @@ export type Stat = {
   change: string;
 };
 
-
 export type WorkerStatus = 'نشط' | 'في إجازة';
 
 export type Worker = {
-    id: string;
-    name: string;
-    phone: string;
-    nationalId: string;
-    role: string;
-    status: WorkerStatus;
-    type: 'company' | 'external';
+  id: string;
+  name: string;
+  phone: string;
+  nationalId: string;
+  role: string;
+  status: WorkerStatus;
+  type: 'company' | 'external';
 };
 
 export type TaskStatus = 'جديدة' | 'قيد التنفيذ' | 'مكتملة';
@@ -72,14 +71,13 @@ export type Task = {
   dueDate: string; // ISO string for date
 };
 
-
 export type Material = {
   id: string;
   name: string;
   description?: string;
   quantity: number;
   unit: string;
-}
+};
 
 export type EquipmentCondition = 'ممتازة' | 'جيدة' | 'تحتاج صيانة';
 

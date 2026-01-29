@@ -23,56 +23,55 @@ export function WorkersProvider({ children }: { children: ReactNode }) {
     () => (firestore ? collection(firestore, 'workers') : null),
     [firestore]
   );
-  
+
   const { data: workers = [] } = useCollection<Worker>(workersRef);
 
   const addWorker = (workerData: Omit<Worker, 'id' | 'type'>, type: 'company' | 'external') => {
     if (!firestore) return;
     const workersCollection = collection(firestore, 'workers');
     const newWorker = { ...workerData, type };
-    
-    addDoc(workersCollection, newWorker)
-      .catch((error) => {
-        const permissionError = new FirestorePermissionError({
-          path: workersCollection.path,
-          operation: 'create',
-          requestResourceData: newWorker,
-        });
-        errorEmitter.emit('permission-error', permissionError);
+
+    addDoc(workersCollection, newWorker).catch(error => {
+      const permissionError = new FirestorePermissionError({
+        path: workersCollection.path,
+        operation: 'create',
+        requestResourceData: newWorker,
       });
+      errorEmitter.emit('permission-error', permissionError);
+    });
   };
 
   const updateWorker = (workerId: string, updatedData: Partial<Omit<Worker, 'id'>>) => {
     if (!firestore) return;
     const workerDocRef = doc(firestore, 'workers', workerId);
-    
-    updateDoc(workerDocRef, updatedData)
-      .catch((error) => {
-        const permissionError = new FirestorePermissionError({
-          path: workerDocRef.path,
-          operation: 'update',
-          requestResourceData: updatedData,
-        });
-        errorEmitter.emit('permission-error', permissionError);
+
+    updateDoc(workerDocRef, updatedData).catch(error => {
+      const permissionError = new FirestorePermissionError({
+        path: workerDocRef.path,
+        operation: 'update',
+        requestResourceData: updatedData,
       });
+      errorEmitter.emit('permission-error', permissionError);
+    });
   };
-  
+
   const deleteWorker = (workerId: string) => {
     if (!firestore) return;
     const workerDocRef = doc(firestore, 'workers', workerId);
 
-    deleteDoc(workerDocRef)
-      .catch((error) => {
-        const permissionError = new FirestorePermissionError({
-          path: workerDocRef.path,
-          operation: 'delete',
-        });
-        errorEmitter.emit('permission-error', permissionError);
+    deleteDoc(workerDocRef).catch(error => {
+      const permissionError = new FirestorePermissionError({
+        path: workerDocRef.path,
+        operation: 'delete',
       });
+      errorEmitter.emit('permission-error', permissionError);
+    });
   };
 
   return (
-    <WorkersContext.Provider value={{ workers: workers || [], addWorker, updateWorker, deleteWorker }}>
+    <WorkersContext.Provider
+      value={{ workers: workers || [], addWorker, updateWorker, deleteWorker }}
+    >
       {children}
     </WorkersContext.Provider>
   );

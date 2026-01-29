@@ -1,10 +1,9 @@
+'use client';
 
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -13,47 +12,41 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { CalendarIcon, Loader2, Sparkles, Trash2, Upload } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import { format, parseISO } from "date-fns";
-import { ar } from "date-fns/locale";
-import { useState, useEffect } from "react";
-import { getMaterialSuggestions } from "@/ai/flows/material-suggestions";
-import { generateReportSummary } from "@/ai/flows/generate-report-summary";
-import { useToast } from "@/hooks/use-toast";
-import { useReports } from "@/context/reports-context";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { CalendarIcon, Loader2, Sparkles, Trash2, Upload } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
+import { format, parseISO } from 'date-fns';
+import { ar } from 'date-fns/locale';
+import { useState, useEffect } from 'react';
+import { getMaterialSuggestions } from '@/ai/flows/material-suggestions';
+import { generateReportSummary } from '@/ai/flows/generate-report-summary';
+import { useToast } from '@/hooks/use-toast';
+import { useReports } from '@/context/reports-context';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  clientName: z.string().min(2, { message: "اسم العميل مطلوب." }),
+  clientName: z.string().min(2, { message: 'اسم العميل مطلوب.' }),
   clientPhone: z.string().optional(),
   clientLocation: z.string().optional(),
   agreedAmount: z.coerce.number().optional(),
   paymentMethod: z.string().optional(),
   workDescription: z.string().optional(),
-  date: z.date({ required_error: "تاريخ اليومية مطلوب." }),
+  date: z.date({ required_error: 'تاريخ اليومية مطلوب.' }),
   startTime: z.string().optional(),
   endTime: z.string().optional(),
   vehicleNumber: z.string().optional(),
   workers: z
-    .array(z.object({ name: z.string().min(1, "اسم العامل مطلوب."), phone: z.string().optional() }))
-    .min(1, "يجب إضافة عامل واحد على الأقل."),
-  tasks: z
-    .array(z.object({ value: z.string() }))
-    .min(1, "يجب إضافة مهمة واحدة على الأقل."),
-  materials: z.array(z.object({ name: z.string().min(1,"اسم المادة مطلوب"), quantity: z.string().optional() })),
+    .array(z.object({ name: z.string().min(1, 'اسم العامل مطلوب.'), phone: z.string().optional() }))
+    .min(1, 'يجب إضافة عامل واحد على الأقل.'),
+  tasks: z.array(z.object({ value: z.string() })).min(1, 'يجب إضافة مهمة واحدة على الأقل.'),
+  materials: z.array(
+    z.object({ name: z.string().min(1, 'اسم المادة مطلوب'), quantity: z.string().optional() })
+  ),
   notes: z.string().optional(),
   beforeImage: z.any().optional(),
   afterImage: z.any().optional(),
@@ -78,20 +71,20 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      clientName: "",
-      clientPhone: "",
-      clientLocation: "",
+      clientName: '',
+      clientPhone: '',
+      clientLocation: '',
       agreedAmount: 0,
-      paymentMethod: "",
-      workDescription: "",
+      paymentMethod: '',
+      workDescription: '',
       date: dateString ? parseISO(dateString) : undefined, // Set to undefined initially
-      startTime: "09:00",
-      endTime: "17:00",
-      tasks: [{ value: "" }],
-      workers: [{ name: "", phone: "" }],
+      startTime: '09:00',
+      endTime: '17:00',
+      tasks: [{ value: '' }],
+      workers: [{ name: '', phone: '' }],
       materials: [],
-      notes: "",
-      vehicleNumber: "",
+      notes: '',
+      vehicleNumber: '',
     },
   });
 
@@ -99,10 +92,10 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     // Set the date only on the client side
     if (isClient) {
       if (dateString) {
-        form.setValue("date", parseISO(dateString));
-      } else if (!form.getValues("date")) {
+        form.setValue('date', parseISO(dateString));
+      } else if (!form.getValues('date')) {
         // Set to new Date only if it's not already set
-        form.setValue("date", new Date());
+        form.setValue('date', new Date());
       }
     }
   }, [dateString, form, isClient]);
@@ -113,26 +106,26 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
 
     addReport(reportData);
     toast({
-      title: "تم حفظ اليومية بنجاح!",
-      description: `تم تحديث تقرير يوم ${format(values.date, "PPP", {
+      title: 'تم حفظ اليومية بنجاح!',
+      description: `تم تحديث تقرير يوم ${format(values.date, 'PPP', {
         locale: ar,
       })}`,
     });
-    router.push("/reports");
+    router.push('/reports');
   };
 
   const handleSuggestMaterials = async () => {
-    const tasks = form.getValues("tasks");
+    const tasks = form.getValues('tasks');
     const taskDescriptions = tasks
-      .map((task) => task.value)
+      .map(task => task.value)
       .filter(Boolean)
-      .join(", ");
+      .join(', ');
 
     if (!taskDescriptions) {
       toast({
-        variant: "destructive",
-        title: "لا يوجد مهام",
-        description: "الرجاء إدخال بعض المهام أولاً للحصول على اقتراحات.",
+        variant: 'destructive',
+        title: 'لا يوجد مهام',
+        description: 'الرجاء إدخال بعض المهام أولاً للحصول على اقتراحات.',
       });
       return;
     }
@@ -140,24 +133,19 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     setIsSuggesting(true);
     try {
       const suggestions = await getMaterialSuggestions({ task: taskDescriptions });
-      const newMaterials = suggestions.map((s) => ({ name: s.materialName, quantity: "" }));
-      const currentMaterialNames = form.getValues("materials").map((m) => m.name);
-      const uniqueNewMaterials = newMaterials.filter(
-        (nm) => !currentMaterialNames.includes(nm.name)
-      );
+      const newMaterials = suggestions.map(s => ({ name: s.materialName, quantity: '' }));
+      const currentMaterialNames = form.getValues('materials').map(m => m.name);
+      const uniqueNewMaterials = newMaterials.filter(nm => !currentMaterialNames.includes(nm.name));
 
       if (uniqueNewMaterials.length > 0) {
-        form.setValue("materials", [
-          ...form.getValues("materials"),
-          ...uniqueNewMaterials,
-        ]);
+        form.setValue('materials', [...form.getValues('materials'), ...uniqueNewMaterials]);
       }
     } catch (error) {
       console.error(error);
       toast({
-        variant: "destructive",
-        title: "خطأ في جلب الاقتراحات",
-        description: "حدث خطأ أثناء محاولة الحصول على اقتراحات المواد.",
+        variant: 'destructive',
+        title: 'خطأ في جلب الاقتراحات',
+        description: 'حدث خطأ أثناء محاولة الحصول على اقتراحات المواد.',
       });
     } finally {
       setIsSuggesting(false);
@@ -168,23 +156,23 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     const values = form.getValues();
     const reportDetails = `
       العميل: ${values.clientName}
-      التاريخ: ${values.date ? format(values.date, "PPP", { locale: ar }) : ""}
-      المهام: ${values.tasks.map((t) => t.value).join(", ")}
-      العمال: ${values.workers.map((w) => w.name).join(", ")}
-      المواد: ${values.materials.map((m) => `${m.name} (${m.quantity})`).join(", ")}
-      الملاحظات: ${values.notes || "لا يوجد"}
+      التاريخ: ${values.date ? format(values.date, 'PPP', { locale: ar }) : ''}
+      المهام: ${values.tasks.map(t => t.value).join(', ')}
+      العمال: ${values.workers.map(w => w.name).join(', ')}
+      المواد: ${values.materials.map(m => `${m.name} (${m.quantity})`).join(', ')}
+      الملاحظات: ${values.notes || 'لا يوجد'}
     `;
 
     setIsSummarizing(true);
     try {
       const result = await generateReportSummary({ reportDetails });
-      form.setValue("notes", result.summary);
+      form.setValue('notes', result.summary);
     } catch (error) {
       console.error(error);
       toast({
-        variant: "destructive",
-        title: "خطأ في إنشاء الملخص",
-        description: "حدث خطأ أثناء محاولة إنشاء ملخص التقرير.",
+        variant: 'destructive',
+        title: 'خطأ في إنشاء الملخص',
+        description: 'حدث خطأ أثناء محاولة إنشاء ملخص التقرير.',
       });
     } finally {
       setIsSummarizing(false);
@@ -195,9 +183,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     <Card>
       <CardHeader>
         <CardTitle className="font-headline text-xl">📝 يومية عمل</CardTitle>
-        <CardDescription>
-          املأ أو عدّل الحقول التالية لتوثيق تفاصيل يوم العمل.
-        </CardDescription>
+        <CardDescription>املأ أو عدّل الحقول التالية لتوثيق تفاصيل يوم العمل.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -213,14 +199,14 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
-                            variant={"outline"}
+                            variant={'outline'}
                             className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
+                              'w-full pl-3 text-left font-normal',
+                              !field.value && 'text-muted-foreground'
                             )}
                           >
                             {field.value && isClient ? (
-                              format(field.value, "PPP", { locale: ar })
+                              format(field.value, 'PPP', { locale: ar })
                             ) : (
                               <span>اختر تاريخاً</span>
                             )}
@@ -233,9 +219,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
+                          disabled={date => date > new Date() || date < new Date('1900-01-01')}
                           initialFocus
                         />
                       </PopoverContent>
@@ -262,90 +246,90 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
               <h3 className="text-lg font-medium mb-4">تفاصيل العمل</h3>
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <FormField
+                  <FormField
                     control={form.control}
                     name="clientName"
                     render={({ field }) => (
-                        <FormItem>
+                      <FormItem>
                         <FormLabel>اسم العميل</FormLabel>
                         <FormControl>
-                            <Input placeholder="ادخل اسم العميل" {...field} />
+                          <Input placeholder="ادخل اسم العميل" {...field} />
                         </FormControl>
                         <FormMessage />
-                        </FormItem>
+                      </FormItem>
                     )}
-                    />
-                    <FormField
+                  />
+                  <FormField
                     control={form.control}
                     name="clientPhone"
                     render={({ field }) => (
-                        <FormItem>
+                      <FormItem>
                         <FormLabel>رقم هاتف العميل</FormLabel>
                         <FormControl>
-                            <Input placeholder="ادخل رقم الهاتف" {...field} />
+                          <Input placeholder="ادخل رقم الهاتف" {...field} />
                         </FormControl>
                         <FormMessage />
-                        </FormItem>
+                      </FormItem>
                     )}
-                    />
-                    <FormField
+                  />
+                  <FormField
                     control={form.control}
                     name="clientLocation"
                     render={({ field }) => (
-                        <FormItem>
+                      <FormItem>
                         <FormLabel>موقع العميل</FormLabel>
                         <FormControl>
-                            <Input placeholder="ادخل موقع العميل" {...field} />
+                          <Input placeholder="ادخل موقع العميل" {...field} />
                         </FormControl>
                         <FormMessage />
-                        </FormItem>
+                      </FormItem>
                     )}
-                    />
+                  />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                        control={form.control}
-                        name="agreedAmount"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>المبلغ المتفق عليه (بالدرهم)</FormLabel>
-                            <FormControl>
-                                <Input type="number" placeholder="0.00" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="paymentMethod"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>طريقة الدفع</FormLabel>
-                            <FormControl>
-                                <Input placeholder="كاش، تحويل بنكي،..." {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                 <FormField
+                  <FormField
                     control={form.control}
-                    name="workDescription"
+                    name="agreedAmount"
                     render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>وصف الأعمال</FormLabel>
+                      <FormItem>
+                        <FormLabel>المبلغ المتفق عليه (بالدرهم)</FormLabel>
                         <FormControl>
-                            <Textarea
-                            placeholder="وصف عام للأعمال المتفق عليها..."
-                            className="resize-none"
-                            {...field}
-                            />
+                          <Input type="number" placeholder="0.00" {...field} />
                         </FormControl>
                         <FormMessage />
-                        </FormItem>
+                      </FormItem>
                     )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="paymentMethod"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>طريقة الدفع</FormLabel>
+                        <FormControl>
+                          <Input placeholder="كاش، تحويل بنكي،..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <FormField
+                  control={form.control}
+                  name="workDescription"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>وصف الأعمال</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="وصف عام للأعمال المتفق عليها..."
+                          className="resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
@@ -378,7 +362,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                 <div>
                   <FormLabel>العمال</FormLabel>
                   <div className="space-y-2 mt-2">
-                    {form.watch("workers").map((worker, index) => (
+                    {form.watch('workers').map((worker, index) => (
                       <div key={index} className="flex items-start gap-2">
                         <FormField
                           control={form.control}
@@ -386,27 +370,21 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                           render={({ field }) => (
                             <FormItem className="flex-1">
                               <FormControl>
-                                <Input
-                                  placeholder={`اسم العامل #${index + 1}`}
-                                  {...field}
-                                />
+                                <Input placeholder={`اسم العامل #${index + 1}`} {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                         <FormField
+                        <FormField
                           control={form.control}
                           name={`workers.${index}.phone`}
                           render={({ field }) => (
                             <FormItem className="flex-1">
                               <FormControl>
-                                <Input
-                                  placeholder="رقم الهاتف"
-                                  {...field}
-                                />
+                                <Input placeholder="رقم الهاتف" {...field} />
                               </FormControl>
-                               <FormMessage />
+                              <FormMessage />
                             </FormItem>
                           )}
                         />
@@ -414,12 +392,12 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                           type="button"
                           variant="ghost"
                           size="icon"
-                           className="mt-1"
+                          className="mt-1"
                           onClick={() => {
-                            const currentWorkers = form.getValues("workers");
+                            const currentWorkers = form.getValues('workers');
                             if (currentWorkers.length > 1) {
                               form.setValue(
-                                "workers",
+                                'workers',
                                 currentWorkers.filter((_, i) => i !== index)
                               );
                             }
@@ -436,9 +414,9 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                     size="sm"
                     className="mt-2"
                     onClick={() =>
-                      form.setValue("workers", [
-                        ...form.getValues("workers"),
-                        { name: "", phone: "" },
+                      form.setValue('workers', [
+                        ...form.getValues('workers'),
+                        { name: '', phone: '' },
                       ])
                     }
                   >
@@ -449,7 +427,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                 <div>
                   <FormLabel>المهام المنجزة</FormLabel>
                   <div className="space-y-2 mt-2">
-                    {form.watch("tasks").map((task, index) => (
+                    {form.watch('tasks').map((task, index) => (
                       <FormField
                         key={index}
                         control={form.control}
@@ -457,20 +435,17 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                         render={({ field }) => (
                           <FormItem className="flex items-center gap-2">
                             <FormControl>
-                              <Input
-                                placeholder={`مهمة #${index + 1}`}
-                                {...field}
-                              />
+                              <Input placeholder={`مهمة #${index + 1}`} {...field} />
                             </FormControl>
                             <Button
                               type="button"
                               variant="ghost"
                               size="icon"
                               onClick={() => {
-                                const currentTasks = form.getValues("tasks");
+                                const currentTasks = form.getValues('tasks');
                                 if (currentTasks.length > 1) {
                                   form.setValue(
-                                    "tasks",
+                                    'tasks',
                                     currentTasks.filter((_, i) => i !== index)
                                   );
                                 }
@@ -489,10 +464,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                     size="sm"
                     className="mt-2"
                     onClick={() =>
-                      form.setValue("tasks", [
-                        ...form.getValues("tasks"),
-                        { value: "" },
-                      ])
+                      form.setValue('tasks', [...form.getValues('tasks'), { value: '' }])
                     }
                   >
                     إضافة مهمة
@@ -559,54 +531,48 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                   </Button>
                 </div>
                 <div className="space-y-2">
-                  {form.watch("materials").map((material, index) => (
+                  {form.watch('materials').map((material, index) => (
                     <div key={index} className="flex items-start gap-2">
-                        <FormField
-                          control={form.control}
-                          name={`materials.${index}.name`}
-                          render={({ field }) => (
-                            <FormItem className="flex-1">
-                              <FormControl>
-                                <Input
-                                  placeholder={`اسم المادة #${index + 1}`}
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                         <FormField
-                          control={form.control}
-                          name={`materials.${index}.quantity`}
-                          render={({ field }) => (
-                            <FormItem className="w-1/3">
-                              <FormControl>
-                                <Input
-                                  placeholder="الكمية"
-                                  {...field}
-                                />
-                              </FormControl>
-                               <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                           className="mt-1"
-                          onClick={() => {
-                            const currentMaterials = form.getValues("materials");
-                            form.setValue(
-                                "materials",
-                                currentMaterials.filter((_, i) => i !== index)
-                              );
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
+                      <FormField
+                        control={form.control}
+                        name={`materials.${index}.name`}
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Input placeholder={`اسم المادة #${index + 1}`} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`materials.${index}.quantity`}
+                        render={({ field }) => (
+                          <FormItem className="w-1/3">
+                            <FormControl>
+                              <Input placeholder="الكمية" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="mt-1"
+                        onClick={() => {
+                          const currentMaterials = form.getValues('materials');
+                          form.setValue(
+                            'materials',
+                            currentMaterials.filter((_, i) => i !== index)
+                          );
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
                   ))}
                 </div>
                 <Button
@@ -615,9 +581,9 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                   size="sm"
                   className="mt-2"
                   onClick={() =>
-                    form.setValue("materials", [
-                      ...form.getValues("materials"),
-                      { name: "", quantity: "" },
+                    form.setValue('materials', [
+                      ...form.getValues('materials'),
+                      { name: '', quantity: '' },
                     ])
                   }
                 >
@@ -660,7 +626,9 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                 )}
               />
             </div>
-            <Button type="submit" disabled={!isClient || !form.formState.isValid}>حفظ اليومية</Button>
+            <Button type="submit" disabled={!isClient || !form.formState.isValid}>
+              حفظ اليومية
+            </Button>
           </form>
         </Form>
       </CardContent>

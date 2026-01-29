@@ -1,9 +1,9 @@
 'use client';
 import { useEffect } from 'react';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -11,15 +11,15 @@ import {
   DialogTitle,
   DialogFooter,
   DialogClose,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon } from 'lucide-react';
@@ -34,14 +34,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-
+} from '@/components/ui/form';
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: "عنوان المهمة مطلوب." }),
+  title: z.string().min(1, { message: 'عنوان المهمة مطلوب.' }),
   priority: z.enum(['عالية', 'متوسطة', 'منخفضة']),
   status: z.enum(['جديدة', 'قيد التنفيذ', 'مكتملة']),
-  dueDate: z.date({ required_error: "تاريخ الاستحقاق مطلوب." }),
+  dueDate: z.date({ required_error: 'تاريخ الاستحقاق مطلوب.' }),
 });
 
 type AddEditTaskDialogProps = {
@@ -55,7 +54,6 @@ const taskPriorities: TaskPriority[] = ['عالية', 'متوسطة', 'منخف�
 const taskStatuses: TaskStatus[] = ['جديدة', 'قيد التنفيذ', 'مكتملة'];
 
 export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditTaskDialogProps) {
-  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,7 +61,7 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
       priority: 'متوسطة',
       status: 'جديدة',
       dueDate: new Date(),
-    }
+    },
   });
 
   useEffect(() => {
@@ -118,7 +116,7 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
               render={({ field }) => (
                 <FormItem className="grid grid-cols-4 items-center gap-4">
                   <FormLabel className="text-right">الأولوية</FormLabel>
-                   <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="col-span-3">
                         <SelectValue placeholder="اختر الأولوية" />
@@ -126,7 +124,9 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
                     </FormControl>
                     <SelectContent>
                       {taskPriorities.map(s => (
-                          <SelectItem key={s} value={s}>{s}</SelectItem>
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -140,7 +140,7 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
               render={({ field }) => (
                 <FormItem className="grid grid-cols-4 items-center gap-4">
                   <FormLabel className="text-right">الحالة</FormLabel>
-                   <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="col-span-3">
                         <SelectValue placeholder="اختر الحالة" />
@@ -148,7 +148,9 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
                     </FormControl>
                     <SelectContent>
                       {taskStatuses.map(s => (
-                          <SelectItem key={s} value={s}>{s}</SelectItem>
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -162,29 +164,33 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
               render={({ field }) => (
                 <FormItem className="grid grid-cols-4 items-center gap-4">
                   <FormLabel className="text-right">تاريخ الاستحقاق</FormLabel>
-                   <Popover>
+                  <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
-                            variant={"outline"}
-                            className={cn(
-                            "col-span-3 justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                            )}
+                          variant={'outline'}
+                          className={cn(
+                            'col-span-3 justify-start text-left font-normal',
+                            !field.value && 'text-muted-foreground'
+                          )}
                         >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? format(field.value, "PPP", {locale: ar}) : <span>اختر تاريخاً</span>}
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value, 'PPP', { locale: ar })
+                          ) : (
+                            <span>اختر تاريخاً</span>
+                          )}
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
-                        <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                            locale={ar}
-                        />
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                        locale={ar}
+                      />
                     </PopoverContent>
                   </Popover>
                   <FormMessage className="col-span-4 col-start-2" />
@@ -193,7 +199,9 @@ export function AddEditTaskDialog({ onSave, open, onOpenChange, task }: AddEditT
             />
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline" type="button">إلغاء</Button>
+                <Button variant="outline" type="button">
+                  إلغاء
+                </Button>
               </DialogClose>
               <Button type="submit">حفظ</Button>
             </DialogFooter>

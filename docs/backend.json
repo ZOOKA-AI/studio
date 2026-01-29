@@ -24,12 +24,7 @@
           "format": "email"
         }
       },
-      "required": [
-        "id",
-        "role",
-        "name",
-        "email"
-      ]
+      "required": ["id", "role", "name", "email"]
     },
     "Site": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -58,12 +53,7 @@
           "description": "Special instructions for cleaning the site."
         }
       },
-      "required": [
-        "id",
-        "name",
-        "clientId",
-        "address"
-      ]
+      "required": ["id", "name", "clientId", "address"]
     },
     "Client": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -89,10 +79,7 @@
           "description": "The phone number of the client."
         }
       },
-      "required": [
-        "id",
-        "name"
-      ]
+      "required": ["id", "name"]
     },
     "DailyReport": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -184,12 +171,7 @@
           "description": "The total cost of the cleaning session."
         }
       },
-      "required": [
-        "id",
-        "date",
-        "siteId",
-        "supervisorId"
-      ]
+      "required": ["id", "date", "siteId", "supervisorId"]
     },
     "WorkerTask": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -218,13 +200,7 @@
           "description": "Number of hours spent on the task."
         }
       },
-      "required": [
-        "id",
-        "workerId",
-        "taskId",
-        "dailyReportId",
-        "hours"
-      ]
+      "required": ["id", "workerId", "taskId", "dailyReportId", "hours"]
     },
     "Task": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -245,10 +221,7 @@
           "description": "A detailed description of the task."
         }
       },
-      "required": [
-        "id",
-        "name"
-      ]
+      "required": ["id", "name"]
     },
     "Material": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -269,10 +242,7 @@
           "description": "A detailed description of the material."
         }
       },
-      "required": [
-        "id",
-        "name"
-      ]
+      "required": ["id", "name"]
     },
     "Equipment": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -302,13 +272,7 @@
           "description": "The supervisor responsible for the equipment."
         }
       },
-      "required": [
-        "id",
-        "name",
-        "condition",
-        "quantity",
-        "supervisor"
-      ]
+      "required": ["id", "name", "condition", "quantity", "supervisor"]
     },
     "Schedule": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -344,12 +308,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "siteId",
-        "startTime",
-        "endTime"
-      ]
+      "required": ["id", "siteId", "startTime", "endTime"]
     },
     "AuditLog": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -391,21 +350,11 @@
           "description": "The value of the entity after the change (JSON string)."
         }
       },
-      "required": [
-        "id",
-        "userId",
-        "entityType",
-        "entityId",
-        "timestamp",
-        "action"
-      ]
+      "required": ["id", "userId", "entityType", "entityId", "timestamp", "action"]
     }
   },
   "auth": {
-    "providers": [
-      "password",
-      "anonymous"
-    ]
+    "providers": ["password", "anonymous"]
   },
   "firestore": {
     "structure": [
@@ -521,7 +470,7 @@
           ]
         }
       },
-       {
+      {
         "path": "/equipment/{equipmentId}",
         "definition": {
           "entityName": "Equipment",

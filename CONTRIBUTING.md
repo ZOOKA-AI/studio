@@ -22,17 +22,20 @@ Thank you for your interest in contributing to Firebase Studio! This document pr
 ## Development Setup
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Set up environment variables:
+
    ```bash
    cp .env.local.example .env.local
    # Edit .env.local with your Firebase and Google AI credentials
    ```
 
 3. Run the development server:
+
    ```bash
    npm run dev
    ```
@@ -45,6 +48,7 @@ Thank you for your interest in contributing to Firebase Studio! This document pr
 ## Making Changes
 
 1. Create a new branch:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -84,12 +88,14 @@ npm run lint:fix
 ## Submitting Changes
 
 1. Commit your changes:
+
    ```bash
    git add .
    git commit -m "Description of changes"
    ```
 
 2. Push to your fork:
+
    ```bash
    git push origin feature/your-feature-name
    ```
