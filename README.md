@@ -13,3 +13,13 @@
 This is a NextJS starter in Firebase Studio.
 
 To get started, take a look at src/app/page.tsx.
+
+## 🚀 Deployment / النشر
+
+This application can be deployed to multiple platforms. See the [Deployment Guide](docs/DEPLOYMENT.md) for detailed instructions.
+
+يمكن نشر هذا التطبيق على منصات متعددة. راجع [دليل النشر](docs/DEPLOYMENT.md) للحصول على إرشادات مفصلة.
+
+### Quick Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ZOOKA-AI/studio)
