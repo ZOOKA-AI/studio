@@ -39,7 +39,7 @@
           manager = "web";
         };
         genkit = {
-          command = ["npm" "run" "genkit:dev:idx"];
+          command = ["npm" "run" "genkit:dev" "--" "--port" "$PORT"];
           manager = "web";
         };
       };
