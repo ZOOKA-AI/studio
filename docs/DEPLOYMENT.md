@@ -74,9 +74,16 @@ The application is currently configured for Firebase App Hosting.
 - `apphosting.yaml` - تكوين Firebase App Hosting
 
 ### النشر / Deployment:
-```bash
-firebase deploy --only hosting
-```
+
+Firebase App Hosting deployments are managed through:
+1. **Firebase Console**: Connect your GitHub repository and deployments happen automatically
+2. **GitHub Actions**: Set up CI/CD pipeline for automatic deployments
+3. **Firebase CLI** (if configured):
+   ```bash
+   firebase apphosting:backends:create
+   ```
+
+For more details, see [Firebase App Hosting documentation](https://firebase.google.com/docs/app-hosting).
 
 ---
 
