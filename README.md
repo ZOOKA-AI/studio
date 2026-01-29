@@ -13,3 +13,15 @@
 This is a NextJS starter in Firebase Studio.
 
 To get started, take a look at src/app/page.tsx.
+
+## Development
+
+This project uses Genkit for AI functionality. In Firebase Studio IDX, you can access:
+
+- **Main App**: The Next.js application runs on the default web preview
+- **Genkit Developer UI**: Access the Genkit Developer UI at http://localhost:8888 via the `genkit` preview
+
+To run Genkit Developer UI locally:
+```bash
+npm run genkit:dev:idx
+```
