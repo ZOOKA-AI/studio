@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import type { Equipment } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
@@ -26,7 +26,7 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
   
   const { data: equipment = [] } = useCollection<Equipment>(equipmentRef);
 
-  const addEquipment = (equipmentData: Omit<Equipment, 'id'>) => {
+  const addEquipment = useCallback((equipmentData: Omit<Equipment, 'id'>) => {
     if (!firestore) return;
     const equipmentCollection = collection(firestore, 'equipment');
     
@@ -39,9 +39,9 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore]);
 
-  const updateEquipment = (equipmentId: string, updatedData: Partial<Omit<Equipment, 'id'>>) => {
+  const updateEquipment = useCallback((equipmentId: string, updatedData: Partial<Omit<Equipment, 'id'>>) => {
     if (!firestore) return;
     const equipmentDocRef = doc(firestore, 'equipment', equipmentId);
     
@@ -54,9 +54,9 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore]);
   
-  const deleteEquipment = (equipmentId: string) => {
+  const deleteEquipment = useCallback((equipmentId: string) => {
     if (!firestore) return;
     const equipmentDocRef = doc(firestore, 'equipment', equipmentId);
 
@@ -68,11 +68,11 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore]);
 
   const value = useMemo(
     () => ({ equipment: equipment || [], addEquipment, updateEquipment, deleteEquipment }),
-    [equipment]
+    [equipment, addEquipment, updateEquipment, deleteEquipment]
   );
 
   return (

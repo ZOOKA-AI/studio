@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import type { Task } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
@@ -35,7 +35,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     [rawTasks]
   );
 
-  const addTask = (taskData: Omit<Task, 'id'>) => {
+  const addTask = useCallback((taskData: Omit<Task, 'id'>) => {
     if (!firestore) return;
     const tasksCollection = collection(firestore, 'tasks');
     const newTask = {
@@ -52,9 +52,9 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore]);
 
-  const updateTask = (taskId: string, updatedData: Partial<Omit<Task, 'id'>>) => {
+  const updateTask = useCallback((taskId: string, updatedData: Partial<Omit<Task, 'id'>>) => {
     if (!firestore) return;
     const taskDocRef = doc(firestore, 'tasks', taskId);
     
@@ -73,9 +73,9 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore]);
   
-  const deleteTask = (taskId: string) => {
+  const deleteTask = useCallback((taskId: string) => {
     if (!firestore) return;
     const taskDocRef = doc(firestore, 'tasks', taskId);
 
@@ -87,11 +87,11 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore]);
 
   const value = useMemo(
     () => ({ tasks, addTask, updateTask, deleteTask }),
-    [tasks]
+    [tasks, addTask, updateTask, deleteTask]
   );
 
   return (

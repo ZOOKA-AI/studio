@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import type { Worker } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
@@ -26,7 +26,7 @@ export function WorkersProvider({ children }: { children: ReactNode }) {
   
   const { data: workers = [] } = useCollection<Worker>(workersRef);
 
-  const addWorker = (workerData: Omit<Worker, 'id' | 'type'>, type: 'company' | 'external') => {
+  const addWorker = useCallback((workerData: Omit<Worker, 'id' | 'type'>, type: 'company' | 'external') => {
     if (!firestore) return;
     const workersCollection = collection(firestore, 'workers');
     const newWorker = { ...workerData, type };
@@ -40,9 +40,9 @@ export function WorkersProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore]);
 
-  const updateWorker = (workerId: string, updatedData: Partial<Omit<Worker, 'id'>>) => {
+  const updateWorker = useCallback((workerId: string, updatedData: Partial<Omit<Worker, 'id'>>) => {
     if (!firestore) return;
     const workerDocRef = doc(firestore, 'workers', workerId);
     
@@ -55,9 +55,9 @@ export function WorkersProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore]);
   
-  const deleteWorker = (workerId: string) => {
+  const deleteWorker = useCallback((workerId: string) => {
     if (!firestore) return;
     const workerDocRef = doc(firestore, 'workers', workerId);
 
@@ -69,11 +69,11 @@ export function WorkersProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore]);
 
   const value = useMemo(
     () => ({ workers: workers || [], addWorker, updateWorker, deleteWorker }),
-    [workers]
+    [workers, addWorker, updateWorker, deleteWorker]
   );
 
   return (

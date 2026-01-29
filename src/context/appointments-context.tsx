@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import type { Appointment } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
@@ -32,7 +32,7 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     [rawAppointments]
   );
 
-  const addAppointment = async (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => {
+  const addAppointment = useCallback(async (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => {
     if (!firestore) return;
     const startTime = new Date(appointment.startTime);
     const newAppointment = {
@@ -42,16 +42,16 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
         endTime: Timestamp.fromDate(new Date(startTime.getTime() + 2 * 60 * 60 * 1000)),
     };
     await addDoc(collection(firestore, 'appointments'), newAppointment);
-  };
+  }, [firestore]);
 
-  const deleteAppointment = async (appointmentId: string) => {
+  const deleteAppointment = useCallback(async (appointmentId: string) => {
     if (!firestore) return;
     await deleteDoc(doc(firestore, 'appointments', appointmentId));
-  };
+  }, [firestore]);
 
   const value = useMemo(
     () => ({ appointments: appointments || [], addAppointment, deleteAppointment }),
-    [appointments]
+    [appointments, addAppointment, deleteAppointment]
   );
 
   return (

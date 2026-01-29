@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import type { DailyReport } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
@@ -33,7 +33,7 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
   );
 
 
-  const addReport = async (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
+  const addReport = useCallback(async (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
     if (!firestore || !user) return; // Ensure user is available
     const reportsCollection = collection(firestore, 'dailyReports');
     
@@ -55,11 +55,11 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore, user]);
 
   const value = useMemo(
     () => ({ reports, addReport }),
-    [reports]
+    [reports, addReport]
   );
 
   return (
