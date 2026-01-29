@@ -13,3 +13,7 @@
 This is a NextJS starter in Firebase Studio.
 
 To get started, take a look at src/app/page.tsx.
+
+## Documentation
+
+- [CI/CD Workflows](docs/ci-cd.md) - Information about automated workflows for security scanning and continuous integration
