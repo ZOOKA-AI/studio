@@ -1,0 +1,74 @@
+name: ✨ طلب ميزة جديدة / Feature Request
+description: اقترح فكرة جديدة لهذا المشروع / Suggest an idea for this project
+title: '[FEATURE] '
+labels: ['enhancement', 'needs-triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        شكراً لاقتراح ميزة جديدة! يرجى ملء النموذج التالي بأكبر قدر ممكن من التفاصيل.
+        Thank you for suggesting a new feature! Please fill out the form below with as much detail as possible.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: 🎯 الميزة المقترحة / Proposed Feature
+      description: وصف واضح وموجز للميزة التي تقترحها / A clear and concise description of the feature you're proposing
+      placeholder: أخبرنا عن الميزة... / Tell us about the feature...
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 💡 الحاجة والمشكلة / Need and Problem
+      description: هل طلب الميزة مرتبط بمشكلة؟ يرجى الوصف / Is your feature request related to a problem? Please describe
+      placeholder: |
+        مثال: أشعر دائمًا بالإحباط عندما...
+        Example: I'm always frustrated when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 🔧 الحل المقترح / Proposed Solution
+      description: وصف واضح وموجز لما تريد حدوثه / A clear and concise description of what you want to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 🌟 البدائل المحتملة / Alternatives Considered
+      description: وصف واضح وموجز لأي حلول أو ميزات بديلة فكرت فيها / A clear description of any alternative solutions you've considered
+
+  - type: checkboxes
+    id: benefits
+    attributes:
+      label: 📊 فوائد الميزة / Benefits
+      description: كيف ستفيد هذه الميزة المشروع والمستخدمين؟ / How will this feature benefit the project and users?
+      options:
+        - label: تحسين تجربة المستخدم / Improve user experience
+        - label: زيادة الأداء / Increase performance
+        - label: إضافة وظائف جديدة / Add new functionality
+        - label: تحسين الأمان / Improve security
+        - label: أخرى (يرجى التوضيح في المعلومات الإضافية) / Other (please specify in additional context)
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📝 معلومات إضافية / Additional Context
+      description: أضف أي معلومات أخرى أو لقطات شاشة حول طلب الميزة هنا / Add any other context or screenshots about the feature request here
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✔️ قائمة التحقق / Checklist
+      options:
+        - label: لقد بحثت في المشكلات المفتوحة والمغلقة ولم أجد طلبًا مماثلاً / I have searched open and closed issues and found no similar request
+          required: true
+        - label: هذه الميزة تتوافق مع أهداف المشروع / This feature aligns with the project goals
+          required: false
+        - label: أنا مستعد للمساهمة في تنفيذ هذه الميزة / I am willing to help implement this feature
+          required: false

@@ -1,0 +1,86 @@
+name: 🐛 تقرير خطأ / Bug Report
+description: أبلغ عن خطأ لمساعدتنا في تحسين المشروع / Report a bug to help us improve
+title: '[BUG] '
+labels: ['bug', 'needs-triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        شكراً لإبلاغك عن خطأ! يرجى ملء النموذج التالي بأكبر قدر ممكن من التفاصيل.
+        Thank you for reporting a bug! Please fill out the form below with as much detail as possible.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📋 وصف المشكلة / Description
+      description: وصف واضح وموجز للمشكلة / A clear and concise description of what the bug is
+      placeholder: أخبرنا بما حدث... / Tell us what happened...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 🔄 خطوات إعادة إنتاج المشكلة / Steps to Reproduce
+      description: خطوات واضحة لإعادة إنتاج المشكلة / Clear steps to reproduce the issue
+      placeholder: |
+        1. اذهب إلى '...' / Go to '...'
+        2. انقر على '...' / Click on '...'
+        3. مرر إلى '...' / Scroll to '...'
+        4. شاهد الخطأ / See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ السلوك المتوقع / Expected Behavior
+      description: وصف واضح وموجز لما كنت تتوقع حدوثه / A clear description of what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 📸 لقطات الشاشة / Screenshots
+      description: إذا كان ذلك ممكناً، أضف لقطات شاشة لتوضيح المشكلة / If applicable, add screenshots to help explain your problem
+
+  - type: input
+    id: os
+    attributes:
+      label: نظام التشغيل / Operating System
+      placeholder: مثال / e.g., Windows 10, macOS 13, Ubuntu 22.04
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: المتصفح / Browser
+      placeholder: مثال / e.g., Chrome 120, Safari 17, Firefox 121
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: إصدار Node.js / Node.js Version
+      placeholder: مثال / e.g., v20.10.0
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📝 معلومات إضافية / Additional Context
+      description: أضف أي معلومات أخرى حول المشكلة هنا / Add any other context about the problem here
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✔️ قائمة التحقق / Checklist
+      options:
+        - label: لقد بحثت في المشكلات المفتوحة والمغلقة ولم أجد مشكلة مماثلة / I have searched open and closed issues and found no similar issue
+          required: true
+        - label: هذا الخطأ قابل للإعادة / This bug is reproducible
+          required: false
+        - label: لقد قدمت جميع المعلومات الضرورية / I have provided all necessary information
+          required: true
