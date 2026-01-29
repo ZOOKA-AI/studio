@@ -77,7 +77,7 @@ This project is licensed under an open-source license, meaning you can use, modi
 If you benefit from this project, you can support it through:
 
 - ⭐ **إعطاء نجمة** للمشروع على GitHub | **Star** the project on GitHub
-- 💖 **الدعم المالي** عبر [GitHub Sponsors](https://github.com/sponsors/ZOOKA-AI)
+- 💖 **الدعم المالي** عبر [GitHub Sponsors](https://github.com/sponsors/ZOOKA-AI) | **Financial support** via [GitHub Sponsors](https://github.com/sponsors/ZOOKA-AI)
 - 🤝 **المساهمة** في الكود أو التوثيق | **Contribute** to code or documentation
 - 📢 **نشر الكلمة** عن المشروع | **Spread the word** about the project
 
