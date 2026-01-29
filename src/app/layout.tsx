@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
+import { SponsorshipBanner } from '@/components/layout/sponsorship-banner';
 import { ReportsProvider } from '@/context/reports-context';
 import { WorkersProvider } from '@/context/workers-context';
 import { TasksProvider } from '@/context/tasks-context';
@@ -39,13 +40,16 @@ export default function RootLayout({
                   <ReportsProvider>
                     <WorkersProvider>
                       <SidebarProvider>
-                          <div className="relative flex min-h-screen">
-                              <AppSidebar />
-                              <div className="flex-1">
-                                  <Header />
-                                  <main className="p-4 sm:p-6 lg:p-8">
-                                      {children}
-                                  </main>
+                          <div className="relative flex min-h-screen flex-col">
+                              <SponsorshipBanner />
+                              <div className="flex flex-1">
+                                  <AppSidebar />
+                                  <div className="flex-1">
+                                      <Header />
+                                      <main className="p-4 sm:p-6 lg:p-8">
+                                          {children}
+                                      </main>
+                                  </div>
                               </div>
                           </div>
                           <Toaster />
