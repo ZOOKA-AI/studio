@@ -33,7 +33,7 @@ export function AppointmentsCalendar() {
   }, []);
 
   const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 }); // Sunday
-  const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i));
+  const weekDays = Array.from({ length: 7 }).map((_unused, dayIndex) => addDays(weekStart, dayIndex));
 
   const weekRange = `${format(weekStart, 'd', { locale: ar })} - ${format(addDays(weekStart, 6), 'd MMMM yyyy', { locale: ar })}`;
 
