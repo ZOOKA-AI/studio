@@ -1,0 +1,54 @@
+---
+name: 🐛 تقرير خطأ / Bug Report
+about: أبلغ عن خطأ لمساعدتنا في تحسين المشروع / Report a bug to help us improve
+title: '[BUG] '
+labels: ['bug', 'needs-triage']
+assignees: ''
+---
+
+## 📋 وصف المشكلة / Description
+
+وصف واضح وموجز للمشكلة.
+<!-- A clear and concise description of what the bug is. -->
+
+## 🔄 خطوات إعادة إنتاج المشكلة / Steps to Reproduce
+
+1. اذهب إلى '...'
+2. انقر على '...'
+3. مرر إلى '...'
+4. شاهد الخطأ
+
+<!-- 
+1. Go to '...'
+2. Click on '...'
+3. Scroll down to '...'
+4. See error
+-->
+
+## ✅ السلوك المتوقع / Expected Behavior
+
+وصف واضح وموجز لما كنت تتوقع حدوثه.
+<!-- A clear and concise description of what you expected to happen. -->
+
+## 📸 لقطات الشاشة / Screenshots
+
+إذا كان ذلك ممكناً، أضف لقطات شاشة لتوضيح المشكلة.
+<!-- If applicable, add screenshots to help explain your problem. -->
+
+## 💻 البيئة / Environment
+
+- **نظام التشغيل / OS**: [مثال: Windows 10, macOS 13, Ubuntu 22.04]
+- **المتصفح / Browser**: [مثال: Chrome 120, Safari 17, Firefox 121]
+- **إصدار Node.js / Node.js Version**: [مثال: v20.10.0]
+- **إصدار المشروع / Project Version**: [مثال: 0.1.0]
+
+## 📝 معلومات إضافية / Additional Context
+
+أضف أي معلومات أخرى حول المشكلة هنا.
+<!-- Add any other context about the problem here. -->
+
+## ✔️ قائمة التحقق / Checklist
+
+- [ ] لقد بحثت في المشكلات المفتوحة والمغلقة ولم أجد مشكلة مماثلة / I have searched open and closed issues and found no similar issue
+- [ ] هذا الخطأ قابل للإعادة / This bug is reproducible
+- [ ] لقد قدمت جميع المعلومات الضرورية / I have provided all necessary information

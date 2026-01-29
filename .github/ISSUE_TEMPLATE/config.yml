@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 مناقشات المجتمع / Community Discussions
+    url: https://github.com/ZOOKA-AI/studio/discussions
+    about: للأسئلة العامة والمناقشات حول المشروع / For general questions and discussions about the project
+  - name: 📚 التوثيق / Documentation
+    url: https://github.com/ZOOKA-AI/studio#readme
+    about: راجع ملف README للحصول على معلومات حول المشروع / Check the README for project information
