@@ -1,7 +1,31 @@
 {
-  "name": "nextn",
+  "name": "firebase-studio",
   "version": "0.1.0",
   "private": true,
+  "description": "Next.js starter template with Firebase integration and AI capabilities using Genkit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZOOKA-AI/studio.git"
+  },
+  "keywords": [
+    "nextjs",
+    "firebase",
+    "genkit",
+    "ai",
+    "typescript",
+    "tailwindcss",
+    "react"
+  ],
+  "author": "ZOOKA-AI",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ZOOKA-AI/studio/issues"
+  },
+  "homepage": "https://github.com/ZOOKA-AI/studio#readme",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
