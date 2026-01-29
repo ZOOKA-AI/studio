@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useMemo } from 'react';
 import type { DailyReport } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
@@ -24,10 +24,13 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
   
   const { data: rawReports = [] } = useCollection<Omit<DailyReport, 'date'> & { date: Timestamp }>(reportsRef);
 
-  const reports: DailyReport[] = (rawReports || []).map(report => ({
-    ...report,
-    date: report.date.toDate(),
-  }));
+  const reports: DailyReport[] = useMemo(() =>
+    (rawReports || []).map(report => ({
+      ...report,
+      date: report.date.toDate(),
+    })),
+    [rawReports]
+  );
 
 
   const addReport = async (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
@@ -54,8 +57,13 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
       });
   };
 
+  const value = useMemo(
+    () => ({ reports, addReport }),
+    [reports]
+  );
+
   return (
-    <ReportsContext.Provider value={{ reports, addReport }}>
+    <ReportsContext.Provider value={value}>
       {children}
     </ReportsContext.Provider>
   );

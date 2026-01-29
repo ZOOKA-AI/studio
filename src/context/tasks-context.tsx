@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useMemo } from 'react';
 import type { Task } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
@@ -27,10 +27,13 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   
   const { data: rawTasks = [] } = useCollection<Omit<Task, 'dueDate'> & {dueDate: Timestamp}>(tasksRef);
   
-  const tasks: Task[] = (rawTasks || []).map(task => ({
-      ...task,
-      dueDate: task.dueDate.toDate().toISOString(),
-  })).sort((a,b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+  const tasks: Task[] = useMemo(() => 
+    [...(rawTasks || [])].map(task => ({
+        ...task,
+        dueDate: task.dueDate.toDate().toISOString(),
+    })).sort((a,b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()),
+    [rawTasks]
+  );
 
   const addTask = (taskData: Omit<Task, 'id'>) => {
     if (!firestore) return;
@@ -86,8 +89,13 @@ export function TasksProvider({ children }: { children: ReactNode }) {
       });
   };
 
+  const value = useMemo(
+    () => ({ tasks, addTask, updateTask, deleteTask }),
+    [tasks]
+  );
+
   return (
-    <TasksContext.Provider value={{ tasks, addTask, updateTask, deleteTask }}>
+    <TasksContext.Provider value={value}>
       {children}
     </TasksContext.Provider>
   );

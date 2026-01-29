@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useMemo } from 'react';
 import type { Worker } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
@@ -71,8 +71,13 @@ export function WorkersProvider({ children }: { children: ReactNode }) {
       });
   };
 
+  const value = useMemo(
+    () => ({ workers: workers || [], addWorker, updateWorker, deleteWorker }),
+    [workers]
+  );
+
   return (
-    <WorkersContext.Provider value={{ workers: workers || [], addWorker, updateWorker, deleteWorker }}>
+    <WorkersContext.Provider value={value}>
       {children}
     </WorkersContext.Provider>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useMemo } from 'react';
 import type { Equipment } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
@@ -70,8 +70,13 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
       });
   };
 
+  const value = useMemo(
+    () => ({ equipment: equipment || [], addEquipment, updateEquipment, deleteEquipment }),
+    [equipment]
+  );
+
   return (
-    <EquipmentContext.Provider value={{ equipment: equipment || [], addEquipment, updateEquipment, deleteEquipment }}>
+    <EquipmentContext.Provider value={value}>
       {children}
     </EquipmentContext.Provider>
   );

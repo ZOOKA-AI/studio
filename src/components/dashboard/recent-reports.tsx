@@ -18,6 +18,7 @@ import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { useMemo } from "react";
 
 type RecentReportsProps = {
   reports: DailyReport[];
@@ -25,7 +26,10 @@ type RecentReportsProps = {
 
 export function RecentReports({ reports }: RecentReportsProps) {
   
-  const sortedDailyEntries = reports.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sortedDailyEntries = useMemo(() => 
+    [...reports].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+    [reports]
+  );
 
   return (
     <Card>
