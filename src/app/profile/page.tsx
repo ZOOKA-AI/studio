@@ -91,7 +91,7 @@ export default function ProfilePage() {
             .then(() => {
                 toast({ title: "تم تحديث الملف الشخصي بنجاح!" });
             })
-            .catch((error) => {
+            .catch((error: unknown) => {
                  const permissionError = new FirestorePermissionError({
                     path: userDocRef.path,
                     operation: 'update',

@@ -41,7 +41,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     };
     
     addDoc(tasksCollection, newTask)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: tasksCollection.path,
           operation: 'create',
@@ -56,13 +56,13 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     const taskDocRef = doc(firestore, 'tasks', taskId);
     
     // Convert dueDate back to Timestamp if it exists
-    const dataToUpdate: any = {...updatedData};
+    const dataToUpdate: Partial<Omit<Task, 'id' | 'dueDate'>> & { dueDate?: Timestamp } = {...updatedData};
     if (updatedData.dueDate) {
         dataToUpdate.dueDate = Timestamp.fromDate(parseISO(updatedData.dueDate));
     }
 
     updateDoc(taskDocRef, dataToUpdate)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: taskDocRef.path,
           operation: 'update',
@@ -77,7 +77,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     const taskDocRef = doc(firestore, 'tasks', taskId);
 
     deleteDoc(taskDocRef)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: taskDocRef.path,
           operation: 'delete',
