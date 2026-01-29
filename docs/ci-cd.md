@@ -10,7 +10,7 @@ This repository includes automated workflows for continuous integration and secu
 - **Runs on**: 
   - Push to `main` or `master` branches
   - Pull requests to `main` or `master` branches
-  - Weekly schedule (Mondays at midnight)
+  - Weekly schedule (Mondays at midnight UTC)
 - **Language**: JavaScript/TypeScript
 
 ### 2. Secret Scanning
