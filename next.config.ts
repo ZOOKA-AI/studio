@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   basePath: '/studio',
   images: {
     unoptimized: true,
+    // remotePatterns kept for future compatibility when not using static export
     remotePatterns: [
       {
         protocol: 'https',
