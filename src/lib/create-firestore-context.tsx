@@ -2,7 +2,7 @@
 
 import { createContext, useContext, ReactNode } from 'react';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, addDoc, updateDoc, deleteDoc, doc, CollectionReference } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
 import { handlePermissionError } from './firestore-utils';
 
