@@ -55,7 +55,7 @@ function createEventEmitter<T extends Record<string, any>>() {
       if (!events[eventName]) {
         return;
       }
-      events[eventName]?.forEach(callback => callback(data));
+      events[eventName]?.forEach(registeredCallback => registeredCallback(data));
     },
   };
 }
