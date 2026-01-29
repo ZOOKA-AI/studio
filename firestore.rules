@@ -60,6 +60,15 @@ service cloud.firestore {
     /**
      * Retrieves the role of the currently authenticated user from their user profile.
      * Note: This function performs a document read.
+     * 
+     * PERFORMANCE CONSIDERATION: This function incurs a Firestore read on every authorization check.
+     * For production environments with high traffic, consider using Firebase Auth custom claims instead.
+     * Custom claims are included in the authentication token and don't require additional reads.
+     * 
+     * To implement custom claims:
+     * 1. Use Firebase Admin SDK on your backend to set custom claims when users are created/updated
+     * 2. Replace this function with: request.auth.token.role
+     * 3. Update isSupervisor() to check: request.auth.token.role == 'supervisor'
      */
     function getUserRole() {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
