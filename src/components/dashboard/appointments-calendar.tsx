@@ -38,17 +38,17 @@ export function AppointmentsCalendar() {
   const weekRange = `${format(weekStart, 'd', { locale: ar })} - ${format(addDays(weekStart, 6), 'd MMMM yyyy', { locale: ar })}`;
 
   const handleNextWeek = useCallback(() => {
-    setCurrentDate(prev => addDays(prev, 7));
+    setCurrentDate((prev: Date) => addDays(prev, 7));
   }, []);
 
   const handlePrevWeek = useCallback(() => {
-    setCurrentDate(prev => addDays(prev, -7));
+    setCurrentDate((prev: Date) => addDays(prev, -7));
   }, []);
 
   // Memoize appointments grouped by day for efficient lookup
   const appointmentsByDay = useMemo(() => {
     const grouped = new Map<string, Appointment[]>();
-    appointments.forEach(appointment => {
+    appointments.forEach((appointment: Appointment) => {
       const dateKey = format(new Date(appointment.startTime), 'yyyy-MM-dd');
       if (!grouped.has(dateKey)) {
         grouped.set(dateKey, []);

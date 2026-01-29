@@ -66,12 +66,12 @@ export default function WorkersPage() {
     };
 
     const companyWorkers = useMemo(() => 
-        workers.filter(w => w.type === 'company'),
+        workers.filter((w: Worker) => w.type === 'company'),
         [workers]
     );
     
     const externalWorkers = useMemo(() => 
-        workers.filter(w => w.type === 'external'),
+        workers.filter((w: Worker) => w.type === 'external'),
         [workers]
     );
 
