@@ -54,7 +54,7 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at:
 
-**البريد الإلكتروني / Email**: [أضف بريد إلكتروني للتواصل / Add contact email]
+**عبر GitHub Issues / Via GitHub Issues**: [Open a confidential issue](https://github.com/ZOOKA-AI/studio/issues)
 
 جميع الشكاوى سيتم مراجعتها والتحقيق منها بسرعة وبشكل عادل.
 

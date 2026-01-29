@@ -152,11 +152,11 @@ tailwindcss, arabic, open-source, community, web-development,
 fullstack, developer-tools, generative-ai
 ```
 
-### 3. إنشاء ملف LICENSE / Create LICENSE File
+### 3. إنشاء ملف LICENSE / Create LICENSE File (اختياري ولكن موصى به / Optional but Recommended)
 
-إذا لم يكن موجوداً بالفعل، أضف ملف LICENSE للمشروع.
+إذا لم يكن موجوداً بالفعل، يُنصح بشدة بإضافة ملف LICENSE للمشروع.
 
-If not already present, add a LICENSE file to the project.
+If not already present, it is highly recommended to add a LICENSE file to the project.
 
 **مثال لاستخدام MIT License**:
 ```bash
@@ -165,7 +165,12 @@ If not already present, add a LICENSE file to the project.
 # GitHub will provide templates
 ```
 
-### 4. إنشاء دليل المساهمة / Create Contributing Guide
+**فائدة إضافة LICENSE**:
+- يوضح كيفية استخدام المشروع / Clarifies how the project can be used
+- يحمي حقوق المطورين / Protects developers' rights
+- يمكنك من إضافة شارة الترخيص في README / Allows adding license badge to README
+
+### 4. إنشاء دليل المساهمة / Create Contributing Guide (اختياري ولكن موصى به / Optional but Recommended)
 
 لتكملة ميثاق السلوك، أضف ملف `CONTRIBUTING.md`:
 
