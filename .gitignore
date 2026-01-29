@@ -32,7 +32,9 @@ yarn-error.log*
 
 # local env files
 .env*.local
-.env
+.env.development
+.env.test
+.env.production
 
 # vercel
 .vercel
@@ -56,5 +58,4 @@ firestore-debug.log
 *~
 
 # OS
-.DS_Store
 Thumbs.db
