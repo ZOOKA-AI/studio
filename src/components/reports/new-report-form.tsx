@@ -30,8 +30,9 @@ import { cn } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
 import { ar } from "date-fns/locale";
 import { useState, useEffect } from "react";
-import { getMaterialSuggestions } from "@/ai/flows/material-suggestions";
-import { generateReportSummary } from "@/ai/flows/generate-report-summary";
+// AI features disabled for static export to GitHub Pages
+// import { getMaterialSuggestions } from "@/ai/flows/material-suggestions";
+// import { generateReportSummary } from "@/ai/flows/generate-report-summary";
 import { useToast } from "@/hooks/use-toast";
 import { useReports } from "@/context/reports-context";
 import { useRouter } from "next/navigation";
@@ -122,6 +123,15 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   };
 
   const handleSuggestMaterials = async () => {
+    // AI features disabled for static export to GitHub Pages
+    toast({
+      variant: "destructive",
+      title: "الميزة غير متوفرة",
+      description: "ميزة اقتراح المواد بالذكاء الاصطناعي غير متوفرة في النسخة الحالية.",
+    });
+    return;
+    
+    /* Original AI code - disabled for static export
     const tasks = form.getValues("tasks");
     const taskDescriptions = tasks
       .map((task) => task.value)
@@ -162,9 +172,19 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     } finally {
       setIsSuggesting(false);
     }
+    */
   };
 
   const handleGenerateSummary = async () => {
+    // AI features disabled for static export to GitHub Pages
+    toast({
+      variant: "destructive",
+      title: "الميزة غير متوفرة",
+      description: "ميزة إنشاء الملخص بالذكاء الاصطناعي غير متوفرة في النسخة الحالية.",
+    });
+    return;
+    
+    /* Original AI code - disabled for static export
     const values = form.getValues();
     const reportDetails = `
       العميل: ${values.clientName}
@@ -189,6 +209,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
     } finally {
       setIsSummarizing(false);
     }
+    */
   };
 
   return (

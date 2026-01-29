@@ -1,4 +1,4 @@
-'use server';
+// 'use server'; // Disabled for static export to GitHub Pages
 
 /**
  * @fileOverview This file defines a Genkit flow to generate a summary of a daily report.
