@@ -71,7 +71,7 @@
 
 ### Frontend
 - **Next.js 16.1** - React framework with App Router
-- **React 19** - UI library
+- **React 18.3** - UI library
 - **TypeScript 5** - Type-safe development
 - **Tailwind CSS 3.4** - Utility-first CSS framework
 - **Radix UI** - Accessible component library
