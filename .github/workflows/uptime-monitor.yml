@@ -23,9 +23,16 @@ jobs:
           echo "Checking URL: $URL"
           
           # Perform HTTP request and check status code
-          HTTP_CODE=$(curl -o /dev/null -s -w "%{http_code}" -L "$URL" --max-time 30)
+          HTTP_CODE=$(curl -o /dev/null -s -w "%{http_code}" -L "$URL" --max-time 30 || echo "000")
           
           echo "HTTP Status Code: $HTTP_CODE"
+          
+          # Validate that HTTP_CODE is a number
+          if ! [[ "$HTTP_CODE" =~ ^[0-9]+$ ]]; then
+            echo "❌ Invalid HTTP code received: $HTTP_CODE"
+            echo "status=down" >> $GITHUB_OUTPUT
+            exit 1
+          fi
           
           # Check if status code is in the 2xx or 3xx range (success)
           if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 400 ]; then
@@ -36,6 +43,36 @@ jobs:
             echo "status=down" >> $GITHUB_OUTPUT
             exit 1
           fi
+      
+      - name: Close uptime alert issue on success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Check if there's an open uptime alert issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'uptime-alert'
+            });
+            
+            if (issues.data.length > 0) {
+              // Close the issue and add a comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                body: `✅ Website is back online at ${new Date().toISOString()}\n\nThe uptime monitoring check has confirmed the website is responding properly. Closing this issue automatically.`
+              });
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                state: 'closed'
+              });
+            }
       
       - name: Create issue on failure
         if: failure()

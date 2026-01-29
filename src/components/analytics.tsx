@@ -21,6 +21,12 @@ export function Analytics() {
     return null;
   }
 
+  // Validate that the host URL is HTTPS for security
+  if (!plausibleHost.startsWith('https://')) {
+    console.error('Analytics: NEXT_PUBLIC_PLAUSIBLE_HOST must use HTTPS');
+    return null;
+  }
+
   return (
     <Script
       defer

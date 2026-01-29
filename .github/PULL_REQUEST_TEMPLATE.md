@@ -18,8 +18,9 @@
 ## المشكلة المرتبطة / Related Issue
 
 <!-- اربط المشكلة ذات الصلة / Link the related issue -->
+<!-- مثال / Example: Fixes #123 or Resolves #456 -->
 
-يحل # (رقم المشكلة / issue number)
+Fixes #
 
 ## كيفية الاختبار / How to Test
 
