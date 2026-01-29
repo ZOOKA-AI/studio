@@ -39,7 +39,7 @@
           manager = "web";
         };
         genkit = {
-          command = ["npm" "run" "genkit:dev" "--" "--port" "$PORT"];
+          command = ["sh" "-c" "npx genkit start --port $PORT -- npx tsx src/ai/dev.ts"];
           manager = "web";
         };
       };
