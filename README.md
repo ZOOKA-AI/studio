@@ -1,5 +1,9 @@
 # Firebase Studio
 
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ZOOKA-AI/studio?style=flat-square&logo=github&label=Latest%20Release)](https://github.com/ZOOKA-AI/studio/releases)
+[![GitHub](https://img.shields.io/github/license/ZOOKA-AI/studio?style=flat-square)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/ZOOKA-AI/studio?style=flat-square)](https://github.com/ZOOKA-AI/studio/stargazers)
+
 ---
 
 ### ✨ دعم تطوير أدوات الذكاء الاصطناعي للجميع ✨
