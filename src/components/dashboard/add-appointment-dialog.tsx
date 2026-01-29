@@ -72,7 +72,11 @@ export function AddAppointmentDialog({ onAppointmentAdd, open, onOpenChange }: A
         setTime('09:00');
         
         // Close dialog
-        onOpenChange ? onOpenChange(false) : setIsOpen(false);
+        if (onOpenChange) {
+            onOpenChange(false);
+        } else {
+            setIsOpen(false);
+        }
     };
     
     const controlledOpen = open !== undefined ? open : isOpen;
