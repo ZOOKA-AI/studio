@@ -228,9 +228,13 @@ export function PostTemplates() {
 
   const copyTemplate = (template: typeof postTemplates[0]) => {
     const fullContent = `${template.content}\n\n${template.hashtags.join(' ')}`;
-    navigator.clipboard.writeText(fullContent);
-    setCopiedId(template.id);
-    setTimeout(() => setCopiedId(null), 2000);
+    navigator.clipboard.writeText(fullContent).then(() => {
+      setCopiedId(template.id);
+      setTimeout(() => setCopiedId(null), 2000);
+    }).catch((err) => {
+      console.error('Failed to copy template:', err);
+      alert('فشل نسخ القالب. يرجى المحاولة مرة أخرى.');
+    });
   };
 
   const getTypeIcon = (type: string) => {

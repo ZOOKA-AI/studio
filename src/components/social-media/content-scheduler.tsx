@@ -26,6 +26,18 @@ export function ContentScheduler() {
 
   const handleAddPost = () => {
     if (content && selectedDate) {
+      // Validate that the date is not in the past
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      const schedDate = new Date(selectedDate);
+      schedDate.setHours(0, 0, 0, 0);
+      
+      if (schedDate < now) {
+        // Could use a toast notification here instead
+        alert('لا يمكن جدولة منشور لتاريخ في الماضي');
+        return;
+      }
+      
       addPost({
         content,
         hashtags: selectedHashtags,
@@ -84,7 +96,7 @@ export function ContentScheduler() {
               <CardContent className="pt-6 space-y-4">
                 <div className="space-y-2">
                   <Label>نوع المنشور</Label>
-                  <Select value={postType} onValueChange={(v: any) => setPostType(v)}>
+                  <Select value={postType} onValueChange={(v: typeof postType) => setPostType(v)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -104,7 +116,11 @@ export function ContentScheduler() {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     rows={5}
+                    maxLength={2200}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    {content.length} / 2200 حرف
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -133,6 +149,7 @@ export function ContentScheduler() {
                           <button
                             onClick={() => setSelectedHashtags(selectedHashtags.filter((_, i) => i !== index))}
                             className="ml-2 hover:text-destructive"
+                            aria-label={`إزالة ${tag}`}
                           >
                             ×
                           </button>

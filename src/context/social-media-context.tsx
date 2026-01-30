@@ -118,7 +118,7 @@ export function SocialMediaProvider({ children }: { children: ReactNode }) {
   const addPost = (post: Omit<SocialMediaPost, 'id'>) => {
     const newPost: SocialMediaPost = {
       ...post,
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     };
     setPosts([...posts, newPost]);
   };
@@ -134,7 +134,7 @@ export function SocialMediaProvider({ children }: { children: ReactNode }) {
   const addHashtagSet = (set: Omit<HashtagSet, 'id'>) => {
     const newSet: HashtagSet = {
       ...set,
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     };
     setHashtagSets([...hashtagSets, newSet]);
   };

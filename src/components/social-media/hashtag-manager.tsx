@@ -21,9 +21,13 @@ export function HashtagManager() {
 
   const copyHashtags = (hashtags: string[], setId: string) => {
     const text = hashtags.join(' ');
-    navigator.clipboard.writeText(text);
-    setCopiedId(setId);
-    setTimeout(() => setCopiedId(null), 2000);
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedId(setId);
+      setTimeout(() => setCopiedId(null), 2000);
+    }).catch((err) => {
+      console.error('Failed to copy hashtags:', err);
+      alert('فشل نسخ الهاشتاجات. يرجى المحاولة مرة أخرى.');
+    });
   };
 
   const exportHashtagsJSON = () => {
@@ -114,7 +118,7 @@ export function HashtagManager() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>الفئة</Label>
-                    <Select value={newCategory} onValueChange={(v: any) => setNewCategory(v)}>
+                    <Select value={newCategory} onValueChange={(v: typeof newCategory) => setNewCategory(v)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -129,7 +133,7 @@ export function HashtagManager() {
 
                   <div className="space-y-2">
                     <Label>اللغة</Label>
-                    <Select value={newLanguage} onValueChange={(v: any) => setNewLanguage(v)}>
+                    <Select value={newLanguage} onValueChange={(v: typeof newLanguage) => setNewLanguage(v)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
