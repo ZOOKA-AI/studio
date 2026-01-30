@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - ${{ github.event.repository.default_branch }}
+  pull_request:
+    branches:
+      - main
+      - ${{ github.event.repository.default_branch }}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18, 20]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Detect platform information
+        run: |
+          echo "::group::Platform Information"
+          echo "Operating System: $(uname -s)"
+          echo "OS Version: $(uname -r)"
+          echo "Architecture: $(uname -m)"
+          echo "Platform: $(uname -o 2>/dev/null || echo 'N/A')"
+          echo "::endgroup::"
+          
+          # Validate platform is Linux
+          if [[ "$(uname -s)" != "Linux" ]]; then
+            echo "::error::Expected Linux platform, but got $(uname -s)"
+            exit 1
+          fi
+          echo "✓ Platform validation passed: Linux"
+        shell: bash
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Verify npm availability
+        run: |
+          echo "::group::Node.js and npm Information"
+          echo "Node.js version: $(node --version)"
+          echo "npm version: $(npm --version)"
+          echo "npm cache directory: $(npm config get cache)"
+          echo "::endgroup::"
+        shell: bash
+      
+      - name: Install dependencies
+        run: npm ci
+        shell: bash
+      
+      - name: Run TypeScript type check
+        run: npm run typecheck
+        shell: bash
+      
+      - name: Run linter
+        run: npm run lint
+        shell: bash
+      
+      - name: Build application
+        run: npm run build
+        shell: bash
+        env:
+          NODE_ENV: production
