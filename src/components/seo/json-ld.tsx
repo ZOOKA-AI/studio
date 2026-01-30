@@ -1,4 +1,5 @@
 import Script from 'next/script';
+import { CONTACT_INFO, SEO_CONFIG } from '@/lib/config';
 
 // UAE Emirates and major cities
 const uaeLocations = [
@@ -18,8 +19,8 @@ export function JsonLd() {
     '@type': 'Organization',
     name: 'Royal Clean UAE',
     alternateName: 'رويال كلين الإمارات',
-    url: 'https://zooka-ai.com',
-    logo: 'https://zooka-ai.com/logo.png',
+    url: SEO_CONFIG.baseUrl,
+    logo: `${SEO_CONFIG.baseUrl}/logo.png`,
     description: 'شركة تنظيف احترافية تخدم جميع إمارات دولة الإمارات العربية المتحدة',
     address: {
       '@type': 'PostalAddress',
@@ -29,17 +30,17 @@ export function JsonLd() {
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+971-XX-XXX-XXXX',
+      telephone: CONTACT_INFO.phone,
       contactType: 'customer service',
       areaServed: ['AE'],
       availableLanguage: ['ar', 'en'],
     },
     sameAs: [
-      'https://facebook.com/royalcleanuae',
-      'https://twitter.com/royalcleanuae',
-      'https://instagram.com/royalcleanuae',
-      'https://linkedin.com/company/royalcleanuae',
-      'https://youtube.com/@royalcleanuae',
+      `https://facebook.com/${CONTACT_INFO.social.facebook}`,
+      `https://twitter.com/${CONTACT_INFO.social.twitter}`,
+      `https://instagram.com/${CONTACT_INFO.social.instagram}`,
+      `https://linkedin.com/${CONTACT_INFO.social.linkedin}`,
+      `https://youtube.com/${CONTACT_INFO.social.youtube}`,
     ],
   };
 
@@ -47,9 +48,9 @@ export function JsonLd() {
   const localBusinessSchemas = uaeLocations.map((location) => ({
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': `https://zooka-ai.com/#${location.nameEn.toLowerCase().replace(/\s/g, '-')}`,
+    '@id': `${SEO_CONFIG.baseUrl}/#${location.nameEn.toLowerCase().replace(/\s/g, '-')}`,
     name: `Royal Clean - ${location.name}`,
-    image: 'https://zooka-ai.com/logo.png',
+    image: `${SEO_CONFIG.baseUrl}/logo.png`,
     description: `خدمات تنظيف احترافية في ${location.name}. تنظيف منازل، شقق، فلل، مكاتب. خدمة سريعة وموثوقة.`,
     address: {
       '@type': 'PostalAddress',
@@ -62,8 +63,8 @@ export function JsonLd() {
       latitude: location.lat,
       longitude: location.lng,
     },
-    url: `https://zooka-ai.com/${location.nameEn.toLowerCase().replace(/\s/g, '-')}`,
-    telephone: '+971-XX-XXX-XXXX',
+    url: `${SEO_CONFIG.baseUrl}/${location.nameEn.toLowerCase().replace(/\s/g, '-')}`,
+    telephone: CONTACT_INFO.phone,
     priceRange: 'AED 100 - AED 5000',
     openingHoursSpecification: [
       {
@@ -154,13 +155,13 @@ export function JsonLd() {
         '@type': 'ListItem',
         position: 1,
         name: 'الرئيسية',
-        item: 'https://zooka-ai.com',
+        item: SEO_CONFIG.baseUrl,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'خدمات التنظيف',
-        item: 'https://zooka-ai.com/services',
+        item: `${SEO_CONFIG.baseUrl}/services`,
       },
     ],
   };

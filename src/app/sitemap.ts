@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { SEO_CONFIG } from '@/lib/config'
 
 // UAE Emirates and major cities
 const uaeLocations = [
@@ -24,7 +25,7 @@ const dubaiAreas = [
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://zooka-ai.com'
+  const baseUrl = SEO_CONFIG.baseUrl
   
   // Main pages
   const mainPages: MetadataRoute.Sitemap = [

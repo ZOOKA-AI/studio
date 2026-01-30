@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { SEO_CONFIG } from '@/lib/config'
  
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -19,6 +20,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/admin/', '/settings/'],
       },
     ],
-    sitemap: 'https://zooka-ai.com/sitemap.xml',
+    sitemap: `${SEO_CONFIG.baseUrl}/sitemap.xml`,
   }
 }

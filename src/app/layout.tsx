@@ -13,9 +13,10 @@ import { FirebaseClientProvider } from '@/firebase';
 import { MaterialsProvider } from '@/context/materials-context';
 import { EquipmentProvider } from '@/context/equipment-context';
 import { JsonLd } from '@/components/seo/json-ld';
+import { SEO_CONFIG } from '@/lib/config';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://zooka-ai.com'),
+  metadataBase: new URL(SEO_CONFIG.baseUrl),
   title: {
     default: 'رويال كلين - خدمات التنظيف الأفضل في الإمارات | Royal Clean UAE',
     template: '%s | رويال كلين - خدمات التنظيف في الإمارات'
@@ -70,7 +71,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'ar_AE',
     alternateLocale: ['en_AE', 'ar_SA'],
-    url: 'https://zooka-ai.com',
+    url: SEO_CONFIG.baseUrl,
     title: 'رويال كلين - خدمات التنظيف الأفضل في الإمارات | Royal Clean UAE',
     description: 'خدمات التنظيف الاحترافية رقم 1 في الإمارات العربية المتحدة. نخدم جميع الإمارات السبع. احجز الآن!',
     siteName: 'Royal Clean UAE',
@@ -102,15 +103,15 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://zooka-ai.com',
+    canonical: SEO_CONFIG.baseUrl,
     languages: {
-      'ar-AE': 'https://zooka-ai.com/ar',
-      'en-AE': 'https://zooka-ai.com/en',
+      'ar-AE': `${SEO_CONFIG.baseUrl}/ar`,
+      'en-AE': `${SEO_CONFIG.baseUrl}/en`,
     },
   },
   verification: {
-    google: 'your-google-verification-code',
-    yandex: 'your-yandex-verification-code',
+    google: SEO_CONFIG.verification.google, // TODO: Replace with actual Google Search Console verification code
+    yandex: SEO_CONFIG.verification.yandex, // TODO: Replace with actual Yandex Webmaster verification code
   },
 };
 
@@ -125,9 +126,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
-        <JsonLd />
       </head>
       <body className={cn("font-body antialiased", 'bg-background')}>
+        <JsonLd />
         <FirebaseClientProvider>
           <EquipmentProvider>
             <MaterialsProvider>
