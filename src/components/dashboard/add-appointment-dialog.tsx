@@ -25,12 +25,13 @@ import { CalendarIcon, PlusCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import type { Appointment, AppointmentStatus } from '@/lib/types';
+import type { NewAppointment } from '@/lib/type-utils';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { APPOINTMENT_STATUSES, DEFAULT_START_TIME } from '@/lib/constants';
 
 type AddAppointmentDialogProps = {
-  onAppointmentAdd: (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => void;
+  onAppointmentAdd: (appointment: NewAppointment) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };

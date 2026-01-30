@@ -2,6 +2,7 @@
 
 import { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import type { Task } from '@/lib/types';
+import type { TimestampTask, NewTask, UpdateTask } from '@/lib/type-utils';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
@@ -11,8 +12,8 @@ import { parseISO } from 'date-fns';
 
 type TasksContextType = {
   tasks: Task[];
-  addTask: (taskData: Omit<Task, 'id'>) => void;
-  updateTask: (taskId: string, updatedData: Partial<Omit<Task, 'id'>>) => void;
+  addTask: (taskData: NewTask) => void;
+  updateTask: (taskId: string, updatedData: UpdateTask) => void;
   deleteTask: (taskId: string) => void;
 };
 
@@ -25,7 +26,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     [firestore]
   );
   
-  const { data: rawTasks = [] } = useCollection<Omit<Task, 'dueDate'> & {dueDate: Timestamp}>(tasksRef);
+  const { data: rawTasks = [] } = useCollection<TimestampTask>(tasksRef);
   
   const tasks: Task[] = useMemo(() => 
     [...(rawTasks || [])].map(task => ({
@@ -35,7 +36,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     [rawTasks]
   );
 
-  const addTask = useCallback((taskData: Omit<Task, 'id'>) => {
+  const addTask = useCallback((taskData: NewTask) => {
     if (!firestore) return;
     const tasksCollection = collection(firestore, 'tasks');
     const newTask = {
@@ -54,7 +55,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
       });
   }, [firestore]);
 
-  const updateTask = useCallback((taskId: string, updatedData: Partial<Omit<Task, 'id'>>) => {
+  const updateTask = useCallback((taskId: string, updatedData: UpdateTask) => {
     if (!firestore) return;
     const taskDocRef = doc(firestore, 'tasks', taskId);
     

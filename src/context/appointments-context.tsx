@@ -2,6 +2,7 @@
 
 import { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import type { Appointment } from '@/lib/types';
+import type { TimestampAppointment, NewAppointment } from '@/lib/type-utils';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
@@ -9,7 +10,7 @@ import { DEFAULT_SITE_ADDRESS, DEFAULT_APPOINTMENT_DURATION_HOURS } from '@/lib/
 
 type AppointmentsContextType = {
   appointments: Appointment[];
-  addAppointment: (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => void;
+  addAppointment: (appointment: NewAppointment) => void;
   deleteAppointment: (appointmentId: string) => void;
 };
 
@@ -22,7 +23,7 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     [firestore]
   );
   
-  const { data: rawAppointments = [] } = useCollection<Omit<Appointment, 'startTime'|'endTime'> & {startTime: Timestamp, endTime: Timestamp}>(appointmentsRef);
+  const { data: rawAppointments = [] } = useCollection<TimestampAppointment>(appointmentsRef);
 
   const appointments: Appointment[] = useMemo(() => 
     (rawAppointments || []).map(appointment => ({
@@ -33,7 +34,7 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     [rawAppointments]
   );
 
-  const addAppointment = useCallback(async (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => {
+  const addAppointment = useCallback(async (appointment: NewAppointment) => {
     if (!firestore) return;
     const startTime = new Date(appointment.startTime);
     const newAppointment = {

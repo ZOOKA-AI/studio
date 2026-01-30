@@ -2,6 +2,7 @@
 
 import { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import type { DailyReport } from '@/lib/types';
+import type { TimestampReport, NewReport } from '@/lib/type-utils';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
@@ -11,7 +12,7 @@ import { SUPERVISOR_NAME, DEFAULT_WORKING_HOURS, DEFAULT_REPORT_STATUS } from '@
 
 type ReportsContextType = {
   reports: DailyReport[];
-  addReport: (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => void;
+  addReport: (report: NewReport) => void;
 };
 
 const ReportsContext = createContext<ReportsContextType | undefined>(undefined);
@@ -23,7 +24,7 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
     [firestore]
   );
   
-  const { data: rawReports = [] } = useCollection<Omit<DailyReport, 'date'> & { date: Timestamp }>(reportsRef);
+  const { data: rawReports = [] } = useCollection<TimestampReport>(reportsRef);
 
   const reports: DailyReport[] = useMemo(() =>
     (rawReports || []).map(report => ({
@@ -34,7 +35,7 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
   );
 
 
-  const addReport = useCallback(async (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
+  const addReport = useCallback(async (report: NewReport) => {
     if (!firestore || !user) return; // Ensure user is available
     const reportsCollection = collection(firestore, 'dailyReports');
     
