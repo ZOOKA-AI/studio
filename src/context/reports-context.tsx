@@ -1,16 +1,18 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import type { DailyReport } from '@/lib/types';
+import type { TimestampReport, NewReport } from '@/lib/type-utils';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import { SUPERVISOR_NAME, DEFAULT_WORKING_HOURS, DEFAULT_REPORT_STATUS } from '@/lib/constants';
 
 type ReportsContextType = {
   reports: DailyReport[];
-  addReport: (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => void;
+  addReport: (report: NewReport) => void;
 };
 
 const ReportsContext = createContext<ReportsContextType | undefined>(undefined);
@@ -22,25 +24,28 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
     [firestore]
   );
   
-  const { data: rawReports = [] } = useCollection<Omit<DailyReport, 'date'> & { date: Timestamp }>(reportsRef);
+  const { data: rawReports = [] } = useCollection<TimestampReport>(reportsRef);
 
-  const reports: DailyReport[] = (rawReports || []).map(report => ({
-    ...report,
-    date: report.date.toDate(),
-  }));
+  const reports: DailyReport[] = useMemo(() =>
+    (rawReports || []).map(report => ({
+      ...report,
+      date: report.date.toDate(),
+    })),
+    [rawReports]
+  );
 
 
-  const addReport = async (report: Omit<DailyReport, 'hours' | 'id' | 'supervisor' | 'status'>) => {
+  const addReport = useCallback(async (report: NewReport) => {
     if (!firestore || !user) return; // Ensure user is available
     const reportsCollection = collection(firestore, 'dailyReports');
     
     const newReport = {
       ...report,
       date: Timestamp.fromDate(report.date),
-      supervisorId: user.uid, // Use the actual user ID
-      supervisor: 'محمد المشرف', // Hardcode supervisor name
-      hours: 8, // Placeholder
-      status: 'قيد المراجعة',
+      supervisorId: user.uid,
+      supervisor: SUPERVISOR_NAME,
+      hours: DEFAULT_WORKING_HOURS,
+      status: DEFAULT_REPORT_STATUS,
     };
     
     addDoc(reportsCollection, newReport)
@@ -52,10 +57,15 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-  };
+  }, [firestore, user]);
+
+  const value = useMemo(
+    () => ({ reports, addReport }),
+    [reports, addReport]
+  );
 
   return (
-    <ReportsContext.Provider value={{ reports, addReport }}>
+    <ReportsContext.Provider value={value}>
       {children}
     </ReportsContext.Provider>
   );

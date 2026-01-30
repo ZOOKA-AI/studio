@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
@@ -33,8 +33,13 @@ export function MaterialsProvider({ children }: { children: ReactNode }) {
   // Use the useCollection hook to fetch data.
   const { data: materials = [] } = useCollection<Material>(materialsRef);
 
+  const value = useMemo(
+    () => ({ materials: materials || [] }),
+    [materials]
+  );
+
   return (
-    <MaterialsContext.Provider value={{ materials: materials || [] }}>
+    <MaterialsContext.Provider value={value}>
       {children}
     </MaterialsContext.Provider>
   );

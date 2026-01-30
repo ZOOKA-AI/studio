@@ -8,7 +8,7 @@ import { format, addDays, startOfWeek, isSameDay } from "date-fns";
 import { ar } from "date-fns/locale";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { AddAppointmentDialog } from "./add-appointment-dialog";
 import { useAppointments } from "@/context/appointments-context";
 
@@ -37,13 +37,26 @@ export function AppointmentsCalendar() {
 
   const weekRange = `${format(weekStart, 'd', { locale: ar })} - ${format(addDays(weekStart, 6), 'd MMMM yyyy', { locale: ar })}`;
 
-  const handleNextWeek = () => {
-    setCurrentDate(addDays(currentDate, 7));
-  };
+  const handleNextWeek = useCallback(() => {
+    setCurrentDate((prev: Date) => addDays(prev, 7));
+  }, []);
 
-  const handlePrevWeek = () => {
-    setCurrentDate(addDays(currentDate, -7));
-  };
+  const handlePrevWeek = useCallback(() => {
+    setCurrentDate((prev: Date) => addDays(prev, -7));
+  }, []);
+
+  // Memoize appointments grouped by day for efficient lookup
+  const appointmentsByDay = useMemo(() => {
+    const grouped = new Map<string, Appointment[]>();
+    appointments.forEach((appointment: Appointment) => {
+      const dateKey = format(new Date(appointment.startTime), 'yyyy-MM-dd');
+      if (!grouped.has(dateKey)) {
+        grouped.set(dateKey, []);
+      }
+      grouped.get(dateKey)!.push(appointment);
+    });
+    return grouped;
+  }, [appointments]);
 
 
   return (
@@ -67,9 +80,8 @@ export function AppointmentsCalendar() {
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-px bg-border border border-border rounded-lg overflow-hidden">
             {weekDays.map((day) => {
-              const dayAppointments = appointments.filter((appointment) =>
-                isSameDay(new Date(appointment.startTime), day)
-              );
+              const dateKey = format(day, 'yyyy-MM-dd');
+              const dayAppointments = appointmentsByDay.get(dateKey) || [];
               return (
                 <div key={day.toString()} className={cn("bg-card p-2", isSameDay(day, today) && "bg-primary/5")}>
                   <div className="text-center mb-2">

@@ -15,10 +15,15 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Home, Calendar, PlusCircle, Book, Users, HardHat, Box, Settings, LogOut, ShieldCheck, CheckSquare, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
+import { COMPANY_NAME, SUPERVISOR_NAME, USER_AVATAR_ID } from '@/lib/constants';
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const userAvatar = PlaceHolderImages.find(p => p.id === 'user-avatar-1');
+  const userAvatar = useMemo(() => 
+    PlaceHolderImages.find(p => p.id === USER_AVATAR_ID),
+    []
+  );
 
   const menuItems = [
     { href: '/', label: 'لوحة التحكم', icon: Home },
@@ -39,7 +44,7 @@ export function AppSidebar() {
                 <ShieldCheck className="w-7 h-7 text-primary" />
             </div>
             <div className="flex flex-col">
-                <h2 className="font-headline text-lg font-bold text-primary">رويال للتنظيف</h2>
+                <h2 className="font-headline text-lg font-bold text-primary">{COMPANY_NAME}</h2>
                 <p className="text-xs text-muted-foreground">لوحة تحكم المشرف</p>
             </div>
         </div>
@@ -87,10 +92,10 @@ export function AppSidebar() {
               <AvatarFallback>م</AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <p className="text-sm font-semibold">محمد المشرف</p>
+              <p className="text-sm font-semibold">{SUPERVISOR_NAME}</p>
               <p className="text-xs text-muted-foreground">supervisor@royal.com</p>
             </div>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="تسجيل الخروج">
                 <LogOut className="h-5 w-5 text-muted-foreground" />
             </Button>
           </div>

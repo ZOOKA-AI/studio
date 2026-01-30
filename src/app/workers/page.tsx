@@ -6,7 +6,7 @@ import { PlusCircle, MoreHorizontal } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { AddEditWorkerDialog } from "@/components/workers/add-edit-worker-dialog";
 import {
   DropdownMenu,
@@ -65,8 +65,15 @@ export default function WorkersPage() {
         setEditingWorker(null);
     };
 
-    const companyWorkers = workers.filter(w => w.type === 'company');
-    const externalWorkers = workers.filter(w => w.type === 'external');
+    const companyWorkers = useMemo(() => 
+        workers.filter((w: Worker) => w.type === 'company'),
+        [workers]
+    );
+    
+    const externalWorkers = useMemo(() => 
+        workers.filter((w: Worker) => w.type === 'external'),
+        [workers]
+    );
 
     const renderTable = (data: Worker[]) => (
         <Table>
