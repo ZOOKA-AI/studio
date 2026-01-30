@@ -15,13 +15,17 @@ import {
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { SUPERVISOR_NAME, USER_AVATAR_ID } from '@/lib/constants';
 
 export function Header() {
     const { toast } = useToast();
-    const userAvatar = PlaceHolderImages.find(p => p.id === 'user-avatar-1');
+    const userAvatar = useMemo(() => 
+      PlaceHolderImages.find(p => p.id === USER_AVATAR_ID), 
+      []
+    );
     const [today, setToday] = useState('');
 
     useEffect(() => {
@@ -33,7 +37,7 @@ export function Header() {
       <div className="flex items-center gap-2">
         <SidebarTrigger className="lg:hidden" />
         <h1 className="font-headline text-lg font-bold text-foreground">
-          مرحباً، محمد المشرف
+          مرحباً، {SUPERVISOR_NAME}
         </h1>
       </div>
 
@@ -41,7 +45,7 @@ export function Header() {
         <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
             {today && <span>{today}</span>}
         </div>
-        <Button variant="ghost" size="icon" className="relative rounded-full">
+        <Button variant="ghost" size="icon" className="relative rounded-full" aria-label="الإشعارات">
           <Bell className="h-5 w-5" />
           <span className="absolute top-1 right-1 flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>

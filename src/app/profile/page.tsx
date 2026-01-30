@@ -113,7 +113,7 @@ export default function ProfilePage() {
             toast({ title: "تم تحديث كلمة المرور بنجاح!" });
             passwordForm.reset();
         } catch (error: any) {
-            console.error("Password update error:", error);
+            // Error handled by toast notification
              toast({
                 variant: "destructive",
                 title: "خطأ في تحديث كلمة المرور!",

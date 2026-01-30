@@ -5,6 +5,7 @@ import type { Appointment } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
+import { DEFAULT_SITE_ADDRESS, DEFAULT_APPOINTMENT_DURATION_HOURS } from '@/lib/constants';
 
 type AppointmentsContextType = {
   appointments: Appointment[];
@@ -38,8 +39,8 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     const newAppointment = {
         ...appointment,
         startTime: Timestamp.fromDate(startTime),
-        siteAddress: 'غير محدد',
-        endTime: Timestamp.fromDate(new Date(startTime.getTime() + 2 * 60 * 60 * 1000)),
+        siteAddress: DEFAULT_SITE_ADDRESS,
+        endTime: Timestamp.fromDate(new Date(startTime.getTime() + DEFAULT_APPOINTMENT_DURATION_HOURS * 60 * 60 * 1000)),
     };
     await addDoc(collection(firestore, 'appointments'), newAppointment);
   }, [firestore]);

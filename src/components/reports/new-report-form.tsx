@@ -153,7 +153,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
         ]);
       }
     } catch (error) {
-      console.error(error);
+      // Error already handled by toast below
       toast({
         variant: "destructive",
         title: "خطأ في جلب الاقتراحات",
@@ -180,7 +180,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
       const result = await generateReportSummary({ reportDetails });
       form.setValue("notes", result.summary);
     } catch (error) {
-      console.error(error);
+      // Error already handled by toast below
       toast({
         variant: "destructive",
         title: "خطأ في إنشاء الملخص",

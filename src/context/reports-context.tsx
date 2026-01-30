@@ -7,6 +7,7 @@ import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import { SUPERVISOR_NAME, DEFAULT_WORKING_HOURS, DEFAULT_REPORT_STATUS } from '@/lib/constants';
 
 type ReportsContextType = {
   reports: DailyReport[];
@@ -40,10 +41,10 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
     const newReport = {
       ...report,
       date: Timestamp.fromDate(report.date),
-      supervisorId: user.uid, // Use the actual user ID
-      supervisor: 'محمد المشرف', // Hardcode supervisor name
-      hours: 8, // Placeholder
-      status: 'قيد المراجعة',
+      supervisorId: user.uid,
+      supervisor: SUPERVISOR_NAME,
+      hours: DEFAULT_WORKING_HOURS,
+      status: DEFAULT_REPORT_STATUS,
     };
     
     addDoc(reportsCollection, newReport)

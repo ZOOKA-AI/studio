@@ -112,11 +112,11 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
                     setUserAuthState({ user: supervisorUser, isUserLoading: false, userError: null });
                 } catch (creationError) {
-                    console.error("Supervisor account creation failed:", creationError);
+                    // Set error state - will be handled by FirebaseErrorListener
                     setUserAuthState({ user: null, isUserLoading: false, userError: creationError as Error });
                 }
             } else {
-                console.error("Supervisor sign-in failed:", error);
+                // Set error state - will be handled by FirebaseErrorListener
                 setUserAuthState({ user: null, isUserLoading: false, userError: error });
             }
         }
@@ -127,7 +127,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       auth,
       ensureSupervisorAccount,
       (error) => { // Auth listener error
-        console.error("FirebaseProvider: onAuthStateChanged error:", error);
+        // Set error state - will be handled by FirebaseErrorListener
         setUserAuthState({ user: null, isUserLoading: false, userError: error });
       }
     );
