@@ -27,6 +27,7 @@ import { ar } from 'date-fns/locale';
 import type { Appointment, AppointmentStatus } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { APPOINTMENT_STATUSES, DEFAULT_START_TIME } from '@/lib/constants';
 
 type AddAppointmentDialogProps = {
   onAppointmentAdd: (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => void;
@@ -34,14 +35,12 @@ type AddAppointmentDialogProps = {
   onOpenChange?: (open: boolean) => void;
 };
 
-const appointmentStatuses: AppointmentStatus[] = ['حجز جديد', 'مجدول', 'قيد التنفيذ', 'مكتمل', 'متأخر', 'مؤجل'];
-
 export function AddAppointmentDialog({ onAppointmentAdd, open, onOpenChange }: AddAppointmentDialogProps) {
     const { toast } = useToast();
     const [clientName, setClientName] = useState('');
-    const [status, setStatus] = useState<AppointmentStatus>('حجز جديد');
+    const [status, setStatus] = useState<AppointmentStatus>(APPOINTMENT_STATUSES[5]); // 'حجز جديد'
     const [date, setDate] = useState<Date | undefined>(new Date());
-    const [time, setTime] = useState('09:00');
+    const [time, setTime] = useState(DEFAULT_START_TIME);
     const [isOpen, setIsOpen] = useState(false);
 
     const handleSave = () => {
@@ -67,9 +66,9 @@ export function AddAppointmentDialog({ onAppointmentAdd, open, onOpenChange }: A
         
         // Reset form
         setClientName('');
-        setStatus('حجز جديد');
+        setStatus(APPOINTMENT_STATUSES[5]); // 'حجز جديد'
         setDate(new Date());
-        setTime('09:00');
+        setTime(DEFAULT_START_TIME);
         
         // Close dialog
         onOpenChange ? onOpenChange(false) : setIsOpen(false);
@@ -107,7 +106,7 @@ export function AddAppointmentDialog({ onAppointmentAdd, open, onOpenChange }: A
                     <SelectValue placeholder="اختر الحالة" />
                 </SelectTrigger>
                 <SelectContent>
-                    {appointmentStatuses.map(s => (
+                    {APPOINTMENT_STATUSES.map(s => (
                         <SelectItem key={s} value={s}>{s}</SelectItem>
                     ))}
                 </SelectContent>
