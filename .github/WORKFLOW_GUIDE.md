@@ -43,7 +43,7 @@ The workflow uses GitHub Actions caching for npm dependencies:
 ```yaml
 cache: 'npm'
 ```
-This caches `node_modules` and improves workflow performance by 30-50%.
+This caches the npm cache directory (`~/.npm`) and improves workflow performance by reducing npm registry requests. Dependencies are still installed with `npm ci`, but packages are retrieved from cache when available.
 
 ### Build Steps
 1. **Checkout**: Retrieves code with full history

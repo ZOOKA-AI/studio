@@ -13,20 +13,25 @@ echo "Current OS: $CURRENT_OS"
 case "$CURRENT_OS" in
   Linux*)
     echo "✓ Linux platform detected and is supported"
-    export RUNNER_PLATFORM="linux"
+    RUNNER_PLATFORM="linux"
     ;;
   Darwin*)
     echo "✓ macOS platform detected and is supported"
-    export RUNNER_PLATFORM="macos"
+    RUNNER_PLATFORM="macos"
     ;;
   MINGW*|MSYS*|CYGWIN*)
     echo "✓ Windows platform detected and is supported"
-    export RUNNER_PLATFORM="windows"
+    RUNNER_PLATFORM="windows"
     ;;
   *)
     echo "✗ Unsupported platform: $CURRENT_OS"
     exit 1
     ;;
 esac
+
+# Export to GitHub Actions environment for subsequent steps
+if [ -n "$GITHUB_ENV" ]; then
+  echo "RUNNER_PLATFORM=$RUNNER_PLATFORM" >> "$GITHUB_ENV"
+fi
 
 echo "Platform validation completed successfully"
