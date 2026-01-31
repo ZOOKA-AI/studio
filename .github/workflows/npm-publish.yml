@@ -1,50 +1,19 @@
-name: Publish Node.js Package
+# نشر حزمة NPM
 
-on:
-  release:
-    types: [created]
+## 🚀 الخطوات:
 
-jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install dependencies
-        run: npm ci
-      - name: Run tests
-        run: npm test
-      # If you have a build process:
-      - name: Build package
-        run: npm run build
+1. **الإعداد:**
+    - تثبيت التبعيات.
+    - إعداد المتغيرات البيئية.
 
-  publish-npm:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org/
-      - name: Install dependencies
-        run: npm ci
-      # If you have a build process:
-      - name: Build package
-        run: npm run build
+2. **اختبارات:**
+    - تشغيل الاختبارات لالتزام الأمان.
 
-      - name: Publish to npm
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+3. **نشر:**
+    - نشر الحزمة على npm.
 
-      - name: GitHub Sponsors Message
-        run: |
-          echo "شارك في دعم المشروع عبر GitHub Sponsors: https://github.com/sponsors/ZOOKA-AI"
-          echo "ساهم في استمرار التحسين والتطوير بالمساهمة عبر صفحة الرعاية!"
+## 💬 رسالة رعاية:
+
+✨ مشروع زوكا يحتاج لداعمي التقنية الطموحين!  
+كن شريك الإنجاز وادعمنا للمزيد من التطوير والانتشار.  
+ادعمنا واصنع الفرق الآن عبر: [https://github.com/sponsors/ZOOKA-AI](https://github.com/sponsors/ZOOKA-AI)
