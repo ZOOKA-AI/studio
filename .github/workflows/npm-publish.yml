@@ -1,19 +1,33 @@
-# نشر حزمة NPM
+name: Node.js CI
 
-## 🚀 الخطوات:
+on:
+  release:
+    types: [created]
 
-1. **الإعداد:**
-    - تثبيت التبعيات.
-    - إعداد المتغيرات البيئية.
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-2. **اختبارات:**
-    - تشغيل الاختبارات لالتزام الأمان.
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-3. **نشر:**
-    - نشر الحزمة على npm.
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16' # هنا يمكنك تحديد إصدار Node.js المطلوب
 
-## 💬 رسالة رعاية:
+      - name: Install Dependencies
+        run: npm install
 
-✨ مشروع زوكا يحتاج لداعمي التقنية الطموحين!  
-كن شريك الإنجاز وادعمنا للمزيد من التطوير والانتشار.  
-ادعمنا واصنع الفرق الآن عبر: [https://github.com/sponsors/ZOOKA-AI](https://github.com/sponsors/ZOOKA-AI)
+      - name: Run Tests
+        run: npm test
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Show Encouraging Message
+        run: |
+          echo "🎉 الحلول رائعة! إذا كنت تتطلع إلى مغامرات جديدة، فكن شجاعًا واستمر في التعلم! 🚀"
