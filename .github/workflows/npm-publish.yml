@@ -15,13 +15,19 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16' # هنا يمكنك تحديد إصدار Node.js المطلوب
+          node-version: '20'
 
       - name: Install Dependencies
         run: npm install
 
+      - name: Install webpack-cli
+        run: npm install -D webpack webpack-cli
+
       - name: Run Tests
         run: npm test
+
+      - name: Run Build
+        run: npm run build
 
       - name: Publish to npm
         run: npm publish
