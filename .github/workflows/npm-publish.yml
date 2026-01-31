@@ -10,20 +10,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
       - name: Install dependencies
         run: npm ci
-
       - name: Run tests
         run: npm test
-
+      # If you have a build process:
       - name: Build package
-        run: npm run build # احذفها إذا مشروعك لا يحتاج build
+        run: npm run build
 
   publish-npm:
     needs: build-and-test
@@ -31,26 +28,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-
       - name: Install dependencies
         run: npm ci
-
+      # If you have a build process:
       - name: Build package
-        run: npm run build # احذفها إذا مشروعك لا يحتاج build
+        run: npm run build
 
       - name: Publish to npm
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
-  sponsorship:
-    runs-on: ubuntu-latest
-    steps:
-      - name: GitHub Sponsors
-        run: echo "🚀 إذا أعجبك المشروع يمكنك دعمنا عبر GitHub Sponsors: https://github.com/sponsors/ZOOKA-AI"
+      - name: GitHub Sponsors Message
+        run: |
+          echo "شارك في دعم المشروع عبر GitHub Sponsors: https://github.com/sponsors/ZOOKA-AI"
+          echo "ساهم في استمرار التحسين والتطوير بالمساهمة عبر صفحة الرعاية!"
