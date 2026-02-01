@@ -660,7 +660,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                 )}
               />
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2" role="group" aria-label="إجراءات اليومية">
               <Button type="button" variant="outline" onClick={() => router.back()}>
                 رجوع
               </Button>
