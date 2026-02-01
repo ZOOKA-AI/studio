@@ -192,10 +192,6 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   };
   
   const handleBack = () => {
-    if (document.referrer && document.referrer.startsWith(window.location.origin)) {
-      router.back();
-      return;
-    }
     router.push("/reports");
   };
 
