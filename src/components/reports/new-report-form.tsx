@@ -660,7 +660,14 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                 )}
               />
             </div>
-            <Button type="submit" disabled={!isClient || !form.formState.isValid}>حفظ اليومية</Button>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" variant="outline" onClick={() => router.back()}>
+                رجوع
+              </Button>
+              <Button type="submit" disabled={!isClient || !form.formState.isValid}>
+                حفظ اليومية
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>
