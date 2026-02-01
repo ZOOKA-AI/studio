@@ -192,7 +192,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   };
   
   const handleBack = () => {
-    if (window.history.length > 1) {
+    if (document.referrer && document.referrer.startsWith(window.location.origin)) {
       router.back();
       return;
     }
