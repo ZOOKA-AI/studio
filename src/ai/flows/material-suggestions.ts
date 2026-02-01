@@ -1,5 +1,3 @@
-'use server';
-
 /**
  * @fileOverview Provides material suggestions for tasks in the daily report.
  *
