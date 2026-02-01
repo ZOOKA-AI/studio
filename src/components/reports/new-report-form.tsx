@@ -190,6 +190,14 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
       setIsSummarizing(false);
     }
   };
+  
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      router.back();
+      return;
+    }
+    router.push("/reports");
+  };
 
   return (
     <Card>
@@ -661,7 +669,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
               />
             </div>
             <div className="flex flex-wrap gap-2" role="group" aria-label="إجراءات اليومية">
-              <Button type="button" variant="outline" onClick={() => router.back()}>
+              <Button type="button" variant="outline" onClick={handleBack}>
                 رجوع
               </Button>
               <Button type="submit" disabled={!isClient || !form.formState.isValid}>
