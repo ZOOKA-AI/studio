@@ -1,12 +1,13 @@
 'use client';
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusCircle, UserPlus, FolderPlus, CalendarPlus, Send } from "lucide-react";
 import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
+import { BroadcastDialog } from "./broadcast-dialog";
 
 export function QuickActions() {
-    const { toast } = useToast();
+    const [isBroadcastOpen, setIsBroadcastOpen] = useState(false);
   const actions = [
     { label: 'إضافة موعد جديد (تسجيل المشرف)', icon: CalendarPlus, variant: 'default' as const, href: '/calendar' },
     { label: 'بدء يومية جديدة', icon: PlusCircle, variant: 'outline' as const, href: '/reports/new' },
@@ -31,11 +32,12 @@ export function QuickActions() {
             </Button>
           );
         })}
-        <Button variant={'outline'} className="w-full justify-start text-base py-6" onClick={() => toast({ title: 'تم الإرسال', description: "تم إرسال الإشعار بنجاح."})}>
+        <Button variant={'outline'} className="w-full justify-start text-base py-6" onClick={() => setIsBroadcastOpen(true)}>
             <Send className="me-3 h-5 w-5" />
             إرسال إشعار
         </Button>
       </CardContent>
+      <BroadcastDialog open={isBroadcastOpen} onOpenChange={setIsBroadcastOpen} />
     </Card>
   );
 }

@@ -90,3 +90,12 @@ export type Equipment = {
   quantity: number;
   supervisor: string;
 };
+
+export type Broadcast = {
+  id: string;
+  title: string;
+  message: string;
+  recipients: string[]; // Worker IDs or 'all'
+  createdAt: string; // ISO string
+  createdBy: string; // User who created the broadcast
+};
