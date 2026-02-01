@@ -17,7 +17,7 @@ import {
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { Button } from "../ui/button";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 type RecentReportsProps = {
   reports: DailyReport[];
@@ -53,7 +53,7 @@ export function RecentReports({ reports }: RecentReportsProps) {
                 <TableCell>{entry.clientName}</TableCell>
                 <TableCell>
                     <Button variant="ghost" size="sm" asChild>
-                        <Link href={`/reports/new?date=${format(new Date(entry.date), 'yyyy-MM-dd')}`}>
+                        <Link to={`/reports/new?date=${format(new Date(entry.date), 'yyyy-MM-dd')}`}>
                             عرض أو إضافة مهام
                         </Link>
                     </Button>
