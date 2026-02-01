@@ -192,6 +192,12 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
   };
   
   const handleBack = () => {
+    if (form.formState.isDirty) {
+      const shouldLeave = window.confirm("لديك تغييرات غير محفوظة. هل تريد الرجوع دون حفظ؟");
+      if (!shouldLeave) {
+        return;
+      }
+    }
     router.push("/reports");
   };
 
