@@ -17,7 +17,7 @@ type BroadcastsContextType = {
 const BroadcastsContext = createContext<BroadcastsContextType | undefined>(undefined);
 
 export function BroadcastsProvider({ children }: { children: ReactNode }) {
-  const { firestore } = useFirebase();
+  const { firestore, user } = useFirebase();
   const broadcastsRef = useMemoFirebase(
     () => (firestore ? collection(firestore, 'broadcasts') : null),
     [firestore]
@@ -26,12 +26,12 @@ export function BroadcastsProvider({ children }: { children: ReactNode }) {
   const { data: broadcasts = [] } = useCollection<Broadcast>(broadcastsRef);
 
   const addBroadcast = (broadcastData: Omit<Broadcast, 'id' | 'createdAt' | 'createdBy'>) => {
-    if (!firestore) return;
+    if (!firestore || !user) return;
     const broadcastsCollection = collection(firestore, 'broadcasts');
     const newBroadcast = { 
       ...broadcastData, 
       createdAt: new Date().toISOString(),
-      createdBy: 'المشرف' // This should be the current user in a real implementation
+      createdBy: user.uid
     };
     
     addDoc(broadcastsCollection, newBroadcast)
