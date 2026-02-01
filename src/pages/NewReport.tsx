@@ -1,20 +1,10 @@
-"use client";
 
 import { NewReportForm } from '@/components/reports/new-report-form';
-import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-function NewReportPageContent() {
-  const searchParams = useSearchParams();
+export default function NewReport() {
+  const [searchParams] = useSearchParams();
   const date = searchParams.get('date');
   
   return <NewReportForm date={date} />;
-}
-
-export default function NewReport() {
-  return (
-    <Suspense fallback={<div>تحميل...</div>}>
-      <NewReportPageContent />
-    </Suspense>
-  );
 }

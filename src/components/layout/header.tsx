@@ -1,4 +1,3 @@
-'use client';
 
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
 export function Header() {
@@ -66,10 +65,10 @@ export function Header() {
             <DropdownMenuLabel>حسابي</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-                <Link href="/profile">الملف الشخصي</Link>
+                <Link to="/profile">الملف الشخصي</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-                <Link href="/settings">الإعدادات</Link>
+                <Link to="/settings">الإعدادات</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={() => toast({ title: 'تم تسجيل الخروج', description: 'هذه الميزة لا تعمل بعد.'})}>تسجيل الخروج</DropdownMenuItem>

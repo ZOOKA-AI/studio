@@ -1,8 +1,7 @@
-'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusCircle, UserPlus, FolderPlus, CalendarPlus, Send } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
 export function QuickActions() {
@@ -24,7 +23,7 @@ export function QuickActions() {
           const Icon = action.icon;
           return (
             <Button key={index} variant={action.variant} className="w-full justify-start text-base py-6" asChild>
-              <Link href={action.href}>
+              <Link to={action.href}>
                 <Icon className="me-3 h-5 w-5" />
                 {action.label}
               </Link>

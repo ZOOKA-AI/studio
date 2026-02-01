@@ -30,11 +30,11 @@ import { cn } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
 import { ar } from "date-fns/locale";
 import { useState, useEffect } from "react";
-import { getMaterialSuggestions } from "@/ai/flows/material-suggestions";
-import { generateReportSummary } from "@/ai/flows/generate-report-summary";
+import { getMaterialSuggestions } from "@/ai-client/material-suggestions";
+import { generateReportSummary } from "@/ai-client/report-summary";
 import { useToast } from "@/hooks/use-toast";
 import { useReports } from "@/context/reports-context";
-import { useRouter } from "next/navigation";
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const formSchema = z.object({
   clientName: z.string().min(2, { message: "اسم العميل مطلوب." }),
@@ -65,7 +65,7 @@ type NewReportFormProps = {
 
 export function NewReportForm({ date: dateString }: NewReportFormProps) {
   const { toast } = useToast();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { addReport } = useReports();
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [isSummarizing, setIsSummarizing] = useState(false);
@@ -118,7 +118,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
         locale: ar,
       })}`,
     });
-    router.push("/reports");
+    navigate("/reports");
   };
 
   const handleSuggestMaterials = async () => {

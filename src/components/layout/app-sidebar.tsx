@@ -1,4 +1,3 @@
-'use client';
 
 import {
   Sidebar,
@@ -13,11 +12,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Home, Calendar, PlusCircle, Book, Users, HardHat, Box, Settings, LogOut, ShieldCheck, CheckSquare, User } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, useLocation } from 'react-router-dom';
 
 export function AppSidebar() {
-  const pathname = usePathname();
+  const location = useLocation();
+  const pathname = location.pathname;
   const userAvatar = PlaceHolderImages.find(p => p.id === 'user-avatar-1');
 
   const menuItems = [
@@ -48,7 +47,7 @@ export function AppSidebar() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Link href={item.href} passHref>
+              <Link to={item.href}>
                 <SidebarMenuButton
                   isActive={pathname === item.href}
                   className="w-full justify-start"
@@ -64,7 +63,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
             <SidebarMenuItem>
-              <Link href="/profile" passHref>
+              <Link to="/profile">
                 <SidebarMenuButton isActive={pathname === '/profile'} className="justify-start">
                     <span className="me-3"><User className="h-5 w-5" /></span>
                     <span>الملف الشخصي</span>
@@ -72,7 +71,7 @@ export function AppSidebar() {
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/settings" passHref>
+              <Link to="/settings">
                 <SidebarMenuButton isActive={pathname === '/settings'} className="justify-start">
                     <span className="me-3"><Settings className="h-5 w-5" /></span>
                     <span>الإعدادات</span>
