@@ -164,8 +164,8 @@ export const ScheduleSchema = z.object({
   id: z.string().min(1),
   siteId: z.string().min(1),
   siteName: z.string().optional(),
-  startTime: z.string(),
-  endTime: z.string(),
+  startTime: z.string().datetime(), // ISO 8601 datetime string
+  endTime: z.string().datetime(),   // ISO 8601 datetime string
   supervisorId: z.string().optional(),
   workerIds: z.array(z.string()).optional().default([]),
   status: ScheduleStatusSchema.optional(),
@@ -306,7 +306,7 @@ export const AppointmentSchema = z.object({
   clientId: z.string().min(1),
   siteId: z.string().optional(),
   title: z.string().min(1),
-  date: z.string(),
+  date: z.string().date(),          // ISO 8601 date string (YYYY-MM-DD)
   startTime: z.string(),
   endTime: z.string(),
   status: AppointmentStatusSchema.optional(),

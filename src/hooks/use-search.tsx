@@ -41,6 +41,10 @@ export interface UseSearchResult<T> {
  *   true
  * );
  */
+
+/** Default page size for search results */
+const DEFAULT_PAGE_SIZE = 20;
+
 export function useSearch<T = any>(
   buildQuery: (() => Query<DocumentData> | null) | null,
   autoSearch: boolean = false
@@ -84,7 +88,7 @@ export function useSearch<T = any>(
       if (snapshot.docs.length > 0) {
         setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
         // If we got fewer results than expected, there might not be more
-        setHasMore(snapshot.docs.length >= 20); // Assuming default limit of 20
+        setHasMore(snapshot.docs.length >= DEFAULT_PAGE_SIZE);
       } else {
         setLastDoc(null);
         setHasMore(false);
@@ -120,7 +124,7 @@ export function useSearch<T = any>(
       
       if (snapshot.docs.length > 0) {
         setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
-        setHasMore(snapshot.docs.length >= 20);
+        setHasMore(snapshot.docs.length >= DEFAULT_PAGE_SIZE);
       } else {
         setHasMore(false);
       }
