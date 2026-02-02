@@ -5,6 +5,7 @@
  * before writing to the database.
  */
 
+import * as React from 'react';
 import {
   collection,
   addDoc,
@@ -63,9 +64,11 @@ export async function addValidatedDoc<T>(
     throw new ValidationError('Validation failed', errors);
   }
 
+  const validatedData = result.data;
+
   // Add timestamps
   const dataWithTimestamps = {
-    ...result.data,
+    ...validatedData,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   };
@@ -111,9 +114,11 @@ export async function setValidatedDoc<T>(
     throw new ValidationError('Validation failed', errors);
   }
 
+  const validatedData = result.data;
+
   // Add timestamps
   const dataWithTimestamps = {
-    ...result.data,
+    ...validatedData,
     ...(merge ? {} : { createdAt: serverTimestamp() }),
     updatedAt: serverTimestamp(),
   };
@@ -157,9 +162,11 @@ export async function updateValidatedDoc<T>(
     throw new ValidationError('Validation failed', errors);
   }
 
+  const validatedData = result.data;
+
   // Add updated timestamp
   const dataWithTimestamp = {
-    ...result.data,
+    ...validatedData,
     updatedAt: serverTimestamp(),
   };
 
@@ -293,6 +300,3 @@ export function useValidation<T>(schema: z.ZodSchema<T>) {
     hasErrors: Object.keys(errors).length > 0,
   };
 }
-
-// Note: React import for the hook
-import React from 'react';
