@@ -3,18 +3,15 @@ import { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://quran.zekr.by.zooka-ai.com';
   
-  // Define all routes
+  // Define Quran-specific routes
   const routes = [
     '',
-    '/calendar',
-    '/tasks',
-    '/reports',
-    '/reports/new',
-    '/profile',
-    '/settings',
-    '/workers',
-    '/equipment',
-    '/inventory',
+    '/quran',
+    '/surahs',
+    '/bookmarks',
+    '/recitation',
+    '/tafsir',
+    '/search',
   ];
 
   // Generate sitemap entries

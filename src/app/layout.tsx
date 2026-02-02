@@ -93,10 +93,6 @@ export const metadata: Metadata = {
       'en': 'https://quran.zekr.by.zooka-ai.com/en',
     },
   },
-  verification: {
-    google: 'google-site-verification-code',
-    yandex: 'yandex-verification-code',
-  },
   category: 'religion',
 };
 
@@ -112,11 +108,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
         
-        {/* Geo-targeting meta tags */}
+        {/* Geo-targeting meta tags - Primary region: Egypt */}
         <meta name="geo.region" content="EG" />
         <meta name="geo.placename" content="Egypt" />
-        <meta name="geo.region" content="AE" />
-        <meta name="geo.placename" content="United Arab Emirates" />
         
         {/* Additional SEO meta tags */}
         <meta name="rating" content="general" />
@@ -183,11 +177,6 @@ export default function RootLayout({
                 '@type': 'Offer',
                 price: '0',
                 priceCurrency: 'USD'
-              },
-              aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: '4.9',
-                ratingCount: '10000'
               },
               description: 'تطبيق ذكر للقرآن الكريم - قراءة، استماع، وحفظ القرآن الكريم',
               inLanguage: 'ar',
