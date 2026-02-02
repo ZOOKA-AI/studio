@@ -27,6 +27,12 @@ Studio is a modern full-stack application combining:
 - 📅 Task scheduling and management
 - 📸 Image upload and documentation
 - 🔍 Advanced search and filtering
+- 📖 **Quran & Islamic Features**:
+  - Complete Quran reading (114 Surahs)
+  - Quran search functionality
+  - Azkar (Islamic remembrances)
+  - Prayer times for any location
+  - Qibla direction finder
 
 ## 🛠️ Tech Stack
 
@@ -145,6 +151,15 @@ Get intelligent material recommendations based on work descriptions and requirem
 ### Text Analysis
 Analyze text for sentiment, entities, and insights.
 
+### Quran & Islamic Features
+- **Quran Reading**: Access all 114 Surahs with Arabic text
+- **Quran Search**: Search for specific verses or keywords
+- **Azkar**: Daily Islamic remembrances (morning, evening, after prayer)
+- **Prayer Times**: Accurate prayer times for any global location
+- **Qibla Direction**: Find the direction to Mecca from any coordinates
+
+See [Quran Features Documentation](./docs/quran-features.md) for detailed information.
+
 ## 🔧 Development
 
 ### Frontend Development
@@ -165,6 +180,7 @@ uvicorn main:app --reload  # Run with auto-reload
 ## 📚 Documentation
 
 - [Backend Documentation](./backend/README.md)
+- [Quran & Islamic Features](./docs/quran-features.md)
 - [Blueprint](./docs/blueprint.md)
 
 ## 🤝 Contributing
