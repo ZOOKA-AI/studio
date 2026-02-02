@@ -1,5 +1,3 @@
-'use client';
-
 export function StructuredData() {
   const uaeLocations = [
     { name: 'Dubai', nameAr: 'دبي', lat: 25.2048, lng: 55.2708 },
@@ -23,7 +21,7 @@ export function StructuredData() {
     ],
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+971-xxx-xxxx',
+      telephone: '+971-xxx-xxxx', // TODO: Replace with actual contact number
       contactType: 'Customer Service',
       areaServed: 'AE',
       availableLanguage: ['Arabic', 'English'],
@@ -43,7 +41,7 @@ export function StructuredData() {
     alternateName: `رويال كلين - ${location.nameAr}`,
     description: `Professional AI-powered cleaning services in ${location.name}, UAE - خدمات التنظيف الاحترافية المدعومة بالذكاء الاصطناعي في ${location.nameAr}، الإمارات`,
     url: 'https://royalcleanuae.com',
-    telephone: '+971-xxx-xxxx',
+    telephone: '+971-xxx-xxxx', // TODO: Replace with actual contact number
     priceRange: '$$',
     image: 'https://royalcleanuae.com/logo.png',
     geo: {
