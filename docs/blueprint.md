@@ -1,4 +1,4 @@
-# **App Name**: Royal Clean Dashboard
+# **App Name**: ZOOKA Studio
 
 ## Core Features:
 

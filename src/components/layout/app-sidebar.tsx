@@ -39,8 +39,8 @@ export function AppSidebar() {
                 <ShieldCheck className="w-7 h-7 text-primary" />
             </div>
             <div className="flex flex-col">
-                <h2 className="font-headline text-lg font-bold text-primary">رويال للتنظيف</h2>
-                <p className="text-xs text-muted-foreground">لوحة تحكم المشرف</p>
+                <h2 className="font-headline text-lg font-bold text-primary">ZOOKA Studio</h2>
+                <p className="text-xs text-muted-foreground">لوحة التحكم</p>
             </div>
         </div>
       </SidebarHeader>
@@ -87,8 +87,8 @@ export function AppSidebar() {
               <AvatarFallback>م</AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <p className="text-sm font-semibold">محمد المشرف</p>
-              <p className="text-xs text-muted-foreground">supervisor@royal.com</p>
+              <p className="text-sm font-semibold">مستخدم النظام</p>
+              <p className="text-xs text-muted-foreground">user@zooka-ai.com</p>
             </div>
             <Button variant="ghost" size="icon">
                 <LogOut className="h-5 w-5 text-muted-foreground" />

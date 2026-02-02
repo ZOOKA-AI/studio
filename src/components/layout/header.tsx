@@ -33,7 +33,7 @@ export function Header() {
       <div className="flex items-center gap-2">
         <SidebarTrigger className="lg:hidden" />
         <h1 className="font-headline text-lg font-bold text-foreground">
-          مرحباً، محمد المشرف
+          مرحباً بك
         </h1>
       </div>
 
@@ -56,8 +56,8 @@ export function Header() {
                 <AvatarFallback>م</AvatarFallback>
               </Avatar>
               <div className="hidden lg:flex flex-col items-start">
-                  <p className="text-sm font-medium">محمد</p>
-                  <p className="text-xs text-muted-foreground">مشرف</p>
+                  <p className="text-sm font-medium">المستخدم</p>
+                  <p className="text-xs text-muted-foreground">مدير</p>
               </div>
               <ChevronDown className="h-4 w-4 text-muted-foreground hidden lg:block" />
             </Button>

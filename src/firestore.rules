@@ -1,8 +1,8 @@
 /**
- * Royal Clean Dashboard - Firestore Security Rules
+ * ZOOKA Studio - Firestore Security Rules
  *
  * Core Philosophy:
- * This ruleset enforces a role-based access control (RBAC) model tailored for a cleaning services company.
+ * This ruleset enforces a role-based access control (RBAC) model.
  * The primary roles are 'admin', 'supervisor', and 'worker'.
  * - Admins have full read/write access to all data for management and oversight.
  * - Supervisors can manage sites, clients, schedules, and the daily reports they create.

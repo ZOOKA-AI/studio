@@ -14,8 +14,8 @@ import { MaterialsProvider } from '@/context/materials-context';
 import { EquipmentProvider } from '@/context/equipment-context';
 
 export const metadata: Metadata = {
-  title: 'Royal Clean Dashboard',
-  description: 'لوحة تحكم لشركة رويال للتنظيف',
+  title: 'ZOOKA Studio',
+  description: 'منصة إدارة متكاملة',
 };
 
 export default function RootLayout({
