@@ -12,7 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Home, Calendar, PlusCircle, Book, Users, HardHat, Box, Settings, LogOut, ShieldCheck, CheckSquare, User } from 'lucide-react';
+import { Home, Calendar, PlusCircle, Book, Users, HardHat, Box, Settings, LogOut, ShieldCheck, CheckSquare, User, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -80,6 +80,27 @@ export function AppSidebar() {
               </Link>
             </SidebarMenuItem>
         </SidebarMenu>
+        <div className="w-full border-t my-2" />
+        <div className="px-2 py-2">
+          <a 
+            href="https://royalcleanuae.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            <span>موقع رويال كلين الإمارات</span>
+          </a>
+          <a 
+            href="https://zoka.royalcleanuae.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors mt-1"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            <span>لوحة التحكم الذكية</span>
+          </a>
+        </div>
         <div className="w-full border-t my-2" />
          <div className="flex items-center gap-3 p-2">
             <Avatar className="h-10 w-10">
