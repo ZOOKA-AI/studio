@@ -73,6 +73,21 @@ Once the server is running, visit:
 - `POST /api/ai/material-suggestions` - Get material suggestions
 - `GET /api/ai/models` - List available AI models
 
+### Quran Services
+- `GET /api/quran/surahs` - Get list of all Quran Surahs
+- `GET /api/quran/surah/{surah_number}` - Get a specific Surah (1-114)
+- `GET /api/quran/ayah/{reference}` - Get a specific Ayah (e.g., "2:255")
+- `GET /api/quran/search/{query}` - Search for text in the Quran
+- `GET /api/quran/juz/{juz_number}` - Get a specific Juz (1-30)
+
+### Azkar (Islamic Remembrances)
+- `GET /api/azkar/categories` - Get all available Azkar categories
+- `GET /api/azkar/{category}` - Get Azkar for a category (morning, evening, after_prayer)
+
+### Prayer Times
+- `GET /api/prayer-times/{city}/{country}` - Get prayer times for a location
+- `GET /api/qibla/{latitude}/{longitude}` - Get Qibla direction for coordinates
+
 ## Project Structure
 
 ```
