@@ -67,7 +67,7 @@ export function StructuredData() {
         latitude: location.lat,
         longitude: location.lng,
       },
-      geoRadius: '50000',
+      geoRadius: '50000', // 50km in meters (schema.org requires meters)
     },
   }));
 
