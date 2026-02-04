@@ -1,0 +1,35 @@
+# Docker Compose configuration for LOCAL DEVELOPMENT ONLY
+# ⚠️ WARNING: DO NOT use this configuration in production!
+# 
+# For production use, set a strong POSTGRES_PASSWORD environment variable:
+# Example: POSTGRES_PASSWORD=your_strong_secure_password_here docker-compose up
+#
+# The default password 'changeme' is intentionally weak and only suitable
+# for local development environments.
+
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-changeme}@db:5432/studio
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - POSTGRES_DB=studio
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
