@@ -1,3 +1,7 @@
+# Docker Compose configuration for local development
+# IMPORTANT: For production use, set POSTGRES_PASSWORD environment variable
+# Example: POSTGRES_PASSWORD=your_secure_password docker-compose up
+
 version: '3.8'
 
 services:
@@ -7,7 +11,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://postgres:password@db:5432/studio
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-changeme}@db:5432/studio
     depends_on:
       - db
     restart: unless-stopped
@@ -16,7 +20,7 @@ services:
     image: postgres:15-alpine
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
       - POSTGRES_DB=studio
     volumes:
       - postgres_data:/var/lib/postgresql/data
