@@ -4,33 +4,112 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   release:
     types: [created]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+    
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          
       - name: Install Dependencies
         run: npm ci
+        
+      - name: Run Tests
+        run: npm test
+        
+      - name: Generate Coverage
+        run: npm run test:coverage
+        
+      - name: Upload Coverage Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.node-version }}
+          path: coverage/
+          retention-days: 1
+  
+  coverage:
+    name: Generate combined coverage
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+      
+      - name: Download all coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-*
+          path: coverage-reports/
+          merge-multiple: true
+      
+      - name: Display coverage structure
+        run: |
+          echo "Coverage reports structure:"
+          ls -R coverage-reports/
+      
+      - name: Upload Combined Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined-coverage
+          path: coverage-reports/
+          retention-days: 30
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [test, coverage]
+    if: github.event_name == 'push' || github.event_name == 'release'
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+          
+      - name: Install Dependencies
+        run: npm ci
+        
       - name: Ensure webpack & webpack-cli installed
         run: |
           npm ls webpack || npm install --save-dev webpack
           npm ls webpack-cli || npm install --save-dev webpack-cli
-      - name: Run Tests
-        run: npm test
+          
       - name: Run Build
         run: npm run build
+        
       - name: Publish to npm
+        if: github.event_name == 'release'
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
       - name: Show Encouraging Message
         run: |
           echo "🎉 الحلول رائعة! إذا كنت تتطلع إلى مغامرات جديدة، فكن شجاعًا واستمر في التعلم! 🚀"
