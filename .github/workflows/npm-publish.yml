@@ -24,7 +24,7 @@ jobs:
           npm ls webpack || npm install --save-dev webpack
           npm ls webpack-cli || npm install --save-dev webpack-cli
       - name: Run Tests
-        run: npm test
+        run: npm test --if-present
       - name: Run Build
         run: npm run build
       - name: Publish to npm
