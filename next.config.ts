@@ -28,7 +28,27 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'bylfizytgayoefuyliix.supabase.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/supabase/:path*',
+        destination: 'https://bylfizytgayoefuyliix.supabase.co/:path*',
+      },
+    ]
   },
 };
 
