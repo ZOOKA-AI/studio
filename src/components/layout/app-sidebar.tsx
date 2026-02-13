@@ -12,7 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Home, Calendar, PlusCircle, Book, Users, HardHat, Box, Settings, LogOut, ShieldCheck, CheckSquare, User } from 'lucide-react';
+import { Home, Calendar, PlusCircle, Book, Users, HardHat, Box, Settings, LogOut, ShieldCheck, CheckSquare, User, Instagram } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -29,6 +29,7 @@ export function AppSidebar() {
     { href: '/workers', label: 'العمال', icon: Users },
     { href: '/equipment', label: 'المعدات', icon: HardHat },
     { href: '/inventory', label: 'المخزون', icon: Box },
+    { href: '/marketing', label: 'التسويق والسيو', icon: Instagram },
   ];
 
   return (
