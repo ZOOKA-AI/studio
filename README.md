@@ -13,3 +13,12 @@
 This is a NextJS starter in Firebase Studio.
 
 To get started, take a look at src/app/page.tsx.
+
+## Features
+
+### 🚀 Marketing & SEO Tools
+- **Instagram Hashtag Generator**: AI-powered hashtag generation for Instagram posts in Arabic and English
+- **SEO JSON-LD Generator**: Automated structured data generation for better search engine visibility
+- **UAE-focused**: Optimized for Dubai, Abu Dhabi, Al Ain, and Sharjah markets
+
+See [docs/marketing-tools.md](docs/marketing-tools.md) for detailed documentation.
