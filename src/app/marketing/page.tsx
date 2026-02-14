@@ -10,8 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/hooks/use-toast';
-import { generateInstagramHashtags, type GenerateInstagramHashtagsInput } from '@/ai/flows/generate-instagram-hashtags';
-import { generateSeoJson, type GenerateSeoJsonInput } from '@/ai/flows/generate-seo-json';
+import { generateInstagramHashtags, type GenerateInstagramHashtagsInput, type GenerateInstagramHashtagsOutput } from '@/ai/flows/generate-instagram-hashtags';
+import { generateSeoJson, type GenerateSeoJsonInput, type GenerateSeoJsonOutput } from '@/ai/flows/generate-seo-json';
 import { Hash, Code, Copy, Loader2, CheckCircle, Instagram } from 'lucide-react';
 
 export default function MarketingPage() {
@@ -24,8 +24,8 @@ export default function MarketingPage() {
   const [hashtagsLoading, setHashtagsLoading] = useState(false);
   const [seoLoading, setSeoLoading] = useState(false);
   
-  const [hashtagsResult, setHashtagsResult] = useState<any>(null);
-  const [seoResult, setSeoResult] = useState<any>(null);
+  const [hashtagsResult, setHashtagsResult] = useState<GenerateInstagramHashtagsOutput | null>(null);
+  const [seoResult, setSeoResult] = useState<GenerateSeoJsonOutput | null>(null);
 
   const handleGenerateHashtags = async () => {
     if (!postContent.trim()) {
