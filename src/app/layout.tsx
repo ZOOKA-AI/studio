@@ -92,6 +92,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  // TODO: Replace with actual Google Search Console verification code
   verification: {
     google: 'google-site-verification-code',
   },

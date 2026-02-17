@@ -1,4 +1,9 @@
 export function StructuredData() {
+  // TODO: Replace placeholder values with actual business information:
+  // - Update telephone number in telephone field
+  // - Update email address if different
+  // - Update logo and image URLs with actual assets
+  // - Update geo coordinates with exact business location
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
