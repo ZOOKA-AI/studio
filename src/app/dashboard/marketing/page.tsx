@@ -34,8 +34,31 @@ interface CampaignResult {
 }
 
 /* ================================
-   Validation Schema
+   Validation Schemas
 ================================ */
+
+const CampaignResultSchema = z.object({
+  caption: z.object({
+    en: z.string(),
+    ar: z.string(),
+  }),
+  hashtags: z.object({
+    primary: z.array(z.string()),
+    location: z.array(z.string()),
+    trending: z.array(z.string()),
+    arabic: z.array(z.string()),
+  }),
+  callToAction: z.object({
+    en: z.string(),
+    ar: z.string(),
+  }),
+  metadata: z.object({
+    serviceType: z.string(),
+    emirate: z.string(),
+    estimatedReach: z.number(),
+    campaignId: z.string(),
+  }),
+});
 
 const CampaignSchema = z.object({
   serviceType: z.enum([
@@ -96,7 +119,8 @@ export default function MarketingDashboard() {
     // Validate
     const parsed = CampaignSchema.safeParse(formData);
     if (!parsed.success) {
-      setError('يرجى التحقق من البيانات المدخلة');
+      const firstError = parsed.error.errors[0];
+      setError(`يرجى التحقق من البيانات المدخلة: ${firstError.path.join('.')} - ${firstError.message}`);
       return;
     }
 
@@ -117,7 +141,9 @@ export default function MarketingDashboard() {
         });
         const data = await createCampaignAction(fd);
 
-        setResult(data as CampaignResult);
+        // Validate server response
+        const validatedData = CampaignResultSchema.parse(data);
+        setResult(validatedData);
 
         // Track success
         posthog?.capture('campaign_generated_success', {
@@ -138,12 +164,16 @@ export default function MarketingDashboard() {
   }
 
   function copyToClipboard(text: string, field: string) {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2000);
-
-    // Track copy event
-    posthog?.capture('content_copied', { field });
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        setCopiedField(field);
+        setTimeout(() => setCopiedField(null), 2000);
+        // Track copy event
+        posthog?.capture('content_copied', { field });
+      })
+      .catch(() => {
+        setError('فشل نسخ المحتوى. يرجى المحاولة مرة أخرى.');
+      });
   }
 
   return (

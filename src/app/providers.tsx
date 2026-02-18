@@ -8,7 +8,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-      if (posthogKey) {
+      if (posthogKey && !posthog.__loaded) {
         posthog.init(posthogKey, {
           api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com',
           loaded: (posthog) => {

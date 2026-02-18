@@ -52,7 +52,12 @@ Output JSON format:
     throw new Error('Invalid response');
   }
 
-  const result = JSON.parse(content.text);
+  let result;
+  try {
+    result = JSON.parse(content.text);
+  } catch (parseError) {
+    throw new Error('Failed to parse AI response. The content generation service returned an invalid format.');
+  }
 
   // Save to Supabase
   const supabase = await createServerClient();
