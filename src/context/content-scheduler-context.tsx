@@ -7,8 +7,9 @@
  */
 
 import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
+import type {SocialPlatform} from '@/types/marketing';
 
-export type SocialPlatform = 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'tiktok' | 'snapchat' | 'whatsapp';
+export type {SocialPlatform};
 
 export interface SocialMediaPost {
   id: string;
@@ -99,7 +100,7 @@ export function ContentSchedulerProvider({children}: {children: ReactNode}) {
   const addPost = (post: Omit<SocialMediaPost, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newPost: SocialMediaPost = {
       ...post,
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

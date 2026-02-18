@@ -13,12 +13,13 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import type {SocialPlatform} from '@/types/marketing';
 
 const GenerateMediaCaptionInputSchema = z.object({
   mediaType: z.enum(['image', 'video']).describe('Type of media'),
   description: z.string().describe('Description of what the media shows'),
   service: z.string().optional().describe('Service being showcased'),
-  platform: z.enum(['facebook', 'instagram', 'linkedin', 'tiktok', 'youtube', 'snapchat']).describe('Target platform'),
+  platform: z.enum(['facebook', 'instagram', 'linkedin', 'tiktok', 'snapchat', 'whatsapp']).describe('Target platform'),
   language: z.enum(['ar', 'en']).default('ar').describe('Language for the caption'),
 });
 export type GenerateMediaCaptionInput = z.infer<typeof GenerateMediaCaptionInputSchema>;

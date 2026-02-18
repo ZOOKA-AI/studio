@@ -13,10 +13,11 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import type {SocialPlatform} from '@/types/marketing';
 
 const GenerateSocialContentInputSchema = z.object({
   topic: z.string().describe('The topic or service to create content about'),
-  platform: z.enum(['facebook', 'instagram', 'linkedin', 'twitter', 'tiktok', 'snapchat']).describe('Target social media platform'),
+  platform: z.enum(['facebook', 'instagram', 'linkedin', 'twitter', 'tiktok', 'snapchat', 'whatsapp']).describe('Target social media platform'),
   tone: z.enum(['professional', 'friendly', 'promotional', 'educational']).optional().describe('Tone of the content'),
   language: z.enum(['ar', 'en']).default('ar').describe('Language for the content'),
 });

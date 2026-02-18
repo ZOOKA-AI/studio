@@ -185,7 +185,7 @@ export function SocialMediaQueue() {
           <TabsContent value="published" className="mt-4">
             {publishedPosts.length === 0 ? (
               <p className="text-center text-muted-foreground py-8">
-                لا توجد منشورات منشورة
+                لا توجد منشورات
               </p>
             ) : (
               publishedPosts.map(post => (
