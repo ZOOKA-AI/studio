@@ -3,8 +3,43 @@
 import { useState, useTransition } from 'react';
 import { Loader2, Send, Instagram, DollarSign, Tag, Sparkles, Copy, CheckCircle2 } from 'lucide-react';
 
+type ServiceType = 'deep_cleaning' | 'regular_cleaning' | 'move_in_out' | 'post_construction' | 'carpet_cleaning' | 'window_cleaning' | 'disinfection';
+type Emirate = 'dubai' | 'abu_dhabi' | 'sharjah' | 'ajman' | 'ras_al_khaimah' | 'fujairah' | 'umm_al_quwain';
+type ToneType = 'professional' | 'friendly' | 'luxury' | 'value';
+
+interface ContentGenerationRequest {
+  serviceType: ServiceType;
+  emirate: Emirate;
+  tone: ToneType;
+  discountPercent: number;
+}
+
+interface GeneratedContent {
+  caption: {
+    en: string;
+    ar: string;
+  };
+  hashtags: {
+    primary: string[];
+    location: string[];
+    trending: string[];
+    arabic: string[];
+  };
+  callToAction: {
+    en: string;
+    ar: string;
+  };
+}
+
+interface ContentGenerationResponse {
+  success: boolean;
+  data: {
+    content: GeneratedContent;
+  };
+}
+
 // Mock data - replace with actual API calls
-const mockGenerateContent = async (data: any) => {
+const mockGenerateContent = async (data: ContentGenerationRequest): Promise<ContentGenerationResponse> => {
   await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API delay
   
   return {
@@ -30,16 +65,12 @@ const mockGenerateContent = async (data: any) => {
   };
 };
 
-type ServiceType = 'deep_cleaning' | 'regular_cleaning' | 'move_in_out' | 'post_construction' | 'carpet_cleaning' | 'window_cleaning' | 'disinfection';
-type Emirate = 'dubai' | 'abu_dhabi' | 'sharjah' | 'ajman' | 'ras_al_khaimah' | 'fujairah' | 'umm_al_quwain';
-type ToneType = 'professional' | 'friendly' | 'luxury' | 'value';
-
 export default function MarketingDashboard() {
   const [selectedServiceType, setSelectedServiceType] = useState<ServiceType>('deep_cleaning');
   const [selectedEmirate, setSelectedEmirate] = useState<Emirate>('dubai');
   const [selectedTone, setSelectedTone] = useState<ToneType>('professional');
   const [discountPercent, setDiscountPercent] = useState<number>(0);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<ContentGenerationResponse | null>(null);
   const [isPending, startTransition] = useTransition();
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
@@ -300,11 +331,11 @@ export default function MarketingDashboard() {
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
               <h3 className="font-bold text-lg mb-4">📌 Hashtags</h3>
               <div className="space-y-4">
-                {Object.entries(result.data.content.hashtags).map(([category, tags]: [string, any]) => (
+                {Object.entries(result.data.content.hashtags).map(([category, tags]) => (
                   <div key={category}>
                     <p className="text-xs font-semibold text-gray-500 mb-2 uppercase">{category}</p>
                     <div className="flex flex-wrap gap-2">
-                      {tags.map((tag: string) => (
+                      {tags.map((tag) => (
                         <span
                           key={tag}
                           className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
