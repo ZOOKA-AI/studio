@@ -22,7 +22,7 @@ export function CampaignScheduler({ onSchedule, disabled }: CampaignSchedulerPro
     if (date) {
       const [hours, minutes] = time.split(':');
       const scheduledDate = new Date(date);
-      scheduledDate.setHours(parseInt(hours), parseInt(minutes));
+      scheduledDate.setHours(parseInt(hours, 10), parseInt(minutes, 10));
       onSchedule(scheduledDate);
       setIsOpen(false);
     }

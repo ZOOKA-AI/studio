@@ -201,12 +201,20 @@ export default function MarketingDashboardPage() {
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast({
-      title: 'Copied!',
-      description: 'Content copied to clipboard',
-    });
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({
+        title: 'Copied!',
+        description: 'Content copied to clipboard',
+      });
+    } catch (error) {
+      toast({
+        title: 'Copy Failed',
+        description: 'Unable to copy to clipboard',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -335,7 +343,10 @@ export default function MarketingDashboardPage() {
                   min="0"
                   max="100"
                   value={discount}
-                  onChange={(e) => setDiscount(parseInt(e.target.value) || 0)}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value, 10) || 0;
+                    setDiscount(Math.min(Math.max(value, 0), 100));
+                  }}
                   placeholder="Enter discount percentage"
                 />
               </div>

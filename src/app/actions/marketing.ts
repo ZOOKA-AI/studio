@@ -6,7 +6,7 @@
  */
 
 import { generateMarketingContent, type GenerateMarketingContentInput } from '@/ai/flows/generate-marketing-content';
-import { calculatePrice, type ServiceType, type PropertyType } from '@/lib/pricing/royal-clean-pricing';
+import { calculatePrice, getServiceDisplayName, type ServiceType, type PropertyType } from '@/lib/pricing/royal-clean-pricing';
 
 export interface CampaignInput {
   serviceType: ServiceType;
@@ -44,7 +44,7 @@ export async function previewCampaignAction(input: CampaignInput): Promise<Campa
 
     // Generate content using AI
     const contentInput: GenerateMarketingContentInput = {
-      serviceType: input.serviceType.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+      serviceType: getServiceDisplayName(input.serviceType),
       propertyType: input.propertyType.charAt(0).toUpperCase() + input.propertyType.slice(1),
       emirate: input.emirate,
       price: pricing.finalPrice,
