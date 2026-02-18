@@ -1,0 +1,8 @@
+{
+  "routes": [
+    {
+      "src": "/dashboard/marketing",
+      "dest": "/dashboard/marketing"
+    }
+  ]
+}
