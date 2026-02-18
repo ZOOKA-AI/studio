@@ -1,0 +1,1 @@
+{"version":2,"framework":"nextjs","buildCommand":"next build","installCommand":"npm install","routes":[{"src":"/dashboard","dest":"/dashboard"},{"src":"/api","dest":"/api"}],"env":{"NODE_VERSION":"24.0.0","TZ":"Asia/Dubai"}}
