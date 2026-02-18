@@ -3,6 +3,9 @@
  * Supports: Instagram, Facebook, LinkedIn, Twitter, TikTok, WhatsApp
  */
 
+// API Version Configuration
+const FACEBOOK_GRAPH_API_VERSION = 'v18.0';
+
 export interface OmniContent {
   brand: 'royal_clean' | 'zooka_ai';
   content_type: 'local_service' | 'global_platform';
@@ -117,7 +120,7 @@ export class OmniPublisher {
     }
 
     // Create media container
-    const createMediaUrl = `https://graph.facebook.com/v18.0/${igAccountId}/media`;
+    const createMediaUrl = `https://graph.facebook.com/${FACEBOOK_GRAPH_API_VERSION}/${igAccountId}/media`;
     const mediaResponse = await fetch(createMediaUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -134,7 +137,7 @@ export class OmniPublisher {
     }
 
     // Publish media
-    const publishUrl = `https://graph.facebook.com/v18.0/${igAccountId}/media_publish`;
+    const publishUrl = `https://graph.facebook.com/${FACEBOOK_GRAPH_API_VERSION}/${igAccountId}/media_publish`;
     const publishResponse = await fetch(publishUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -166,7 +169,7 @@ export class OmniPublisher {
       throw new Error('Facebook credentials not configured');
     }
 
-    const url = `https://graph.facebook.com/v18.0/${pageId}/photos`;
+    const url = `https://graph.facebook.com/${FACEBOOK_GRAPH_API_VERSION}/${pageId}/photos`;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -304,7 +307,7 @@ export class OmniPublisher {
 
     return {
       platform: 'tiktok_video',
-      success: data.data?.share_id ? true : false,
+      success: Boolean(data.data?.share_id),
       post_id: data.data?.share_id,
       timestamp: new Date(),
     };
@@ -325,9 +328,11 @@ export class OmniPublisher {
       ? `${content.caption_ar}\n\n${content.caption_en}`
       : content.caption_en;
 
-    const url = `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`;
+    const url = `https://graph.facebook.com/${FACEBOOK_GRAPH_API_VERSION}/${phoneNumberId}/messages`;
     
-    // Note: This sends a template message. Real implementation would use broadcast lists
+    // Note: Replace 'BROADCAST_LIST' with your actual WhatsApp broadcast list ID
+    // Format: The recipient should be a valid WhatsApp phone number or broadcast list ID
+    // For testing, use a valid phone number with country code (e.g., '971501234567')
     const response = await fetch(url, {
       method: 'POST',
       headers: {
