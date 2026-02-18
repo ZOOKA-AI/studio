@@ -22,6 +22,8 @@ import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 
+const CONTENT_GENERATION_DELAY_MS = 2000;
+
 type ServiceType = 'deep-cleaning' | 'regular-cleaning' | 'move-in-out' | 'post-construction';
 type Emirate = 'dubai' | 'abu-dhabi' | 'sharjah' | 'ajman' | 'ras-al-khaimah' | 'fujairah' | 'umm-al-quwain';
 type CampaignTone = 'professional' | 'friendly' | 'luxurious' | 'eco-friendly';
@@ -109,14 +111,14 @@ export default function MarketingDashboard() {
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
 
   const calculateDiscountedPrice = (basePrice: number): number => {
-    return basePrice - (basePrice * discount) / 100;
+    return Math.round(basePrice - (basePrice * discount) / 100);
   };
 
   const generateContent = async () => {
     setIsGenerating(true);
     
     // Simulate API call for content generation
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, CONTENT_GENERATION_DELAY_MS));
     
     const serviceLabel = serviceTypes.find(s => s.value === serviceType)?.label || '';
     const serviceLabelAr = serviceTypes.find(s => s.value === serviceType)?.labelAr || '';
@@ -395,7 +397,7 @@ export default function MarketingDashboard() {
                         {discount > 0 ? (
                           <>
                             <div className="text-lg font-bold text-primary">
-                              {tier.currency} {discountedPrice.toFixed(0)}
+                              {tier.currency} {discountedPrice}
                             </div>
                             <div className="text-xs text-muted-foreground line-through">
                               {tier.currency} {originalPrice}
