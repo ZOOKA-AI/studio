@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { TrendingUp, Eye, Heart, MessageCircle, Share2 } from 'lucide-react';
 
 interface AnalyticsData {
@@ -13,7 +13,7 @@ interface AnalyticsData {
 }
 
 export default function Analytics() {
-  const [analytics, setAnalytics] = useState<AnalyticsData[]>([
+  const [platformAnalytics, setPlatformAnalytics] = useState<AnalyticsData[]>([
     {
       platform: 'Instagram',
       impressions: 15420,
@@ -60,7 +60,7 @@ export default function Analytics() {
               <span className="text-sm font-semibold text-gray-600">Total Impressions</span>
             </div>
             <div className="text-3xl font-bold text-gray-800">
-              {analytics.reduce((sum, a) => sum + a.impressions, 0).toLocaleString()}
+              {platformAnalytics.reduce((sum, a) => sum + a.impressions, 0).toLocaleString()}
             </div>
           </div>
 
@@ -72,7 +72,7 @@ export default function Analytics() {
               <span className="text-sm font-semibold text-gray-600">Avg Engagement</span>
             </div>
             <div className="text-3xl font-bold text-gray-800">
-              {(analytics.reduce((sum, a) => sum + a.engagement, 0) / analytics.length).toFixed(1)}%
+              {(platformAnalytics.reduce((sum, a) => sum + a.engagement, 0) / platformAnalytics.length).toFixed(1)}%
             </div>
           </div>
 
@@ -84,7 +84,7 @@ export default function Analytics() {
               <span className="text-sm font-semibold text-gray-600">Total Likes</span>
             </div>
             <div className="text-3xl font-bold text-gray-800">
-              {analytics.reduce((sum, a) => sum + a.likes, 0).toLocaleString()}
+              {platformAnalytics.reduce((sum, a) => sum + a.likes, 0).toLocaleString()}
             </div>
           </div>
 
@@ -96,7 +96,7 @@ export default function Analytics() {
               <span className="text-sm font-semibold text-gray-600">Total Shares</span>
             </div>
             <div className="text-3xl font-bold text-gray-800">
-              {analytics.reduce((sum, a) => sum + a.shares, 0).toLocaleString()}
+              {platformAnalytics.reduce((sum, a) => sum + a.shares, 0).toLocaleString()}
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ export default function Analytics() {
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Platform Performance</h2>
           <div className="space-y-4">
-            {analytics.map((platform) => (
+            {platformAnalytics.map((platform) => (
               <div key={platform.platform} className="p-6 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-xl font-bold text-gray-800">{platform.platform}</h3>
