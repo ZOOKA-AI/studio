@@ -30,6 +30,39 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Enable compression for better performance
+  compress: true,
+  // Generate static sitemap and robots.txt
+  generateBuildId: async () => {
+    // Use git commit hash or timestamp for cache busting
+    return `build-${Date.now()}`;
+  },
+  // Headers for SEO and security
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
