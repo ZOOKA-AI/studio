@@ -78,6 +78,8 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
   return (
     <style
+      // Safe use of dangerouslySetInnerHTML: generating CSS custom properties from developer-controlled config
+      // The config is static/hardcoded, not user-generated content, so XSS risk is minimal
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(

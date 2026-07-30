@@ -5,6 +5,8 @@ import type { Appointment } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 type AppointmentsContextType = {
   appointments: Appointment[];
@@ -32,18 +34,37 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
   const addAppointment = async (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => {
     if (!firestore) return;
     const startTime = new Date(appointment.startTime);
+    const appointmentsCollection = collection(firestore, 'appointments');
     const newAppointment = {
         ...appointment,
         startTime: Timestamp.fromDate(startTime),
         siteAddress: 'غير محدد',
         endTime: Timestamp.fromDate(new Date(startTime.getTime() + 2 * 60 * 60 * 1000)),
     };
-    await addDoc(collection(firestore, 'appointments'), newAppointment);
+    
+    addDoc(appointmentsCollection, newAppointment)
+      .catch((error: unknown) => {
+        const permissionError = new FirestorePermissionError({
+          path: appointmentsCollection.path,
+          operation: 'create',
+          requestResourceData: newAppointment,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
   };
 
   const deleteAppointment = async (appointmentId: string) => {
     if (!firestore) return;
-    await deleteDoc(doc(firestore, 'appointments', appointmentId));
+    const appointmentDocRef = doc(firestore, 'appointments', appointmentId);
+    
+    deleteDoc(appointmentDocRef)
+      .catch((error: unknown) => {
+        const permissionError = new FirestorePermissionError({
+          path: appointmentDocRef.path,
+          operation: 'delete',
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
   };
 
   return (

@@ -44,7 +44,7 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
     };
     
     addDoc(reportsCollection, newReport)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: reportsCollection.path,
           operation: 'create',

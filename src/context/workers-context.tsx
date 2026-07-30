@@ -32,7 +32,7 @@ export function WorkersProvider({ children }: { children: ReactNode }) {
     const newWorker = { ...workerData, type };
     
     addDoc(workersCollection, newWorker)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: workersCollection.path,
           operation: 'create',
@@ -47,7 +47,7 @@ export function WorkersProvider({ children }: { children: ReactNode }) {
     const workerDocRef = doc(firestore, 'workers', workerId);
     
     updateDoc(workerDocRef, updatedData)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: workerDocRef.path,
           operation: 'update',
@@ -62,7 +62,7 @@ export function WorkersProvider({ children }: { children: ReactNode }) {
     const workerDocRef = doc(firestore, 'workers', workerId);
 
     deleteDoc(workerDocRef)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: workerDocRef.path,
           operation: 'delete',

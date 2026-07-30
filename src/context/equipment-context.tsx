@@ -31,7 +31,7 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
     const equipmentCollection = collection(firestore, 'equipment');
     
     addDoc(equipmentCollection, equipmentData)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: equipmentCollection.path,
           operation: 'create',
@@ -46,7 +46,7 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
     const equipmentDocRef = doc(firestore, 'equipment', equipmentId);
     
     updateDoc(equipmentDocRef, updatedData)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: equipmentDocRef.path,
           operation: 'update',
@@ -61,7 +61,7 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
     const equipmentDocRef = doc(firestore, 'equipment', equipmentId);
 
     deleteDoc(equipmentDocRef)
-      .catch((error) => {
+      .catch((error: unknown) => {
         const permissionError = new FirestorePermissionError({
           path: equipmentDocRef.path,
           operation: 'delete',
