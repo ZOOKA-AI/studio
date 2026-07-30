@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Empire Portal - Royal Clean Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'PT Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #E6EBF5 0%, #4169E1 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(65, 105, 225, 0.3);
+            max-width: 1200px;
+            width: 100%;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        .logo {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #4169E1;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .subtitle {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .portal-card {
+            background: linear-gradient(135deg, #4169E1 0%, #5179F1 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .portal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(65, 105, 225, 0.4);
+        }
+        .portal-card.accent {
+            background: linear-gradient(135deg, #FF7F50 0%, #FF8F60 100%);
+        }
+        .portal-icon {
+            font-size: 3em;
+        }
+        .portal-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        .portal-desc {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .status-bar {
+            background: #f0f4f8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .status-label {
+            font-weight: bold;
+            color: #4169E1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">👑 Royal Clean Empire</div>
+        <div class="subtitle">Main Empire Portal</div>
+        
+        <div class="portal-grid">
+            <a href="/empire.html" class="portal-card accent">
+                <div class="portal-icon">🎯</div>
+                <div class="portal-title">Empire Command</div>
+                <div class="portal-desc">Access control center</div>
+            </a>
+            
+            <a href="/status.html" class="portal-card">
+                <div class="portal-icon">📊</div>
+                <div class="portal-title">System Status</div>
+                <div class="portal-desc">View system metrics</div>
+            </a>
+            
+            <a href="/health.html" class="portal-card">
+                <div class="portal-icon">🏥</div>
+                <div class="portal-title">Health Check</div>
+                <div class="portal-desc">Monitor system health</div>
+            </a>
+            
+            <a href="/" class="portal-card">
+                <div class="portal-icon">📱</div>
+                <div class="portal-title">Dashboard</div>
+                <div class="portal-desc">Main application</div>
+            </a>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-dot"></div>
+                <div class="status-label">System Online</div>
+            </div>
+            <div class="status-item">
+                <div class="status-dot"></div>
+                <div class="status-label">All Services Running</div>
+            </div>
+            <div class="status-item">
+                <div class="status-dot"></div>
+                <div class="status-label">Database Connected</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
