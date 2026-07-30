@@ -1,4 +1,4 @@
-'use server';
+// 'use server'; // Disabled for static export to GitHub Pages
 
 /**
  * @fileOverview Provides material suggestions for tasks in the daily report.
