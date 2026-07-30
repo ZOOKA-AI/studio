@@ -38,6 +38,10 @@
           command = ["npm" "run" "dev" "--" "--port" "$PORT" "--hostname" "0.0.0.0"];
           manager = "web";
         };
+        genkit = {
+          command = ["sh" "-c" "npx genkit start --port $PORT -- npx tsx src/ai/dev.ts"];
+          manager = "web";
+        };
       };
     };
   };
