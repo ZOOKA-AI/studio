@@ -1,1 +1,7 @@
-'use client' directive, import posthog from posthog-js, PostHogProvider from posthog-js/react, useEffect hook. Create Providers component that initializes PostHog on mount with NEXT_PUBLIC_POSTHOG_KEY and NEXT_PUBLIC_POSTHOG_HOST, enable debug in development. Wrap children with PostHogProvider.
+'use client';
+
+import type {ReactNode} from 'react';
+
+export function Providers({children}: {children: ReactNode}) {
+  return children;
+}
