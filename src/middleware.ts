@@ -1,1 +1,5 @@
-Import createServerClient from @supabase/ssr, NextResponse and NextRequest. Export async middleware function that creates Supabase client with cookies support (get, set, remove methods), gets session, redirects to /login if no session and path starts with /dashboard. Export config with matcher for /dashboard/:path* and /api/:path*.
+import {NextResponse, type NextRequest} from 'next/server';
+
+export function middleware(_request: NextRequest) {
+  return NextResponse.next();
+}
