@@ -420,7 +420,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                             if (currentWorkers.length > 1) {
                               form.setValue(
                                 "workers",
-                                currentWorkers.filter((_, i) => i !== index)
+                                currentWorkers.filter((_worker, workerIndex) => workerIndex !== index)
                               );
                             }
                           }}
@@ -471,7 +471,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                                 if (currentTasks.length > 1) {
                                   form.setValue(
                                     "tasks",
-                                    currentTasks.filter((_, i) => i !== index)
+                                    currentTasks.filter((_task, taskIndex) => taskIndex !== index)
                                   );
                                 }
                               }}
@@ -600,7 +600,7 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                             const currentMaterials = form.getValues("materials");
                             form.setValue(
                                 "materials",
-                                currentMaterials.filter((_, i) => i !== index)
+                                currentMaterials.filter((_material, materialIndex) => materialIndex !== index)
                               );
                           }}
                         >

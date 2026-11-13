@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empire Command Center - Royal Clean Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'PT Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #FFD700 0%, #FF7F50 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .crown {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .subtitle {
+            font-size: 1.2em;
+            color: #aaa;
+        }
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .command-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .command-card:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+        .command-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .command-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4em;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        .command-desc {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        .metrics-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .metrics-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #FFD700;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .metric-card {
+            background: rgba(65, 105, 225, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #FF7F50;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .action-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #4169E1 0%, #5179F1 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .action-btn:hover {
+            background: linear-gradient(135deg, #5179F1 0%, #6189FF 100%);
+            border-color: #FFD700;
+            transform: scale(1.05);
+        }
+        .action-btn.accent {
+            background: linear-gradient(135deg, #FF7F50 0%, #FF8F60 100%);
+        }
+        .action-btn.accent:hover {
+            background: linear-gradient(135deg, #FF8F60 0%, #FF9F70 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="crown">👑</div>
+            <h1 class="title">Empire Command Center</h1>
+            <p class="subtitle">Royal Clean Dashboard Control Hub</p>
+        </div>
+        
+        <div class="metrics-section">
+            <h2 class="metrics-title">📊 Empire Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">247</div>
+                    <div class="metric-label">Total Workers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">1,523</div>
+                    <div class="metric-label">Active Tasks</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">98.5%</div>
+                    <div class="metric-label">Uptime</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">د.إ 125K</div>
+                    <div class="metric-label">Monthly Revenue</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="command-grid">
+            <div class="command-card">
+                <div class="command-icon">📱</div>
+                <div class="command-title">Dashboard</div>
+                <div class="command-desc">Access the main supervisor dashboard with real-time metrics and controls</div>
+            </div>
+            
+            <div class="command-card">
+                <div class="command-icon">👥</div>
+                <div class="command-title">Workforce Management</div>
+                <div class="command-desc">Manage workers, assignments, and track performance across all teams</div>
+            </div>
+            
+            <div class="command-card">
+                <div class="command-icon">📋</div>
+                <div class="command-title">Daily Reports</div>
+                <div class="command-desc">Review and generate comprehensive daily activity reports with AI assistance</div>
+            </div>
+            
+            <div class="command-card">
+                <div class="command-icon">🗓️</div>
+                <div class="command-title">Appointments</div>
+                <div class="command-desc">Schedule and manage client appointments and service bookings</div>
+            </div>
+            
+            <div class="command-card">
+                <div class="command-icon">🔧</div>
+                <div class="command-title">Equipment Tracking</div>
+                <div class="command-desc">Monitor and maintain all equipment and tools inventory</div>
+            </div>
+            
+            <div class="command-card">
+                <div class="command-icon">📦</div>
+                <div class="command-title">Material Inventory</div>
+                <div class="command-desc">Track materials, supplies, and automatic deduction from reports</div>
+            </div>
+        </div>
+        
+        <div class="quick-actions">
+            <a href="/" class="action-btn accent">🚀 Launch Dashboard</a>
+            <a href="/status.html" class="action-btn">📊 View Status</a>
+            <a href="/health.html" class="action-btn">🏥 Health Check</a>
+            <a href="/index.html" class="action-btn">🏠 Portal Home</a>
+        </div>
+    </div>
+</body>
+</html>
