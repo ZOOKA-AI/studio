@@ -12,6 +12,7 @@ import { AppointmentsProvider } from '@/context/appointments-context';
 import { FirebaseClientProvider } from '@/firebase';
 import { MaterialsProvider } from '@/context/materials-context';
 import { EquipmentProvider } from '@/context/equipment-context';
+import { SocialMediaProvider } from '@/context/social-media-context';
 
 export const metadata: Metadata = {
   title: 'Royal Clean Dashboard',
@@ -32,30 +33,32 @@ export default function RootLayout({
       </head>
       <body className={cn("font-body antialiased", 'bg-background')}>
         <FirebaseClientProvider>
-          <EquipmentProvider>
-            <MaterialsProvider>
-              <AppointmentsProvider>
-                <TasksProvider>
-                  <ReportsProvider>
-                    <WorkersProvider>
-                      <SidebarProvider>
-                          <div className="relative flex min-h-screen">
-                              <AppSidebar />
-                              <div className="flex-1">
-                                  <Header />
-                                  <main className="p-4 sm:p-6 lg:p-8">
-                                      {children}
-                                  </main>
-                              </div>
-                          </div>
-                          <Toaster />
-                      </SidebarProvider>
-                    </WorkersProvider>
-                  </ReportsProvider>
-                </TasksProvider>
-              </AppointmentsProvider>
-            </MaterialsProvider>
-          </EquipmentProvider>
+          <SocialMediaProvider>
+            <EquipmentProvider>
+              <MaterialsProvider>
+                <AppointmentsProvider>
+                  <TasksProvider>
+                    <ReportsProvider>
+                      <WorkersProvider>
+                        <SidebarProvider>
+                            <div className="relative flex min-h-screen">
+                                <AppSidebar />
+                                <div className="flex-1">
+                                    <Header />
+                                    <main className="p-4 sm:p-6 lg:p-8">
+                                        {children}
+                                    </main>
+                                </div>
+                            </div>
+                            <Toaster />
+                        </SidebarProvider>
+                      </WorkersProvider>
+                    </ReportsProvider>
+                  </TasksProvider>
+                </AppointmentsProvider>
+              </MaterialsProvider>
+            </EquipmentProvider>
+          </SocialMediaProvider>
         </FirebaseClientProvider>
       </body>
     </html>
