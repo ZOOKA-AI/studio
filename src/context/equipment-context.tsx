@@ -1,12 +1,12 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, ReactNode } from 'react';
 import type { Equipment } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, doc } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
+import { createDocument, updateDocument, deleteDocument } from '@/firebase/firestore-operations';
+import { createContextHook } from '@/lib/context-utils';
 
 type EquipmentContextType = {
   equipment: Equipment[];
@@ -30,44 +30,21 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
     if (!firestore) return;
     const equipmentCollection = collection(firestore, 'equipment');
     
-    addDoc(equipmentCollection, equipmentData)
-      .catch((error) => {
-        const permissionError = new FirestorePermissionError({
-          path: equipmentCollection.path,
-          operation: 'create',
-          requestResourceData: equipmentData,
-        });
-        errorEmitter.emit('permission-error', permissionError);
-      });
+    createDocument(equipmentCollection, equipmentData);
   };
 
   const updateEquipment = (equipmentId: string, updatedData: Partial<Omit<Equipment, 'id'>>) => {
     if (!firestore) return;
     const equipmentDocRef = doc(firestore, 'equipment', equipmentId);
     
-    updateDoc(equipmentDocRef, updatedData)
-      .catch((error) => {
-        const permissionError = new FirestorePermissionError({
-          path: equipmentDocRef.path,
-          operation: 'update',
-          requestResourceData: updatedData,
-        });
-        errorEmitter.emit('permission-error', permissionError);
-      });
+    updateDocument(equipmentDocRef, updatedData);
   };
   
   const deleteEquipment = (equipmentId: string) => {
     if (!firestore) return;
     const equipmentDocRef = doc(firestore, 'equipment', equipmentId);
 
-    deleteDoc(equipmentDocRef)
-      .catch((error) => {
-        const permissionError = new FirestorePermissionError({
-          path: equipmentDocRef.path,
-          operation: 'delete',
-        });
-        errorEmitter.emit('permission-error', permissionError);
-      });
+    deleteDocument(equipmentDocRef);
   };
 
   return (
@@ -77,10 +54,4 @@ export function EquipmentProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useEquipment() {
-  const context = useContext(EquipmentContext);
-  if (context === undefined) {
-    throw new Error('useEquipment must be used within a EquipmentProvider');
-  }
-  return context;
-}
+export const useEquipment = createContextHook(EquipmentContext, 'useEquipment');
