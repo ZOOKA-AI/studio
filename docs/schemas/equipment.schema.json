@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Equipment",
+  "type": "object",
+  "description": "Represents a piece of equipment used for cleaning services with inventory tracking.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the equipment.",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the equipment (e.g., 'مكنسة كهربائية', 'Vacuum Cleaner').",
+      "minLength": 1
+    },
+    "condition": {
+      "type": "string",
+      "description": "The current condition of the equipment.",
+      "enum": ["ممتازة", "جيدة", "تحتاج صيانة"]
+    },
+    "quantity": {
+      "type": "number",
+      "description": "The quantity of this equipment available.",
+      "minimum": 0
+    },
+    "supervisor": {
+      "type": "string",
+      "description": "The supervisor responsible for this equipment."
+    },
+    "lastMaintenanceDate": {
+      "type": "string",
+      "description": "The date of the last maintenance (ISO 8601 date string).",
+      "format": "date"
+    },
+    "nextMaintenanceDate": {
+      "type": "string",
+      "description": "The scheduled date for the next maintenance (ISO 8601 date string).",
+      "format": "date"
+    },
+    "createdAt": {
+      "type": "object",
+      "description": "Timestamp when the equipment was created (Firestore Timestamp)."
+    },
+    "updatedAt": {
+      "type": "object",
+      "description": "Timestamp when the equipment was last updated (Firestore Timestamp)."
+    }
+  },
+  "required": ["id", "name", "condition", "quantity", "supervisor"],
+  "additionalProperties": false
+}

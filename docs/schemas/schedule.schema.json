@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Schedule",
+  "type": "object",
+  "description": "Represents a scheduled time for a site visit with assigned supervisor and workers.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the schedule.",
+      "minLength": 1
+    },
+    "siteId": {
+      "type": "string",
+      "description": "Reference to the Site to be visited.",
+      "minLength": 1
+    },
+    "siteName": {
+      "type": "string",
+      "description": "Denormalized site name for display purposes."
+    },
+    "startTime": {
+      "type": "string",
+      "description": "Start time of the scheduled visit (ISO 8601 datetime string).",
+      "format": "date-time"
+    },
+    "endTime": {
+      "type": "string",
+      "description": "End time of the scheduled visit (ISO 8601 datetime string).",
+      "format": "date-time"
+    },
+    "supervisorId": {
+      "type": "string",
+      "description": "Reference to User (Supervisor) assigned to this schedule. Required for authorization."
+    },
+    "workerIds": {
+      "type": "array",
+      "description": "Array of User IDs (Workers) assigned to this schedule. Required for authorization.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "description": "The current status of the schedule.",
+      "enum": ["scheduled", "in_progress", "completed", "cancelled"]
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or instructions for this scheduled visit."
+    },
+    "createdAt": {
+      "type": "object",
+      "description": "Timestamp when the schedule was created (Firestore Timestamp)."
+    },
+    "updatedAt": {
+      "type": "object",
+      "description": "Timestamp when the schedule was last updated (Firestore Timestamp)."
+    }
+  },
+  "required": ["id", "siteId", "startTime", "endTime"],
+  "additionalProperties": false
+}

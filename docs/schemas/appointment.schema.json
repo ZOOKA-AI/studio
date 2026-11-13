@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Appointment",
+  "type": "object",
+  "description": "Represents a client appointment for scheduling cleaning services.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the appointment.",
+      "minLength": 1
+    },
+    "clientId": {
+      "type": "string",
+      "description": "Reference to the Client who made the appointment.",
+      "minLength": 1
+    },
+    "siteId": {
+      "type": "string",
+      "description": "Reference to the Site for the appointment."
+    },
+    "title": {
+      "type": "string",
+      "description": "Title or brief description of the appointment.",
+      "minLength": 1
+    },
+    "date": {
+      "type": "string",
+      "description": "The date of the appointment (ISO 8601 date string).",
+      "format": "date"
+    },
+    "startTime": {
+      "type": "string",
+      "description": "Start time of the appointment (ISO 8601 time or datetime string)."
+    },
+    "endTime": {
+      "type": "string",
+      "description": "End time of the appointment (ISO 8601 time or datetime string)."
+    },
+    "status": {
+      "type": "string",
+      "description": "The current status of the appointment.",
+      "enum": ["scheduled", "confirmed", "in_progress", "completed", "cancelled"]
+    },
+    "supervisorId": {
+      "type": "string",
+      "description": "Reference to User (Supervisor) assigned to this appointment."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or special requests for the appointment."
+    },
+    "createdAt": {
+      "type": "object",
+      "description": "Timestamp when the appointment was created (Firestore Timestamp)."
+    },
+    "updatedAt": {
+      "type": "object",
+      "description": "Timestamp when the appointment was last updated (Firestore Timestamp)."
+    }
+  },
+  "required": ["id", "clientId", "title", "date"],
+  "additionalProperties": false
+}

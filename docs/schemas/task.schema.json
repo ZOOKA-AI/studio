@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Task",
+  "type": "object",
+  "description": "Represents a standard cleaning task definition in the global task catalog.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the task.",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the task (e.g., 'تنظيف الأرضيات', 'Cleaning Floors').",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "A detailed description of what the task involves."
+    },
+    "category": {
+      "type": "string",
+      "description": "The category of the task (e.g., 'floor', 'windows', 'bathroom')."
+    },
+    "estimatedDuration": {
+      "type": "number",
+      "description": "Estimated duration in minutes to complete this task.",
+      "minimum": 0
+    },
+    "createdAt": {
+      "type": "object",
+      "description": "Timestamp when the task was created (Firestore Timestamp)."
+    },
+    "updatedAt": {
+      "type": "object",
+      "description": "Timestamp when the task was last updated (Firestore Timestamp)."
+    }
+  },
+  "required": ["id", "name"],
+  "additionalProperties": false
+}

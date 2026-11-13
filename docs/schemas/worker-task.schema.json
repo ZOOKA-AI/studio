@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkerTask",
+  "type": "object",
+  "description": "Represents an individual task assignment to a specific worker as part of a daily report.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the worker task.",
+      "minLength": 1
+    },
+    "workerId": {
+      "type": "string",
+      "description": "Reference to User (Worker) assigned to this task.",
+      "minLength": 1
+    },
+    "taskId": {
+      "type": "string",
+      "description": "Reference to the Task being performed.",
+      "minLength": 1
+    },
+    "dailyReportId": {
+      "type": "string",
+      "description": "Reference to the DailyReport this task belongs to.",
+      "minLength": 1
+    },
+    "hours": {
+      "type": "number",
+      "description": "Number of hours the worker spent on this task.",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string",
+      "description": "The current status of the task.",
+      "enum": ["pending", "in_progress", "completed"]
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about the task execution."
+    },
+    "createdAt": {
+      "type": "object",
+      "description": "Timestamp when the worker task was created (Firestore Timestamp)."
+    },
+    "updatedAt": {
+      "type": "object",
+      "description": "Timestamp when the worker task was last updated (Firestore Timestamp)."
+    }
+  },
+  "required": ["id", "workerId", "taskId", "dailyReportId", "hours"],
+  "additionalProperties": false
+}

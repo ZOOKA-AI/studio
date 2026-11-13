@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AuditLog",
+  "type": "object",
+  "description": "Represents an immutable audit log record tracking all modifications in the system. This collection is append-only - records cannot be updated or deleted.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the audit log record.",
+      "minLength": 1
+    },
+    "userId": {
+      "type": "string",
+      "description": "Reference to the User who performed the action.",
+      "minLength": 1
+    },
+    "entityType": {
+      "type": "string",
+      "description": "The type of entity that was modified (collection name).",
+      "minLength": 1
+    },
+    "entityId": {
+      "type": "string",
+      "description": "The ID of the specific entity that was modified.",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "object",
+      "description": "The timestamp when the change was made (Firestore Timestamp)."
+    },
+    "action": {
+      "type": "string",
+      "description": "The action that was performed on the entity.",
+      "enum": ["create", "update", "delete"]
+    },
+    "oldValue": {
+      "type": "string",
+      "description": "The JSON string representation of the entity before the change (null for create actions)."
+    },
+    "newValue": {
+      "type": "string",
+      "description": "The JSON string representation of the entity after the change (null for delete actions)."
+    },
+    "changes": {
+      "type": "object",
+      "description": "Object describing specific fields that changed (for update actions).",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "old": { "description": "Previous value" },
+          "new": { "description": "New value" }
+        }
+      }
+    },
+    "ipAddress": {
+      "type": "string",
+      "description": "IP address from which the action was performed (if available)."
+    },
+    "userAgent": {
+      "type": "string",
+      "description": "User agent string of the client that performed the action (if available)."
+    }
+  },
+  "required": ["id", "userId", "entityType", "entityId", "timestamp", "action"],
+  "additionalProperties": false
+}
