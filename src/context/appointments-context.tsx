@@ -1,10 +1,12 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, ReactNode } from 'react';
 import type { Appointment } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
+import { createContextHook } from '@/lib/context-utils';
+import { timestampToISO, dateToTimestamp } from '@/lib/timestamp-utils';
 
 type AppointmentsContextType = {
   appointments: Appointment[];
@@ -25,8 +27,8 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
 
   const appointments: Appointment[] = (rawAppointments || []).map(appointment => ({
     ...appointment,
-    startTime: appointment.startTime.toDate().toISOString(),
-    endTime: appointment.endTime.toDate().toISOString(),
+    startTime: timestampToISO(appointment.startTime),
+    endTime: timestampToISO(appointment.endTime),
   }));
 
   const addAppointment = async (appointment: Omit<Appointment, 'id' | 'siteAddress' | 'endTime'>) => {
@@ -34,9 +36,9 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     const startTime = new Date(appointment.startTime);
     const newAppointment = {
         ...appointment,
-        startTime: Timestamp.fromDate(startTime),
+        startTime: dateToTimestamp(startTime),
         siteAddress: 'غير محدد',
-        endTime: Timestamp.fromDate(new Date(startTime.getTime() + 2 * 60 * 60 * 1000)),
+        endTime: dateToTimestamp(new Date(startTime.getTime() + 2 * 60 * 60 * 1000)),
     };
     await addDoc(collection(firestore, 'appointments'), newAppointment);
   };
@@ -53,10 +55,4 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useAppointments() {
-  const context = useContext(AppointmentsContext);
-  if (context === undefined) {
-    throw new Error('useAppointments must be used within an AppointmentsProvider');
-  }
-  return context;
-}
+export const useAppointments = createContextHook(AppointmentsContext, 'useAppointments');

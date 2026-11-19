@@ -1,9 +1,10 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, ReactNode } from 'react';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
+import { createContextHook } from '@/lib/context-utils';
 
 // This matches the Material entity in backend.json, but for client-side use.
 export type Material = {
@@ -40,10 +41,4 @@ export function MaterialsProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useMaterials() {
-  const context = useContext(MaterialsContext);
-  if (context === undefined) {
-    throw new Error('useMaterials must be used within a MaterialsProvider');
-  }
-  return context;
-}
+export const useMaterials = createContextHook(MaterialsContext, 'useMaterials');

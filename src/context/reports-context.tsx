@@ -1,12 +1,13 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, ReactNode } from 'react';
 import type { DailyReport } from '@/lib/types';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, Timestamp } from 'firebase/firestore';
 import { useFirebase, useMemoFirebase } from '@/firebase';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
+import { createDocument } from '@/firebase/firestore-operations';
+import { createContextHook } from '@/lib/context-utils';
+import { dateToTimestamp } from '@/lib/timestamp-utils';
 
 type ReportsContextType = {
   reports: DailyReport[];
@@ -36,22 +37,14 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
     
     const newReport = {
       ...report,
-      date: Timestamp.fromDate(report.date),
+      date: dateToTimestamp(report.date),
       supervisorId: user.uid, // Use the actual user ID
       supervisor: 'محمد المشرف', // Hardcode supervisor name
       hours: 8, // Placeholder
       status: 'قيد المراجعة',
     };
     
-    addDoc(reportsCollection, newReport)
-      .catch((error) => {
-        const permissionError = new FirestorePermissionError({
-          path: reportsCollection.path,
-          operation: 'create',
-          requestResourceData: newReport,
-        });
-        errorEmitter.emit('permission-error', permissionError);
-      });
+    await createDocument(reportsCollection, newReport);
   };
 
   return (
@@ -61,10 +54,4 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useReports() {
-  const context = useContext(ReportsContext);
-  if (context === undefined) {
-    throw new Error('useReports must be used within a ReportsProvider');
-  }
-  return context;
-}
+export const useReports = createContextHook(ReportsContext, 'useReports');
