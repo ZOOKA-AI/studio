@@ -190,6 +190,16 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
       setIsSummarizing(false);
     }
   };
+  
+  const handleBack = () => {
+    if (form.formState.isDirty) {
+      const shouldLeave = window.confirm("لديك تغييرات غير محفوظة. هل تريد الرجوع دون حفظ؟");
+      if (!shouldLeave) {
+        return;
+      }
+    }
+    router.push("/reports");
+  };
 
   return (
     <Card>
@@ -660,7 +670,14 @@ export function NewReportForm({ date: dateString }: NewReportFormProps) {
                 )}
               />
             </div>
-            <Button type="submit" disabled={!isClient || !form.formState.isValid}>حفظ اليومية</Button>
+            <div className="flex flex-wrap gap-2" role="group" aria-label="إجراءات اليومية">
+              <Button type="button" variant="outline" onClick={handleBack}>
+                رجوع
+              </Button>
+              <Button type="submit" disabled={!isClient || !form.formState.isValid}>
+                حفظ اليومية
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>
