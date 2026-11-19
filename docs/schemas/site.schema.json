@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Site",
+  "type": "object",
+  "description": "Represents a cleaning site or location where services are performed.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the site.",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the site (e.g., 'Villa Ahmed', 'Office Building A').",
+      "minLength": 1
+    },
+    "clientId": {
+      "type": "string",
+      "description": "Reference to the Client who owns this site.",
+      "minLength": 1
+    },
+    "address": {
+      "type": "string",
+      "description": "The physical address of the site.",
+      "minLength": 1
+    },
+    "specialInstructions": {
+      "type": "string",
+      "description": "Special instructions or notes for cleaning this site."
+    },
+    "createdAt": {
+      "type": "object",
+      "description": "Timestamp when the site was created (Firestore Timestamp)."
+    },
+    "updatedAt": {
+      "type": "object",
+      "description": "Timestamp when the site was last updated (Firestore Timestamp)."
+    }
+  },
+  "required": ["id", "name", "clientId", "address"],
+  "additionalProperties": false
+}

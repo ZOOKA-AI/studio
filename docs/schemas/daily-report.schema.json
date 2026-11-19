@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DailyReport",
+  "type": "object",
+  "description": "Represents a daily work report created by a supervisor documenting cleaning activities, tasks, and materials used.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the daily report.",
+      "minLength": 1
+    },
+    "date": {
+      "type": "string",
+      "description": "The date of the report (ISO 8601 date string).",
+      "format": "date"
+    },
+    "siteId": {
+      "type": "string",
+      "description": "Reference to the Site where work was performed.",
+      "minLength": 1
+    },
+    "siteName": {
+      "type": "string",
+      "description": "Denormalized site name for display purposes."
+    },
+    "clientName": {
+      "type": "string",
+      "description": "Denormalized client name for display purposes.",
+      "minLength": 1
+    },
+    "supervisorId": {
+      "type": "string",
+      "description": "Reference to User (Supervisor) who created this report. Required for authorization.",
+      "minLength": 1
+    },
+    "workerIds": {
+      "type": "array",
+      "description": "Array of User IDs (Workers) assigned to this report. Required for authorization.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "workers": {
+      "type": "array",
+      "description": "Array of worker details (denormalized for display).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "minItems": 1
+    },
+    "startTime": {
+      "type": "string",
+      "description": "The starting time of the cleaning session (ISO 8601 time or datetime string)."
+    },
+    "endTime": {
+      "type": "string",
+      "description": "The ending time of the cleaning session (ISO 8601 time or datetime string)."
+    },
+    "tasks": {
+      "type": "array",
+      "description": "List of task IDs completed during this session.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "additionalTasks": {
+      "type": "array",
+      "description": "List of additional task descriptions not in the standard task list.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "materials": {
+      "type": "array",
+      "description": "List of material IDs used during this session.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "beforeImages": {
+      "type": "array",
+      "description": "URLs of images taken before cleaning.",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "afterImages": {
+      "type": "array",
+      "description": "URLs of images taken after cleaning.",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "clientSignature": {
+      "type": "string",
+      "description": "URL or base64 representation of the client's signature approving the work."
+    },
+    "supervisorSignature": {
+      "type": "string",
+      "description": "URL or base64 representation of the supervisor's signature."
+    },
+    "status": {
+      "type": "string",
+      "description": "The current status of the daily report.",
+      "enum": ["draft", "in_progress", "completed", "approved"]
+    },
+    "totalCost": {
+      "type": "number",
+      "description": "The total cost of the cleaning session.",
+      "minimum": 0
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or comments about the work performed."
+    },
+    "createdAt": {
+      "type": "object",
+      "description": "Timestamp when the report was created (Firestore Timestamp)."
+    },
+    "updatedAt": {
+      "type": "object",
+      "description": "Timestamp when the report was last updated (Firestore Timestamp)."
+    }
+  },
+  "required": ["id", "date", "siteId", "supervisorId", "workerIds", "workers", "tasks", "clientName"],
+  "additionalProperties": false
+}
